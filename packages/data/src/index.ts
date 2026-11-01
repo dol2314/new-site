@@ -6,9 +6,11 @@ export {
   carTaxData,
   evSubsidyData,
   inspectionData,
+  registrationTaxData,
   type CarTaxData,
   type EvRegion,
   type EvSubsidyData,
   type InspectionData,
+  type RegistrationTaxData,
   type SourceRef,
 } from "./params";

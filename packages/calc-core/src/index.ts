@@ -30,3 +30,12 @@ export {
   type PenaltyTier,
 } from "./inspection";
 export { calcEvSubsidy, type EvModel, type EvSubsidyInput, type EvSubsidyResult } from "./evSubsidy";
+export {
+  calcRegistrationTax,
+  type CapRelief,
+  type Powertrain,
+  type RegistrationTaxInput,
+  type RegistrationTaxParams,
+  type RegistrationTaxResult,
+  type Relief,
+} from "./registrationTax";

@@ -2,9 +2,9 @@
  * 확인된 법령값으로 엔진을 검증한다. 기대값은 법령 산식으로 손으로 계산한 값
  * (지방세법 제127조·제128조·제151조, 시행령 제122조·제125조, 국고금 관리법 제47조, 자동차관리법 시행령 별표 2).
  */
-import { calcCarTax, calcEvSubsidy, calcInspectionPenalty, calcPrepay, inspectionWindow, penaltyForDays } from "@site/calc-core";
+import { calcCarTax, calcEvSubsidy, calcRegistrationTax, calcInspectionPenalty, calcPrepay, inspectionWindow, penaltyForDays } from "@site/calc-core";
 import { describe, expect, it } from "vitest";
-import { carTaxData, evSubsidyData, inspectionData } from "./params";
+import { carTaxData, evSubsidyData, inspectionData, registrationTaxData } from "./params";
 
 const d26 = carTaxData(2026);
 const d27 = carTaxData(2027);
@@ -100,4 +100,29 @@ describe("전기차 보조금 (제주 공공데이터 2026-09-17)", () => {
     const atto = evSubsidyData(2026).models.find((x) => x.name === "BYD ATTO 3");
     expect(atto?.discontinued).toBe(true);
   });
+});
+
+describe("취득세 (법령값)", () => {
+  const { params: p, missing } = registrationTaxData();
+  const base = { vatIncluded: true, compact: false, powertrain: "ice" as const, seats7to10: false, childrenUnder18: 0, acquiredOn: "2026-11-01" };
+  it("확인 완료", () => expect(missing).toEqual([]));
+  it("부가세 포함 2,500만원 승용: 22,727,272 × 7% = 1,590,909 → 1,590,900원", () =>
+    expect(calcRegistrationTax({ ...base, price: 25_000_000 }, p).payable).toBe(1_590_900));
+  it("전기차 부가세 포함 4,500만원: 산출 2,863,630원 − 140만 = 1,463,630원 (2026년 취득)", () => {
+    const r = calcRegistrationTax({ ...base, price: 45_000_000, powertrain: "electric" }, p);
+    expect([r.computedTax, r.payable]).toEqual([2_863_630, 1_463_630]);
+  });
+  it("같은 전기차를 2027-01-02에 취득하면 현행법상 감면 없음", () => {
+    const r = calcRegistrationTax({ ...base, price: 45_000_000, powertrain: "electric", acquiredOn: "2027-01-02" }, p);
+    expect(r.payable).toBe(2_863_630);
+    expect(r.expired[0]?.until).toBe("2026-12-31");
+  });
+  it("경차 부가세 포함 1,500만원: 13,636,363 × 4% = 545,450원 ≤ 75만 → 0원", () =>
+    expect(calcRegistrationTax({ ...base, price: 15_000_000, compact: true }, p).payable).toBe(0));
+  it("자녀 3명, 7인승 4,000만원(부가세 포함): 산출 2,545,450원 > 200만 → 85% 감면, 381,820원", () => {
+    const r = calcRegistrationTax({ ...base, price: 40_000_000, seats7to10: true, childrenUnder18: 3 }, p);
+    // 2,545,454 → 2,545,450 / 감면 2,545,450 × 0.85 = 2,163,632.5 → 2,163,630 / 낼 세액 381,820
+    expect([r.computedTax, r.relief?.amount, r.payable]).toEqual([2_545_450, 2_163_630, 381_820]);
+  });
+  it("면세점: 50만원 이하 0원", () => expect(calcRegistrationTax({ ...base, price: 500_000, vatIncluded: false }, p).payable).toBe(0));
 });

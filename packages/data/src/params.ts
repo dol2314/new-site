@@ -2,10 +2,11 @@
  * 확인된(verified) 데이터만 계산 엔진 매개변수로 바꿔 준다.
  * 확인 전 항목이 하나라도 필요하면 missing에 이름이 들어가고, 그 기능을 쓰는 화면은 공개하지 않는다.
  */
-import type { CarTaxParams, EvModel, InspectionCycle, InspectionParams, PenaltyTier, PrepayParams, PrepayPeriod } from "@site/calc-core";
+import type { CarTaxParams, CapRelief, EvModel, RegistrationTaxParams, InspectionCycle, InspectionParams, PenaltyTier, PrepayParams, PrepayPeriod } from "@site/calc-core";
 import car2026 from "../data/car-tax/2026.json";
 import car2027 from "../data/car-tax/2027.json";
 import ev2026 from "../data/ev-subsidy/2026.json";
+import regDoc from "../data/registration-tax/rules.json";
 import inspectionDoc from "../data/inspection/rules.json";
 import type { SourcedValue } from "./schema";
 
@@ -180,4 +181,43 @@ export function evSubsidyData(year: number): EvSubsidyData {
     missing: { regionData, nationwide, conversion },
     sources: refs(doc, ["values.models"]),
   };
+}
+
+export interface RegistrationTaxData {
+  params: RegistrationTaxParams;
+  missing: string[];
+  sources: SourceRef[];
+}
+
+const REG_KEYS = [
+  "values.rates",
+  "values.taxFreeThresholdWon",
+  "values.truncateUnit",
+  "values.evRelief",
+  "values.hydrogenRelief",
+  "values.compactRelief",
+  "values.multiChild",
+  "values.minimumTax",
+  "rules.taxBase",
+  "rules.actualPrice",
+  "rules.noEducationTax",
+  "rules.noRuralSpecialTax",
+  "rules.overlap",
+];
+
+export function registrationTaxData(): RegistrationTaxData {
+  const doc = regDoc as unknown as DataDoc;
+  const missing: string[] = [];
+  const params: RegistrationTaxParams = {
+    rates: pick(doc, "values.rates", missing),
+    taxFreeThresholdWon: pick(doc, "values.taxFreeThresholdWon", missing),
+    truncateUnit: pick(doc, "values.truncateUnit", missing),
+    evRelief: pick<CapRelief>(doc, "values.evRelief", missing),
+    hydrogenRelief: pick<CapRelief>(doc, "values.hydrogenRelief", missing),
+    compactRelief: pick<CapRelief>(doc, "values.compactRelief", missing),
+    multiChild: pick(doc, "values.multiChild", missing),
+    minimumTax: pick(doc, "values.minimumTax", missing),
+  };
+  for (const k of REG_KEYS.filter((k) => k.startsWith("rules."))) pick(doc, k, missing);
+  return { params, missing, sources: refs(doc, REG_KEYS) };
 }
