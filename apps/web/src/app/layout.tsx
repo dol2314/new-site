@@ -1,0 +1,49 @@
+import type { Metadata, Viewport } from "next";
+import type { ReactNode } from "react";
+import { Analytics } from "@/components/Analytics";
+import { Footer } from "@/components/Footer";
+import { Header } from "@/components/Header";
+import { site } from "@/site.config";
+import "./globals.css";
+
+const verificationOther: Record<string, string> = {};
+if (site.verification.naver) verificationOther["naver-site-verification"] = site.verification.naver;
+
+export const metadata: Metadata = {
+  metadataBase: new URL(site.url),
+  title: { default: site.name, template: `%s | ${site.name}` },
+  description: site.description,
+  applicationName: site.name,
+  icons: { icon: "/icon.png", apple: "/icon.png" },
+  // robots는 페이지별로 넣는다(lib/seo.ts). 여기 넣으면 404 페이지에서 Next가 넣는 noindex와 중복된다.
+  verification: {
+    ...(site.verification.google ? { google: site.verification.google } : {}),
+    ...(Object.keys(verificationOther).length ? { other: verificationOther } : {}),
+  },
+  formatDetection: { telephone: false },
+};
+
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  themeColor: [
+    { media: "(prefers-color-scheme: light)", color: "#ffffff" },
+    { media: "(prefers-color-scheme: dark)", color: "#14171c" },
+  ],
+};
+
+export default function RootLayout({ children }: { children: ReactNode }) {
+  return (
+    <html lang="ko">
+      <body>
+        <a href="#main" className="skip-link">
+          본문 바로가기
+        </a>
+        <Header />
+        <main id="main">{children}</main>
+        <Footer />
+        <Analytics />
+      </body>
+    </html>
+  );
+}
