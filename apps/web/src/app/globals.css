@@ -234,3 +234,100 @@ th {
 .footer-links a {
   color: var(--text);
 }
+
+/* 도구 페이지 */
+.summary p {
+  margin-bottom: 6px;
+}
+.calculator {
+  margin: 20px 0 8px;
+  padding: 16px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--surface);
+}
+.calc-form .field {
+  margin-bottom: 14px;
+}
+.calc-form label {
+  display: block;
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+.calc-form input:not([type="checkbox"]),
+.calc-form select {
+  width: 100%;
+  max-width: 320px;
+  min-height: 48px;
+  padding: 8px 12px;
+  font-size: 1rem;
+  color: var(--text);
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+}
+.calc-form input[type="checkbox"] {
+  width: 20px;
+  height: 20px;
+  vertical-align: middle;
+}
+.hint {
+  margin: 4px 0 0;
+  color: var(--muted);
+  font-size: 0.88rem;
+}
+.result {
+  display: block;
+  margin-top: 8px;
+}
+.result-main {
+  font-size: 1.1rem;
+}
+.result-main strong {
+  font-size: 1.35rem;
+  color: var(--accent);
+}
+.error {
+  color: #c62828;
+}
+@media (prefers-color-scheme: dark) {
+  .error {
+    color: #ff8a80;
+  }
+}
+tr.passed td {
+  color: var(--muted);
+}
+.breakdown {
+  padding-left: 1.2em;
+}
+.example {
+  padding: 4px 0 4px 14px;
+  border-left: 3px solid var(--border);
+  margin-bottom: 12px;
+}
+.faq dt {
+  font-weight: 700;
+  margin-top: 14px;
+}
+.faq dd {
+  margin: 4px 0 0;
+}
+.sources {
+  padding-left: 1.2em;
+}
+.sources li {
+  margin-bottom: 6px;
+}
+.result table {
+  min-width: 0;
+  font-size: 0.92rem;
+}
+.result th,
+.result td {
+  padding: 8px 6px;
+}
+.result td:first-child,
+.result th:first-child {
+  white-space: nowrap;
+}
