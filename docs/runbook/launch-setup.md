@@ -45,8 +45,15 @@ Cloudflare 대시보드의 "Workers & Pages → 만들기"는 이제 기본이 W
    - Bing 웹마스터 도구: 서치콘솔에서 가져오기
 4. 각 도구 페이지를 공개할 때마다 서치콘솔 "URL 검사 → 색인 생성 요청", 서치어드바이저 "웹 페이지 수집 요청"
 
+## 3-1. 묶음 공개 전 점검 (매번)
+
+공개 순서와 날짜는 `docs/adsense/launch-plan.md`.
+
+1. `LAUNCH_PREVIEW=1 npm run build && npm run check:launch -- --mobile` — 공개 뒤 구조를 미리 검사(로컬 전용. Cloudflare 변수에 넣지 않는다. 공개 모드와 함께 켜면 빌드가 멈춘다)
+2. 검수한 페이지를 `published: true`로 바꾼 뒤 `npm run check:all` — 하나라도 실패하면 배포하지 않는다
+
 ## 4. 애드센스 (도구 5개 + 글 20편 이후 — 프롬프트 09)
 
 1. 애드센스에 사이트 추가 → 게시자 ID(`pub-` + 숫자 16자리) 확인
 2. Build variable `ADSENSE_PUB_ID` = `pub-...` → 재배포하면 `/ads.txt`가 생성됨 (`https://도메인/ads.txt` 확인)
-3. 신청 전 프롬프트 09의 1단계 점검표 실행
+3. 신청 전 프롬프트 09의 1단계 점검표 실행 — 지난 결과는 `docs/adsense/pre-approval.md`
