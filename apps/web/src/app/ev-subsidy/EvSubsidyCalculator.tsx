@@ -295,8 +295,12 @@ export function EvSubsidyCalculator({
               )}
               {result.additionalLocalShare !== null && (
                 <p className="hint">
-                  추가지원금 중 {formatWon(result.additionalLocalShare)}은
-                  지방비에서, 나머지는 국비에서 나눠 냅니다(받는 합계는 같음).
+                  추가지원금 중 약{" "}
+                  {formatWon(
+                    Math.round(result.additionalLocalShare / 10_000) * 10_000,
+                  )}
+                  은 지방비에서, 나머지는 국비에서 나눠 냅니다(받는 합계는 같음,
+                  실제 분담은 지자체가 정함).
                 </p>
               )}
             </>

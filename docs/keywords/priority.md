@@ -57,6 +57,8 @@
 5. 모든 도구의 **모바일 비중이 70~85%** → 모바일 우선 설계가 맞다.
 6. 전기차 관련 구글 검색이 전년 대비 크게 늘었다(전기차 보조금, 전기차 취등록세 감면, 환경부 충전 요금 모두 +900%). 기획안의 "지금이 타이밍" 판단을 뒷받침한다.
 
+> 2026-11-01 정정: 전기차 보조금은 공식 계산기가 있어 지수 순위와 별개로 "해설 + 실구매가 연결" 페이지로 운영한다(2장 표 참고).
+
 ### 1-4. 제안 출시 순서
 
 | 순서 | 도구 (URL 제안) | 이유 | 목표 |
@@ -74,7 +76,7 @@
 | 도구 | 상위에 보인 경쟁 페이지 | 관찰된 특징 | 우리 쪽 기회 |
 |---|---|---|---|
 | 할부 | [k-calc](https://k-calc.com/calculator/car-loan), [glasswallet](https://glasswallet.com/calculate/car-installment), [calcnara](https://calcnara.com/calculators/installment), [oursupporter](https://oursupporter.com/car/loan), [devcomma](https://tools.devcomma.com/calculators/car-installment), App Store 앱 | 대부분 원리금균등 기본. calcnara는 취득세 함께 계산. oursupporter는 유예할부(잔존가치형)는 정확히 계산되지 않는다고 명시. 금리는 "참고치" 범위만 제시 | 보조금·취등록세·할부를 합친 실구매가, **유예할부(잔존가치) 지원**, 현금·할부·리스 총비용 비교 |
-| 전기차 보조금 | [calcnara 보조금 계산](https://calcnara.com/calculators/ev-subsidy), [aboda 지역별 비교](https://aboda.kr/?p=25115), [innno](https://www.innno.co.kr/2026/01/2026_3.html), [normen](https://normen.co.kr/insurance-by-vehicle-type/electric-car/%EC%A0%84%EA%B8%B0%EC%B0%A8-%EB%B3%B4%EC%A1%B0%EA%B8%88-%EC%A1%B0%ED%9A%8C-%EC%82%AC%EC%9D%B4%ED%8A%B8), 무공해차 통합누리집(공식), 현대차 조회 | 블로그마다 국비 최대액이 서로 다름(580만/650만 등). calcnara는 가격 구간 기준 시뮬레이터 | **공식 지침 조문·기준일을 붙인 계산**, 차종 선택 → 국비+지방비 합계, 지역 비교 표 |
+| 전기차 보조금 | **무공해차 통합누리집 메인의 공식 「보조금 안내·계산기」**(전 지역·전 차종·차상위·다자녀·생애최초·전환지원·택시 반영), [calcnara](https://calcnara.com/calculators/ev-subsidy), [aboda](https://aboda.kr/?p=25115), 현대차 조회 | 공식 계산기가 지역 지방비까지 정확히 계산함(2026-11-01 운영자 제보로 확인) | 공식 계산기와 경쟁하지 않는다: 공식 계산기 바로가기 + 지침 기준 추가지원 해설·차종 비교 + **공식 계산 결과를 넣어 이어 가는 실구매가·할부·취득세** |
 | 검사 | [glasswallet 검사 비용·과태료](https://glasswallet.com/calculate/vehicle-inspection-cost/), [wikidocs @CarMoneyLab](https://wikidocs.net/blog/@CarMoneyLab/25323/) 등 블로그 | 과태료 최대 60만 원 도달 시점이 출처마다 다름(115일 vs 180일). "개별 차량 금액을 확정해 주는 곳은 없음"(검색 요약) | **최초등록일·만료일 입력 → 검사 기간·과태료 날짜별 표**, 법령 조문 근거, 앱 알림 |
 | 자동차세·연납 | [glasswallet 연납 가이드](https://glasswallet.com/calculate/car-tax/prepayment-guide/), [moneynestlab](https://www.moneynestlab.com/car-tax), 위택스(공식), 언론 | 월별 실효 할인율 수치가 출처마다 다름(6월 2.5% vs 2.2%) | 배기량·차령 → 연 세액 → **월별 연납 절감액**을 법령 산식으로, 기준일 명시 |
 | 취등록세 | [normen 명의이전 비용](https://normen.co.kr/title-transfer-calculator), [헤이딜러 블로그](https://www.heydealer.com/blog/%EC%A4%91%EA%B3%A0%EC%B0%A8-%EC%B7%A8%EB%93%B1%EB%A1%9D%EC%84%B8-%EA%B3%84%EC%82%B0-%EC%A0%88%EC%84%B8-%EA%BF%80%ED%8C%81-4%EA%B0%80%EC%A7%80/), wikidocs 블로그 | normen은 취등록세+공채+증지 합산. 전기차 감면 한도·중고 전기차 감면 조건 설명이 블로그마다 다름 | 신차·중고차·전기차 감면을 한 화면에, 감면 일몰일 표시 |
