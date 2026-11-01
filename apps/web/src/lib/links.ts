@@ -14,5 +14,12 @@ export const LINKS = {
   lawCarTax: { label: "지방세법 제127조(자동차세 세율)", href: "https://www.law.go.kr/법령/지방세법/제127조", desc: "국가법령정보센터", verified: true },
   lawPrepay: { label: "지방세법 제128조(납기·연납)", href: "https://www.law.go.kr/법령/지방세법/제128조", desc: "국가법령정보센터", verified: true },
   lawInspection: { label: "자동차관리법 시행규칙 제77조(정기검사 기간)", href: "https://www.law.go.kr/법령/자동차관리법시행규칙/제77조", desc: "국가법령정보센터", verified: true },
+  dataJejuEv: {
+    label: "공공데이터포털: 제주 전기자동차 보조금 지원대상 현황",
+    href: "https://www.data.go.kr/data/15048678/fileData.do",
+    desc: "차종별 국비·지방비 원자료(CSV)",
+    verified: true,
+  },
+  evPortal: { label: "무공해차 통합누리집", href: "https://ev.or.kr/", desc: "보조금 지침·공고 확인", verified: true },
   kotsa: { label: "한국교통안전공단", href: "https://www.kotsa.or.kr/", desc: "자동차 검사 예약·안내", verified: false },
 } satisfies Record<string, OfficialLink>;

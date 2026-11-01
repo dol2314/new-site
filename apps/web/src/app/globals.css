@@ -331,3 +331,14 @@ tr.passed td {
 .result th:first-child {
   white-space: nowrap;
 }
+.calc-form label.inline {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-weight: 400;
+  margin-top: 6px;
+}
+.result th[scope="row"] {
+  white-space: nowrap;
+  width: 1%;
+}
