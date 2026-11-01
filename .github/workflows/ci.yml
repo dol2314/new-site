@@ -1,0 +1,38 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+      - run: npm ci
+      - run: npm run lint
+      - run: npm run typecheck
+      - run: npm test
+      - name: 빌드 (공개 전 모드)
+        run: npm run build
+      - name: SEO 검사 (공개 전 모드)
+        run: npm run check:seo
+      - name: 빌드 (공개 모드 미리 점검)
+        run: npm run build
+        env:
+          NEXT_PUBLIC_SITE_INDEXABLE: "true"
+          NEXT_PUBLIC_SITE_URL: https://example.com
+          NEXT_PUBLIC_OPERATOR_NAME: CI 점검용
+          NEXT_PUBLIC_OPERATOR_EMAIL: ci@example.com
+      - name: SEO 검사 (공개 모드)
+        run: npm run check:seo
+        env:
+          NEXT_PUBLIC_SITE_INDEXABLE: "true"
+          NEXT_PUBLIC_SITE_URL: https://example.com
+          NEXT_PUBLIC_OPERATOR_NAME: CI 점검용
+          NEXT_PUBLIC_OPERATOR_EMAIL: ci@example.com
