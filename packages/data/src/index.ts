@@ -8,6 +8,7 @@ export {
   evSubsidyData,
   evChargingData,
   inspectionData,
+  ownershipData,
   registrationTaxData,
   type CarTaxData,
   type CarTaxProrateData,
@@ -15,6 +16,7 @@ export {
   type EvRegion,
   type EvSubsidyData,
   type InspectionData,
+  type OwnershipData,
   type RegistrationTaxData,
   type SourceRef,
 } from "./params";

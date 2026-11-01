@@ -2,9 +2,9 @@
  * 확인된 법령값으로 엔진을 검증한다. 기대값은 법령 산식으로 손으로 계산한 값
  * (지방세법 제127조·제128조·제151조, 시행령 제122조·제125조, 국고금 관리법 제47조, 자동차관리법 시행령 별표 2).
  */
-import { calcCarTax, calcChargingCost, tierForKw, calcTransferProrate, calcEvSubsidy, calcRegistrationTax, expectedConversionNational, calcInspectionPenalty, calcPrepay, inspectionWindow, penaltyForDays } from "@site/calc-core";
+import { calcCarTax, calcNewRegistrationTax, calcOwnershipCost, calcChargingCost, tierForKw, calcTransferProrate, calcEvSubsidy, calcRegistrationTax, expectedConversionNational, calcInspectionPenalty, calcPrepay, inspectionWindow, penaltyForDays } from "@site/calc-core";
 import { describe, expect, it } from "vitest";
-import { carTaxData, carTaxProrateData, evChargingData, evSubsidyData, inspectionData, registrationTaxData } from "./params";
+import { carTaxData, carTaxProrateData, evChargingData, ownershipData, evSubsidyData, inspectionData, registrationTaxData } from "./params";
 
 const d26 = carTaxData(2026);
 const d27 = carTaxData(2027);
@@ -218,5 +218,32 @@ describe("전기차 공공 충전요금 (기후에너지환경부, 2026-08-01 �
   it("월 1,500km · 5km/kWh: 완속만 88,500원, 200kW 이상만 117,930원", () => {
     const run = (kw: number) => calcChargingCost({ monthlyKm: 1500, kmPerKwh: 5, mix: [{ label: "x", share: 1, wonPerKwh: tierForKw(kw, c.publicTiers).wonPerKwh }] }).monthlyCost;
     expect([run(7), run(350)]).toEqual([88_500, 117_930]);
+  });
+});
+
+describe("신규등록 일할계산·5년 비용 (2027년 세율)", () => {
+  const o = ownershipData();
+  const nr = { ...o.newRegistration, educationTaxRate: 0.3, truncateUnit: 10 };
+  it("확인 완료, 마지막 데이터 연도 2027", () => expect([o.missing, o.latestYear]).toEqual([[], 2027]));
+  it("전기차 2027-01-05 등록: 100,000 × 177/365 = 48,493 → 48,490 + 14,540, 2기분 65,000 → 그해 128,030원", () => {
+    const t = calcCarTax({ fuelType: "electric", ageStartDate: "2027-01-05", taxYear: 2027 }, o.carTaxByYear[2027]!);
+    const r = calcNewRegistrationTax(t, "2027-01-05", nr);
+    expect([r.days, r.carTax, r.educationTax, r.yearTotal]).toEqual([177, 48_490, 14_540, 128_030]);
+  });
+  it("1,598cc 휘발유 2027-01-05 등록, 5개 연도 자동차세: 그해 일할 + 2028(차령 2) 경감 없음 + 2029 5% + 2030 10% + 2031 15%", () => {
+    const r = calcOwnershipCost({
+      start: "2027-01-05",
+      years: 5,
+      purchase: 0,
+      fuelType: "gasoline",
+      displacementCc: 1598,
+      carTaxParamsFor: (y) => o.carTaxByYear[Math.min(y, o.latestYear)]!,
+      newRegistration: o.newRegistration,
+      annualEnergy: 0,
+      annualInsurance: 0,
+    });
+    // 연세액 1,598 × 140 = 223,720 / 첫해 223,720 × 177/365 = 108,488 → 108,480 + 32,540 = 141,020, 2기분 111,860 + 33,550 = 145,410
+    // 2029 5%: 106,267 → 106,260 + 31,870 = 138,130 × 2 / 2030 10%: 100,670 + 30,200 / 2031 15%: 95,080 + 28,520
+    expect(r.rows.map((x) => x.carTax)).toEqual([286_430, 290_820, 276_260, 261_740, 247_200]);
   });
 });

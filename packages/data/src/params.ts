@@ -157,6 +157,37 @@ export function carTaxProrateData(year: number): CarTaxProrateData {
   return { year, params, previewParams, sources: refs(doc, PRORATE_KEYS), missing: [...base.missing, ...missing] };
 }
 
+export interface OwnershipData {
+  /** 확인된 자동차세 매개변수가 있는 연도 */
+  carTaxByYear: Record<number, CarTaxParams>;
+  /** 데이터가 있는 마지막 연도. 그 뒤 연도는 이 연도 세율이 그대로라고 가정한다(화면에 밝힘) */
+  latestYear: number;
+  newRegistration: { minCollectWon: number; halfBasisMinAge: number };
+  sources: SourceRef[];
+  missing: string[];
+}
+
+/** 5년 비용 비교용: 연도별 자동차세 세율 + 신규등록 일할계산 규칙 */
+export function ownershipData(): OwnershipData {
+  const ready = CAR_TAX_YEARS.map(carTaxData).filter((d) => d.missing.length === 0);
+  const latest = ready[ready.length - 1];
+  if (!latest) throw new Error("확인된 자동차세 데이터 없음");
+  const doc = CAR_DOCS[latest.year]!;
+  const missing: string[] = [];
+  const newRegistration = {
+    minCollectWon: pick<number>(doc, "values.prorateMinWon", missing),
+    halfBasisMinAge: pick<number>(doc, "values.prorateHalfBasisMinAge", missing),
+  };
+  pick(doc, "rules.newRegistrationProrate", missing);
+  return {
+    carTaxByYear: Object.fromEntries(ready.map((d) => [d.year, d.tax])),
+    latestYear: latest.year,
+    newRegistration,
+    sources: refs(doc, ["values.ccBrackets", "values.flatAnnualWon", "values.ageReduction", "values.educationTaxRate", "rules.newRegistrationProrate", "values.prorateMinWon"]),
+    missing,
+  };
+}
+
 export interface InspectionData {
   params: InspectionParams;
   cycle: InspectionCycle & { appliesToRegisteredFrom: string };

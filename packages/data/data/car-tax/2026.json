@@ -289,6 +289,16 @@
       "candidate": "buyer",
       "candidate_source": "방증만 있음(2026-11-01 확인): ① 행정안전부 「지방세관계법 운영 예규」(예규 제74호, 2019-06-01 시행) 법130-1 '신규등록 자동차의 자동차세를 계산할 때에는 신규등록일부터 사용일수를 계산한다' — 신규등록에 대한 것이고 이전등록은 언급 없음 (https://www.mois.go.kr/frt/bbs/type001/commonSelectBoardArticle.do?bbsId=BBSMSTR_000000000016&nttId=70984 첨부 PDF 98쪽). ② 서초구청 자동차세 안내 '신고차량: 등록일~기분말일, 말소차량: 기분초일~말소등록일' — 양도·양수는 '양도일 기준 신청에 의한 일할계산'만 있고 당일 귀속 없음, 공제율 7% 등 옛 내용 섞임 (https://www.seocho.go.kr/site/tax/02/10201050000002023050810.jsp). 의정부시 안내(ui4u.go.kr)는 서버가 연결을 끊어 못 읽음",
       "todo": "이전등록일(또는 신청 시 양도일) 당일이 양수인 몫인지 확인 — 법·시행령·시행규칙 서식·운영예규(2019)에 이전 시 당일 귀속 명시 없음. 지자체 세무부서(예: 서초구 세무관리과 02-2155-6592)나 위택스 상담으로 확인. calc-core ProrateParams.transferDayOwner"
+    },
+    "newRegistrationProrate": {
+      "value": "신규등록한 기분의 자동차세는 일할계산(연세액 × 과세대상기간 일수 ÷ 연도 총일수). 사용일수는 신규등록일부터 센다(등록일 포함). 그 뒤 기분은 정기분 전액",
+      "unit": "규칙",
+      "source_name": "지방세법(법률 제21308호, 2026-07-01 시행 현행본) 제130조제1항, 지방세법 시행령 제126조, 행정안전부 「지방세관계법 운영 예규」(예규 제74호, 2019-06-01 시행) 법130-1",
+      "source_url": "https://www.law.go.kr/법령/지방세법/제130조",
+      "effective_date": "2026-07-01",
+      "checked_at": "2026-11-01",
+      "verified": true,
+      "note": "운영예규 원문: '신규등록 자동차의 자동차세를 계산할 때에는 신규등록일부터 사용일수를 계산한다'(https://www.mois.go.kr/frt/bbs/type001/commonSelectBoardArticle.do?bbsId=BBSMSTR_000000000016&nttId=70984 첨부 PDF). calc-core calcNewRegistrationTax()"
     }
   }
 }
