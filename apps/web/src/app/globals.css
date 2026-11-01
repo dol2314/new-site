@@ -353,3 +353,14 @@ fieldset.field legend {
   margin-bottom: 4px;
   padding: 0;
 }
+.calc-form h3 {
+  margin: 8px 0 12px;
+}
+.result tr.selected td {
+  font-weight: 700;
+}
+/* 금액이 숫자 중간에서 줄바꿈되지 않게 */
+.result td,
+.result th {
+  overflow-wrap: normal;
+}
