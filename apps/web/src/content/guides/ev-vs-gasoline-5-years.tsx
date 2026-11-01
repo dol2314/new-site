@@ -159,11 +159,11 @@ export default function Article({ meta }: { meta: GuideMeta }) {
           . 이 조건에서는 <strong>{verdict(base.diff)}</strong>.
         </>,
         <>
-          전기차를 공공 완속으로 충전하면 1년 약{" "}
-          {beSlow?.toLocaleString("ko-KR")}km부터 전기차가 덜 듭니다. 급속(
-          {tierLabel(fast)})만 쓰면 그 기준이 약{" "}
-          {beFast?.toLocaleString("ko-KR")}km로 올라갑니다(
-          {formatKoreanDate(meta.asOf)} 세율·공공 요금 기준).
+          손익이 갈리는 지점은 1년 약 {beSlow?.toLocaleString("ko-KR")}km입니다.
+          이보다 많이 달리면 전기차, 적게 달리면 휘발유차가 유리하고,
+          충전을 {tierLabel(fast)} 충전기로만 하면 이 지점이 약{" "}
+          {beFast?.toLocaleString("ko-KR")}km로 밀립니다(
+          {formatKoreanDate(meta.asOf)} 세율 기준).
         </>,
         <>
           내 차값과 주행거리로는{" "}
