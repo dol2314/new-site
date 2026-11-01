@@ -47,3 +47,5 @@ export {
   type RegistrationTaxResult,
   type Relief,
 } from "./registrationTax";
+export { calcLoan, type LoanInput, type LoanMethod, type LoanResult, type LoanRow } from "./loan";
+export { calcPurchase, type PurchaseInput, type PurchaseResult } from "./purchase";
