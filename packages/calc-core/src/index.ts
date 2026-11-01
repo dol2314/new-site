@@ -18,7 +18,16 @@ export {
   type PrepayPeriod,
   type PrepayResult,
 } from "./carTax";
-export { calcTransferProrate, type ProrateParams, type ProrateResult, type ProrateShare } from "./carTaxProrate";
+export {
+  calcNewRegistrationTax,
+  calcTransferProrate,
+  type NewRegistrationParams,
+  type NewRegistrationResult,
+  type ProrateParams,
+  type ProrateResult,
+  type ProrateShare,
+} from "./carTaxProrate";
+export { calcOwnershipCost, type OwnershipInput, type OwnershipResult, type OwnershipRow } from "./ownership";
 export {
   calcInspectionPenalty,
   estimateExpiry,

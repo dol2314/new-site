@@ -126,3 +126,42 @@ export function calcTransferProrate(
     buyerYearTotal: buyer.total + (half === 1 ? other.total : 0),
   };
 }
+
+export interface NewRegistrationParams {
+  minCollectWon: number;
+  halfBasisMinAge: number;
+  educationTaxRate: number;
+  truncateUnit: number;
+}
+
+export interface NewRegistrationResult {
+  half: 1 | 2;
+  /** 등록일 ~ 기분 말일 (등록일 포함, 운영예규 법130-1) */
+  days: number;
+  carTax: number;
+  educationTax: number;
+  total: number;
+  waived: boolean;
+  /** 등록한 해에 내는 자동차세+교육세: 등록 기분 일할 + (1기분 등록이면) 2기분 전액 */
+  yearTotal: number;
+}
+
+/**
+ * 신규등록한 해의 자동차세 (지방세법 제130조제1항, 시행령 제126조).
+ * 등록일이 속한 기분만 등록일부터 기분 말일까지 일할계산하고, 그 뒤 기분은 전액.
+ */
+export function calcNewRegistrationTax(tax: CarTaxResult, regDate: IsoDate, p: NewRegistrationParams): NewRegistrationResult {
+  const year = Number(regDate.slice(0, 4));
+  const half: 1 | 2 = Number(regDate.slice(5, 7)) <= 6 ? 1 : 2;
+  const halfEnd = half === 1 ? `${year}-06-30` : `${year}-12-31`;
+  const halfDays = diffDays(half === 1 ? `${year}-01-01` : `${year}-07-01`, halfEnd) + 1;
+  const days = diffDays(regDate, halfEnd) + 1;
+  const h = tax.halves[half - 1] as HalfTax;
+  const halfBasis = !tax.flat && h.carAge >= p.halfBasisMinAge;
+  const raw = truncateTo(halfBasis ? (h.carTax * days) / halfDays : (tax.baseAnnual * days) / daysInYear(year), p.truncateUnit);
+  const waived = raw < p.minCollectWon;
+  const carTax = waived ? 0 : raw;
+  const educationTax = truncateTo(carTax * p.educationTaxRate, p.truncateUnit);
+  const total = carTax + educationTax;
+  return { half, days, carTax, educationTax, total, waived, yearTotal: total + (half === 1 ? tax.halves[1].total : 0) };
+}
