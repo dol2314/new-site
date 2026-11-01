@@ -60,6 +60,10 @@ const CAR_KEYS = [
   "values.smallTaxRule",
   "rules.carAge",
   "rules.prepayDiscount",
+  "rules.prepayNotice",
+  "rules.prepayMove",
+  "rules.prepayTransfer",
+  "rules.installment",
 ];
 
 export interface CarTaxData {
@@ -92,6 +96,7 @@ export function carTaxData(year: number): CarTaxData {
   };
   pick(doc, "rules.carAge", missing);
   pick(doc, "rules.prepayDiscount", missing);
+  for (const k of ["rules.prepayNotice", "rules.prepayMove", "rules.prepayTransfer", "rules.installment"]) pick(doc, k, missing);
   return {
     year,
     tax,

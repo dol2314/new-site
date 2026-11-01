@@ -63,6 +63,20 @@ describe("연납 공제 (법령값, 2027년)", () => {
   it("9월: 199,900 × 92/184 × 5% = 4,997.5 → 공제 5,000원", () => expect(calcPrepay(tax, 9, 2027, d27.prepay).carTaxDiscount).toBe(5_000));
 });
 
+describe("연납 사례 글 숫자 (2027년, 1,999cc 휘발유 2025-03 등록)", () => {
+  const d = carTaxData(2027);
+  const t = calcCarTax({ fuelType: "gasoline", displacementCc: 1999, ageStartDate: "2025-03-10", taxYear: 2027 }, d.tax);
+  it("연납 규칙 출처 확인 완료", () => expect(d.missing).toEqual([]));
+  it("차령 3년 5% 경감: 반기 199,900 − 9,995 = 189,905 → 189,900원, 1년 고지 493,740원", () =>
+    expect([t.halves[0].carTax, t.carTax, t.annualTotal]).toEqual([189_900, 379_800, 493_740]));
+  it("1월 연납: 379,800 × 334/365 × 5% 공제 → 자동차세 362,420 + 교육세 108,720 = 471,140원, 22,600원 절약 (글 제목 숫자)", () => {
+    const r = calcPrepay(t, 1, 2027, d.prepay);
+    expect([r.coveredDays, r.payTotal, r.saving]).toEqual([334, 471_140, 22_600]);
+  });
+  it("3·6·9월 절약액 18,610 · 12,350 · 6,180원", () =>
+    expect([3, 6, 9].map((m) => calcPrepay(t, m, 2027, d.prepay).saving)).toEqual([18_610, 12_350, 6_180]));
+});
+
 describe("정기검사 (법령값)", () => {
   const ins = inspectionData();
   it("검사 기간: 만료일 전 90일 ~ 후 31일", () =>
