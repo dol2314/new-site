@@ -62,6 +62,17 @@ export const GUIDES: GuideMeta[] = [
     published: false,
     reviewed: false,
   },
+  {
+    slug: "ev-vs-gasoline-5-years",
+    title: "전기차 vs 휘발유차, 5년 타면 얼마 차이? — 주행거리·충전 방식별 손익 계산",
+    description:
+      "4,500만원 전기차와 3,000만원 휘발유차를 5개 연도 동안 탈 때 실구매가·자동차세·충전비·기름값을 더해 비교하고, 몇 km부터 전기차가 덜 드는지 계산했습니다.",
+    asOf: "2026-11-01",
+    updatedAt: "2026-11-01",
+    tools: ["car-loan", "ev-charging", "registration-tax"],
+    published: false,
+    reviewed: false,
+  },
 ];
 
 export const publishedGuides = () => GUIDES.filter((g) => g.published);

@@ -247,3 +247,18 @@ describe("신규등록 일할계산·5년 비용 (2027년 세율)", () => {
     expect(r.rows.map((x) => x.carTax)).toEqual([286_430, 290_820, 276_260, 261_740, 247_200]);
   });
 });
+
+describe("사례 글 5편 숫자: 전기차 vs 휘발유차 5개 연도 (2027-01-04 등록, 1년 15,000km)", () => {
+  const o = ownershipData();
+  const c = evChargingData();
+  const { params: rp } = registrationTaxData();
+  const regIn = (price: number, powertrain: "electric" | "ice") => ({ price, vatIncluded: true, compact: false, powertrain, seats7to10: false, childrenUnder18: 0, acquiredOn: "2027-01-04" });
+  const common = { start: "2027-01-04", years: 5, carTaxParamsFor: (y: number) => o.carTaxByYear[Math.min(y, o.latestYear)]!, newRegistration: o.newRegistration, annualInsurance: 0 };
+  it("전기차 43,929,736원 vs 휘발유차 43,879,884원 (공공 완속 295원, 연비 12km/L·1,700원 가정)", () => {
+    const evReal = 45_000_000 - 9_000_000 + calcRegistrationTax(regIn(45_000_000, "electric"), rp).payable;
+    const iceReal = 30_000_000 + calcRegistrationTax(regIn(30_000_000, "ice"), rp).payable;
+    const ev = calcOwnershipCost({ ...common, purchase: evReal, fuelType: "electric", annualEnergy: (15_000 / 5) * tierForKw(7, c.publicTiers).wonPerKwh });
+    const ice = calcOwnershipCost({ ...common, purchase: iceReal, fuelType: "gasoline", displacementCc: 1598, annualEnergy: (15_000 / 12) * 1_700 });
+    expect([evReal, iceReal, ev.totals.carTax, ice.totals.carTax, ev.totals.all, ice.totals.all]).toEqual([38_863_630, 31_909_090, 648_380, 1_363_260, 43_929_736, 43_879_884]);
+  });
+});
