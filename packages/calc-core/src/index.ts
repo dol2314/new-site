@@ -29,7 +29,15 @@ export {
   type PenaltyResult,
   type PenaltyTier,
 } from "./inspection";
-export { calcEvSubsidy, type EvModel, type EvSubsidyInput, type EvSubsidyResult } from "./evSubsidy";
+export {
+  calcEvSubsidy,
+  expectedConversionNational,
+  multiChildManwon,
+  type EvModel,
+  type EvSubsidyInput,
+  type EvSubsidyResult,
+  type EvSubsidyRules,
+} from "./evSubsidy";
 export {
   calcRegistrationTax,
   type CapRelief,
