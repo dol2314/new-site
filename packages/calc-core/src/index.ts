@@ -18,6 +18,7 @@ export {
   type PrepayPeriod,
   type PrepayResult,
 } from "./carTax";
+export { calcTransferProrate, type ProrateParams, type ProrateResult, type ProrateShare } from "./carTaxProrate";
 export {
   calcInspectionPenalty,
   estimateExpiry,

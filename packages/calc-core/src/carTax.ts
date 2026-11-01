@@ -15,7 +15,7 @@
  * - 10원 미만 끝수 버림 (지방세기본법 제59조 → 국고금 관리법 제47조제1항). 기분별 징수금마다 적용한다.
  * - 연납 공제 (지방세법 제128조제3항, 시행령 제125조제3항·제6항): PrepayPeriod.basis 참고
  *
- * 범위 밖: 영업용·승합·화물, 연중 신규등록·이전의 일할계산(시행령 제126조), 지자체 조례로 바꾼 세율(법 제127조제3항, 제151조제2항).
+ * 범위 밖: 영업용·승합·화물, 연중 신규등록의 일할계산(이전 일할계산은 carTaxProrate.ts), 지자체 조례로 바꾼 세율(법 제127조제3항, 제151조제2항).
  */
 import { daysInYear, diffDays, formatDate, parseDate, type IsoDate } from "./dates";
 import { truncateTo } from "./money";
