@@ -179,7 +179,7 @@ export function CarLoanCalculator({
         </div>
       )}
       <div className="field">
-        <label htmlFor="date">등록 예정일</label>
+        <label htmlFor="date">취득일 (인도 예정일)</label>
         <input
           id="date"
           type="date"

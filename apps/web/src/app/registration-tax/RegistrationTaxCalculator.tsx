@@ -120,8 +120,9 @@ export function RegistrationTaxCalculator({ params }: { params: RegistrationTaxP
         </select>
       </div>
       <div className="field">
-        <label htmlFor="date">취득일(등록 예정일)</label>
+        <label htmlFor="date">취득일</label>
         <input id="date" type="date" value={acquiredOn} onChange={(e) => setDate(e.target.value)} />
+        <p className="hint">새 차는 차를 인도받는 날과 계약서상 잔금지급일 중 빠른 날, 중고차는 잔금을 낸 날(그 전에 등록하면 등록일)입니다. 감면 기한은 이 날로 판단합니다.</p>
       </div>
 
       <output className="result" aria-live="polite">
@@ -152,7 +153,7 @@ export function RegistrationTaxCalculator({ params }: { params: RegistrationTaxP
             )}
             {result.expired.map((e) => (
               <p key={e.label} className="notice small">
-                {e.label}은 현행법상 {formatKoreanDate(e.until)}까지 취득한 차에만 적용돼 이 날짜에는 빠졌습니다. 법이 바뀌면 다시 확인합니다.
+                {e.label}은 현행법상 {formatKoreanDate(e.until)}까지 취득(새 차는 인도·잔금 중 빠른 날)한 차에만 적용돼 이 날짜에는 빠졌습니다. 법이 바뀌면 다시 확인합니다.
               </p>
             ))}
             {result.relief?.id.startsWith("multi-child") && (

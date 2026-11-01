@@ -124,6 +124,18 @@ describe("취득세 (법령값)", () => {
     // 2,545,454 → 2,545,450 / 감면 2,545,450 × 0.85 = 2,163,632.5 → 2,163,630 / 낼 세액 381,820
     expect([r.computedTax, r.relief?.amount, r.payable]).toEqual([2_545_450, 2_163_630, 381_820]);
   });
+  it("경형 전기차 2,800만원(부가세 포함): 산출 1,018,180원 — 2026년 전기차 감면 0원, 2027년 경차 감면(75만)만 남아 268,180원", () => {
+    const c = { ...base, price: 28_000_000, compact: true, powertrain: "electric" as const };
+    const d = calcRegistrationTax({ ...c, acquiredOn: "2026-12-20" }, p);
+    const j = calcRegistrationTax({ ...c, acquiredOn: "2027-01-05" }, p);
+    expect([d.computedTax, d.payable, j.payable]).toEqual([1_018_180, 0, 268_180]);
+  });
+  it("수소전기차 7,000만원(부가세 포함): 산출 4,454,540원 − 140만 = 3,054,540원, 2027년에도 같음", () => {
+    const h = { ...base, price: 70_000_000, powertrain: "hydrogen" as const };
+    const d = calcRegistrationTax({ ...h, acquiredOn: "2026-12-20" }, p);
+    const j = calcRegistrationTax({ ...h, acquiredOn: "2027-01-05" }, p);
+    expect([d.computedTax, d.payable, j.payable]).toEqual([4_454_540, 3_054_540, 3_054_540]);
+  });
   it("면세점: 50만원 이하 0원", () => expect(calcRegistrationTax({ ...base, price: 500_000, vatIncluded: false }, p).payable).toBe(0));
 });
 

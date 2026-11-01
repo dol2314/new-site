@@ -36,11 +36,11 @@ const examples: Example[] = [
     ),
   },
   {
-    title: "4,500만원 전기차 — 2026년 12월과 2027년 1월 등록 비교",
+    title: "4,500만원 전기차 — 2026년 12월과 2027년 1월 취득 비교",
     body: (
       <p>
         산출 취득세 {formatWon(e2a.computedTax)}에서 {formatWon(p.evRelief.capWon)}을 빼 {formatWon(e2a.payable)}입니다. 현행법상 전기차 감면은{" "}
-        {formatKoreanDate(p.evRelief.until)}까지라, 2027년 1월에 등록하면 {formatWon(e2b.payable)}로 {formatWon(e2b.payable - e2a.payable)} 더
+        {formatKoreanDate(p.evRelief.until)}까지라, 2027년 1월에 인도받으면 {formatWon(e2b.payable)}으로 {formatWon(e2b.payable - e2a.payable)} 더
         냅니다.
       </p>
     ),

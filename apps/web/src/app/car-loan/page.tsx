@@ -93,14 +93,14 @@ const lb = calcLoan({
 
 const examples: Example[] = [
   {
-    title: "4,500만원 전기차, 보조금 900만원 — 12월 등록 vs 1월 등록",
+    title: "4,500만원 전기차, 보조금 900만원 — 12월 인도 vs 1월 인도",
     body: (
       <p>
         차량 대금은 {formatWon(p1.carPayable)}입니다. 취득세는 보조금을 빼기 전
-        차값 기준이라 12월 등록이면 {formatWon(t1.payable)}, 실구매가{" "}
+        차값 기준이라 12월에 인도받으면 {formatWon(t1.payable)}, 실구매가{" "}
         {formatWon(p1.realPrice)}입니다. 현행법상 전기차 취득세 감면이{" "}
-        {formatKoreanDate(p.evRelief.until)}에 끝나 1월에 등록하면 취득세{" "}
-        {formatWon(t2.payable)}, 실구매가 {formatWon(p2.realPrice)}로{" "}
+        {formatKoreanDate(p.evRelief.until)}에 끝나 1월에 인도받으면 취득세{" "}
+        {formatWon(t2.payable)}, 실구매가 {formatWon(p2.realPrice)}으로{" "}
         {formatWon(p2.realPrice - p1.realPrice)} 늘어납니다. (차값·보조금은
         예시)
       </p>
@@ -113,8 +113,8 @@ const examples: Example[] = [
         취득세 {formatWon(ice.payable)}는 처음에 따로 내고, 할부 원금은{" "}
         {formatWon(ip.financed)}입니다. 원리금균등은 매달{" "}
         {formatWon(lp.firstPayment)}, 총이자 {formatWon(lp.totalInterest)}
-        입니다. 원금균등은 첫 달 {formatWon(lq.firstPayment)}로 시작해 줄어들고,
-        총이자는 {formatWon(lq.totalInterest)}로{" "}
+        입니다. 원금균등은 첫 달 {formatWon(lq.firstPayment)}으로 시작해 줄어들고,
+        총이자는 {formatWon(lq.totalInterest)}으로{" "}
         {formatWon(lp.totalInterest - lq.totalInterest)} 적습니다. (금리는 예시)
       </p>
     ),
@@ -123,10 +123,10 @@ const examples: Example[] = [
     title: "같은 조건을 유예할부(40% 유예)로 하면",
     body: (
       <p>
-        매달 {formatWon(lb.firstPayment)}로 원리금균등보다{" "}
+        매달 {formatWon(lb.firstPayment)}으로 원리금균등보다{" "}
         {formatWon(lp.firstPayment - lb.firstPayment)} 적지만, 마지막 달에{" "}
         {formatWon(lb.lastPayment)}를 내야 하고 총이자는{" "}
-        {formatWon(lb.totalInterest)}로{" "}
+        {formatWon(lb.totalInterest)}으로{" "}
         {formatWon(lb.totalInterest - lp.totalInterest)} 많습니다.
       </p>
     ),
