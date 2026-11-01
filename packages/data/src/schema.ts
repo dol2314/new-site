@@ -14,7 +14,7 @@ export interface SourcedValue<T = number> {
   checked_at: string | null;
   /** 공식 출처로 확인했으면 true. false인 값을 쓰는 화면은 공개하지 않는다. */
   verified: boolean;
-  /** 확인 전 후보값 — 계산에 쓰지 않는다. 확인되면 value로 옮기고 지운다 */
+  /** 확인 전 후보값 — 공개 화면 계산에 쓰지 않는다(초안 미리보기만 예외, previewParams). 확인되면 value로 옮기고 지운다 */
   candidate?: T;
   /** 후보값을 어디서 봤는지 (2차 자료면 그렇게 적는다) */
   candidate_source?: string;

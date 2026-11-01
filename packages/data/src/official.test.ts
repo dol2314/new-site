@@ -2,9 +2,9 @@
  * 확인된 법령값으로 엔진을 검증한다. 기대값은 법령 산식으로 손으로 계산한 값
  * (지방세법 제127조·제128조·제151조, 시행령 제122조·제125조, 국고금 관리법 제47조, 자동차관리법 시행령 별표 2).
  */
-import { calcCarTax, calcEvSubsidy, calcRegistrationTax, expectedConversionNational, calcInspectionPenalty, calcPrepay, inspectionWindow, penaltyForDays } from "@site/calc-core";
+import { calcCarTax, calcTransferProrate, calcEvSubsidy, calcRegistrationTax, expectedConversionNational, calcInspectionPenalty, calcPrepay, inspectionWindow, penaltyForDays } from "@site/calc-core";
 import { describe, expect, it } from "vitest";
-import { carTaxData, evSubsidyData, inspectionData, registrationTaxData } from "./params";
+import { carTaxData, carTaxProrateData, evSubsidyData, inspectionData, registrationTaxData } from "./params";
 
 const d26 = carTaxData(2026);
 const d27 = carTaxData(2027);
@@ -75,6 +75,25 @@ describe("연납 사례 글 숫자 (2027년, 1,999cc 휘발유 2025-03 등록)",
   });
   it("3·6·9월 절약액 18,610 · 12,350 · 6,180원", () =>
     expect([3, 6, 9].map((m) => calcPrepay(t, m, 2027, d.prepay).saving)).toEqual([18_610, 12_350, 6_180]));
+});
+
+describe("이전 일할계산 (법령값, 2027년)", () => {
+  const d = carTaxData(2027);
+  const pr = carTaxProrateData(2027);
+  it("확인 전 항목은 이전일 당일 귀속 규칙 하나뿐", () => expect(pr.missing).toEqual(["rules.prorateDayBoundary"]));
+  it("2천원 미만 미징수, 차령 3년 이상은 기분 기준 (제130조제4항, 시행령 제126조)", () =>
+    expect([pr.params.minCollectWon, pr.params.halfBasisMinAge]).toEqual([2_000, 3]));
+  // 아래는 후보값(이전일 당일 = 양수인)으로 계산한 사례 글 숫자. 규칙 확인 후 기대값을 다시 본다.
+  const t = calcCarTax({ fuelType: "gasoline", displacementCc: 1999, ageStartDate: "2025-03-10", taxYear: 2027 }, d.tax);
+  it("[후보값] 4/15 이전등록: 189,900 × 104/181 → 109,110 + 32,730 / 189,900 × 77/181 → 80,780 + 24,230", () => {
+    const r = calcTransferProrate(t, "2027-04-15", 2027, pr.previewParams);
+    expect([r.seller.days, r.seller.total, r.buyer.days, r.buyer.total]).toEqual([104, 141_840, 77, 105_010]);
+  });
+  it("[후보값] 998cc를 1/10에 넘기면 판 사람 몫 1,880원 < 2천원 → 0원", () => {
+    const k = calcCarTax({ fuelType: "gasoline", displacementCc: 998, ageStartDate: "2025-03-10", taxYear: 2027 }, d.tax);
+    const r = calcTransferProrate(k, "2027-01-10", 2027, pr.previewParams);
+    expect([r.seller.days, r.seller.carTax, r.seller.waived]).toEqual([9, 0, true]);
+  });
 });
 
 describe("정기검사 (법령값)", () => {

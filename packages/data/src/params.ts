@@ -2,7 +2,7 @@
  * 확인된(verified) 데이터만 계산 엔진 매개변수로 바꿔 준다.
  * 확인 전 항목이 하나라도 필요하면 missing에 이름이 들어가고, 그 기능을 쓰는 화면은 공개하지 않는다.
  */
-import type { CarTaxParams, CapRelief, EvModel, EvSubsidyRules, RegistrationTaxParams, InspectionCycle, InspectionParams, PenaltyTier, PrepayParams, PrepayPeriod } from "@site/calc-core";
+import type { CarTaxParams, CapRelief, EvModel, EvSubsidyRules, RegistrationTaxParams, InspectionCycle, InspectionParams, PenaltyTier, PrepayParams, PrepayPeriod, ProrateParams } from "@site/calc-core";
 import car2026 from "../data/car-tax/2026.json";
 import car2027 from "../data/car-tax/2027.json";
 import ev2026 from "../data/ev-subsidy/2026.json";
@@ -106,6 +106,54 @@ export function carTaxData(year: number): CarTaxData {
     sources: refs(doc, CAR_KEYS),
     missing,
   };
+}
+
+const PRORATE_KEYS = [
+  "values.prorateMinWon",
+  "values.prorateHalfBasisMinAge",
+  "rules.prorateFormula",
+  "rules.prorateBasisDate",
+  "rules.prorateSellerReport",
+  "rules.prorateRefund",
+  "rules.prorateDayBoundary",
+];
+
+export interface CarTaxProrateData {
+  year: number;
+  /** 확인된 값만 담는다. missing이 비어 있지 않으면 undefined 항목이 있다 */
+  params: ProrateParams;
+  /**
+   * 초안 미리보기 전용: 확인 전 항목을 후보값으로 채운 매개변수.
+   * 공개 화면에서 쓰면 안 된다(missing이 비어 있지 않으면 공개 금지).
+   */
+  previewParams: ProrateParams;
+  sources: SourceRef[];
+  missing: string[];
+}
+
+/** 소유권 이전 일할계산 매개변수 (자동차세 세율·교육세율은 carTaxData와 같은 연도 문서) */
+export function carTaxProrateData(year: number): CarTaxProrateData {
+  const doc = CAR_DOCS[year];
+  if (!doc) throw new RangeError(`${year}년 자동차세 데이터 없음`);
+  const missing: string[] = [];
+  const base = carTaxData(year);
+  for (const k of ["rules.prorateFormula", "rules.prorateBasisDate", "rules.prorateSellerReport", "rules.prorateRefund"]) pick(doc, k, missing);
+  const params: ProrateParams = {
+    minCollectWon: pick(doc, "values.prorateMinWon", missing),
+    halfBasisMinAge: pick(doc, "values.prorateHalfBasisMinAge", missing),
+    transferDayOwner: pick(doc, "rules.prorateDayBoundary", missing),
+    educationTaxRate: base.tax.educationTaxRate,
+    truncateUnit: base.tax.truncateUnit,
+  };
+  const candidate = (key: string) => {
+    const [section, name] = key.split(".") as ["values" | "rules", string];
+    return doc[section]?.[name]?.candidate;
+  };
+  const previewParams: ProrateParams = {
+    ...params,
+    transferDayOwner: params.transferDayOwner ?? (candidate("rules.prorateDayBoundary") as ProrateParams["transferDayOwner"]),
+  };
+  return { year, params, previewParams, sources: refs(doc, PRORATE_KEYS), missing: [...base.missing, ...missing] };
 }
 
 export interface InspectionData {
