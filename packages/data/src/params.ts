@@ -2,9 +2,10 @@
  * 확인된(verified) 데이터만 계산 엔진 매개변수로 바꿔 준다.
  * 확인 전 항목이 하나라도 필요하면 missing에 이름이 들어가고, 그 기능을 쓰는 화면은 공개하지 않는다.
  */
-import type { CarTaxParams, InspectionCycle, InspectionParams, PenaltyTier, PrepayParams, PrepayPeriod } from "@site/calc-core";
+import type { CarTaxParams, EvModel, InspectionCycle, InspectionParams, PenaltyTier, PrepayParams, PrepayPeriod } from "@site/calc-core";
 import car2026 from "../data/car-tax/2026.json";
 import car2027 from "../data/car-tax/2027.json";
+import ev2026 from "../data/ev-subsidy/2026.json";
 import inspectionDoc from "../data/inspection/rules.json";
 import type { SourcedValue } from "./schema";
 
@@ -131,5 +132,52 @@ export function inspectionData(): InspectionData {
     missing: { window, penalty, estimate, fees },
     penaltyMaxReductionRate: discretion?.maxReductionRate,
     sources: refs(doc, ["values.windowDays", "values.cyclePassengerPrivate", "values.penaltyTiers", "values.penaltyDiscretion", "rules.validityStart"]),
+  };
+}
+
+export interface EvRegion {
+  code: string;
+  name: string;
+  baseDate: string;
+  source_url: string;
+}
+
+export interface EvSubsidyData {
+  year: number;
+  models: EvModel[];
+  regions: EvRegion[];
+  baseDate: string;
+  /**
+   * 기능별 확인 대기 항목. 빈 배열이어야 그 기능을 공개한다.
+   * - regionData: 데이터에 있는 지역(예: 제주) 합계 — 국비·지방비 모두 그 지역 공개 데이터
+   * - nationwide: 다른 지역에 국비를 그대로 적용하는 것
+   * - conversion: 전환지원금 대상 조건 설명
+   */
+  missing: { regionData: string[]; nationwide: string[]; conversion: string[] };
+  sources: SourceRef[];
+}
+
+const EV_DOCS: Record<number, DataDoc & { regions: Record<string, { name: string; baseDate: string; source_url: string }> }> = {
+  2026: ev2026 as unknown as DataDoc & { regions: Record<string, { name: string; baseDate: string; source_url: string }> },
+};
+export const EV_SUBSIDY_YEARS = Object.keys(EV_DOCS).map(Number);
+
+export function evSubsidyData(year: number): EvSubsidyData {
+  const doc = EV_DOCS[year];
+  if (!doc) throw new RangeError(`${year}년 전기차 보조금 데이터 없음`);
+  const regionData: string[] = [];
+  const nationwide: string[] = [];
+  const conversion: string[] = [];
+  const models = pick<EvModel[]>(doc, "values.models", regionData) ?? [];
+  pick(doc, "rules.nationalUniform", nationwide);
+  pick(doc, "rules.conversionEligibility", conversion);
+  const regions = Object.entries(doc.regions).map(([code, r]) => ({ code, ...r }));
+  return {
+    year,
+    models,
+    regions,
+    baseDate: doc.values.models?.effective_date ?? "",
+    missing: { regionData, nationwide, conversion },
+    sources: refs(doc, ["values.models"]),
   };
 }

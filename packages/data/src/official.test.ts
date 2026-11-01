@@ -2,9 +2,9 @@
  * 확인된 법령값으로 엔진을 검증한다. 기대값은 법령 산식으로 손으로 계산한 값
  * (지방세법 제127조·제128조·제151조, 시행령 제122조·제125조, 국고금 관리법 제47조, 자동차관리법 시행령 별표 2).
  */
-import { calcCarTax, calcInspectionPenalty, calcPrepay, inspectionWindow, penaltyForDays } from "@site/calc-core";
+import { calcCarTax, calcEvSubsidy, calcInspectionPenalty, calcPrepay, inspectionWindow, penaltyForDays } from "@site/calc-core";
 import { describe, expect, it } from "vitest";
-import { carTaxData, inspectionData } from "./params";
+import { carTaxData, evSubsidyData, inspectionData } from "./params";
 
 const d26 = carTaxData(2026);
 const d27 = carTaxData(2027);
@@ -80,4 +80,24 @@ describe("정기검사 (법령값)", () => {
     expect(calcInspectionPenalty("2027-06-09", "2027-07-11", ins.params).capReachedOn).toBe("2027-11-02"));
   it("과태료 기능은 지연기간 기산일 확인 전까지 공개 불가", () => expect(ins.missing.penalty).toEqual(["rules.overdueCount"]));
   it("검사 기간 기능은 공개 가능", () => expect(ins.missing.window).toEqual([]));
+});
+
+describe("전기차 보조금 (제주 공공데이터 2026-09-17)", () => {
+  it("차종 120개, 지역 데이터 기능은 확인 완료", () => {
+    const d = evSubsidyData(2026);
+    expect(d.models).toHaveLength(120);
+    expect(d.missing.regionData).toEqual([]);
+    expect(d.missing.nationwide).toEqual(["rules.nationalUniform"]);
+    expect(d.missing.conversion).toEqual(["rules.conversionEligibility"]);
+  });
+  it("EV3 롱레인지 2WD 19인치, 제주: 국비 555만 + 도비 382만 = 937만원, 전환지원 포함 1,067만원", () => {
+    const m = evSubsidyData(2026).models.find((x) => x.name === "EV3 롱레인지 2WD 19인치");
+    expect(m).toBeDefined();
+    expect(calcEvSubsidy({ model: m!, region: "jeju", conversion: false }).total).toBe(9_370_000);
+    expect(calcEvSubsidy({ model: m!, region: "jeju", conversion: true }).total).toBe(10_670_000);
+  });
+  it("단종 표시는 이름에서 떼고 discontinued로", () => {
+    const atto = evSubsidyData(2026).models.find((x) => x.name === "BYD ATTO 3");
+    expect(atto?.discontinued).toBe(true);
+  });
 });

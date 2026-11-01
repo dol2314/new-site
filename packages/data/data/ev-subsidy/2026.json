@@ -1,0 +1,1848 @@
+{
+  "topic": "ev-subsidy",
+  "year": 2026,
+  "title": "2026년 전기승용차 구매보조금 (차종별 국비·전환지원금, 지역별 지방비)",
+  "scope": "전기승용차(일반승용·경소형). 화물·승합·이륜, 법인·기관 구매는 범위 밖",
+  "regions": {
+    "jeju": {
+      "name": "제주특별자치도",
+      "baseDate": "2026-09-17",
+      "source_url": "https://www.data.go.kr/data/15048678/fileData.do"
+    }
+  },
+  "values": {
+    "models": {
+      "value": [
+        {
+          "id": "기아|더뉴EV6 롱레인지 2WD 19인치",
+          "maker": "기아",
+          "name": "더뉴EV6 롱레인지 2WD 19인치",
+          "category": "일반승용",
+          "discontinued": false,
+          "national": 570,
+          "conversionNational": 100,
+          "local": {
+            "jeju": 393
+          },
+          "conversionLocal": {
+            "jeju": 30
+          }
+        },
+        {
+          "id": "기아|더뉴EV6 롱레인지 2WD 20인치",
+          "maker": "기아",
+          "name": "더뉴EV6 롱레인지 2WD 20인치",
+          "category": "일반승용",
+          "discontinued": false,
+          "national": 559,
+          "conversionNational": 100,
+          "local": {
+            "jeju": 385
+          },
+          "conversionLocal": {
+            "jeju": 30
+          }
+        },
+        {
+          "id": "기아|더뉴EV6 롱레인지 4WD 19인치",
+          "maker": "기아",
+          "name": "더뉴EV6 롱레인지 4WD 19인치",
+          "category": "일반승용",
+          "discontinued": false,
+          "national": 561,
+          "conversionNational": 100,
+          "local": {
+            "jeju": 387
+          },
+          "conversionLocal": {
+            "jeju": 30
+          }
+        },
+        {
+          "id": "기아|더뉴EV6 롱레인지 4WD 20인치",
+          "maker": "기아",
+          "name": "더뉴EV6 롱레인지 4WD 20인치",
+          "category": "일반승용",
+          "discontinued": false,
+          "national": 532,
+          "conversionNational": 100,
+          "local": {
+            "jeju": 367
+          },
+          "conversionLocal": {
+            "jeju": 30
+          }
+        },
+        {
+          "id": "기아|더뉴EV6 스탠다드",
+          "maker": "기아",
+          "name": "더뉴EV6 스탠다드",
+          "category": "일반승용",
+          "discontinued": false,
+          "national": 501,
+          "conversionNational": 100,
+          "local": {
+            "jeju": 345
+          },
+          "conversionLocal": {
+            "jeju": 30
+          }
+        },
+        {
+          "id": "기아|레이 EV 2WD 14인치 2인승 밴",
+          "maker": "기아",
+          "name": "레이 EV 2WD 14인치 2인승 밴",
+          "category": "경·소형",
+          "discontinued": false,
+          "national": 457,
+          "conversionNational": 91,
+          "local": {
+            "jeju": 344
+          },
+          "conversionLocal": {
+            "jeju": 27
+          }
+        },
+        {
+          "id": "기아|레이 EV 2WD 14인치 4인승 승용",
+          "maker": "기아",
+          "name": "레이 EV 2WD 14인치 4인승 승용",
+          "category": "경·소형",
+          "discontinued": false,
+          "national": 457,
+          "conversionNational": 91,
+          "local": {
+            "jeju": 344
+          },
+          "conversionLocal": {
+            "jeju": 27
+          }
+        },
+        {
+          "id": "기아|EV3 롱레인지 2WD 17인치",
+          "maker": "기아",
+          "name": "EV3 롱레인지 2WD 17인치",
+          "category": "일반승용",
+          "discontinued": false,
+          "national": 555,
+          "conversionNational": 100,
+          "local": {
+            "jeju": 382
+          },
+          "conversionLocal": {
+            "jeju": 30
+          }
+        },
+        {
+          "id": "기아|EV3 롱레인지 2WD 19인치",
+          "maker": "기아",
+          "name": "EV3 롱레인지 2WD 19인치",
+          "category": "일반승용",
+          "discontinued": false,
+          "national": 555,
+          "conversionNational": 100,
+          "local": {
+            "jeju": 382
+          },
+          "conversionLocal": {
+            "jeju": 30
+          }
+        },
+        {
+          "id": "기아|EV3 롱레인지 4WD 19인치",
+          "maker": "기아",
+          "name": "EV3 롱레인지 4WD 19인치",
+          "category": "일반승용",
+          "discontinued": false,
+          "national": 539,
+          "conversionNational": 100,
+          "local": {
+            "jeju": 371
+          },
+          "conversionLocal": {
+            "jeju": 30
+          }
+        },
+        {
+          "id": "기아|EV3 스탠다드 2WD",
+          "maker": "기아",
+          "name": "EV3 스탠다드 2WD",
+          "category": "일반승용",
+          "discontinued": false,
+          "national": 469,
+          "conversionNational": 94,
+          "local": {
+            "jeju": 323
+          },
+          "conversionLocal": {
+            "jeju": 28
+          }
+        },
+        {
+          "id": "기아|EV3 GT",
+          "maker": "기아",
+          "name": "EV3 GT",
+          "category": "일반승용",
+          "discontinued": false,
+          "national": 248,
+          "conversionNational": 50,
+          "local": {
+            "jeju": 171
+          },
+          "conversionLocal": {
+            "jeju": 15
+          }
+        },
+        {
+          "id": "기아|EV4 롱레인지 2WD 17인치",
+          "maker": "기아",
+          "name": "EV4 롱레인지 2WD 17인치",
+          "category": "일반승용",
+          "discontinued": false,
+          "national": 555,
+          "conversionNational": 100,
+          "local": {
+            "jeju": 382
+          },
+          "conversionLocal": {
+            "jeju": 30
+          }
+        },
+        {
+          "id": "기아|EV4 롱레인지 2WD 19인치",
+          "maker": "기아",
+          "name": "EV4 롱레인지 2WD 19인치",
+          "category": "일반승용",
+          "discontinued": false,
+          "national": 555,
+          "conversionNational": 100,
+          "local": {
+            "jeju": 382
+          },
+          "conversionLocal": {
+            "jeju": 30
+          }
+        },
+        {
+          "id": "기아|EV4 롱레인지 4WD 19인치",
+          "maker": "기아",
+          "name": "EV4 롱레인지 4WD 19인치",
+          "category": "일반승용",
+          "discontinued": false,
+          "national": 554,
+          "conversionNational": 100,
+          "local": {
+            "jeju": 382
+          },
+          "conversionLocal": {
+            "jeju": 30
+          }
+        },
+        {
+          "id": "기아|EV4 롱레인지 GTL 2WD 19인치",
+          "maker": "기아",
+          "name": "EV4 롱레인지 GTL 2WD 19인치",
+          "category": "일반승용",
+          "discontinued": false,
+          "national": 555,
+          "conversionNational": 100,
+          "local": {
+            "jeju": 382
+          },
+          "conversionLocal": {
+            "jeju": 30
+          }
+        },
+        {
+          "id": "기아|EV4 스탠다드 2WD 17인치",
+          "maker": "기아",
+          "name": "EV4 스탠다드 2WD 17인치",
+          "category": "일반승용",
+          "discontinued": false,
+          "national": 512,
+          "conversionNational": 100,
+          "local": {
+            "jeju": 353
+          },
+          "conversionLocal": {
+            "jeju": 30
+          }
+        },
+        {
+          "id": "기아|EV4 스탠다드 2WD 19인치",
+          "maker": "기아",
+          "name": "EV4 스탠다드 2WD 19인치",
+          "category": "일반승용",
+          "discontinued": false,
+          "national": 481,
+          "conversionNational": 96,
+          "local": {
+            "jeju": 331
+          },
+          "conversionLocal": {
+            "jeju": 29
+          }
+        },
+        {
+          "id": "기아|EV4 GT",
+          "maker": "기아",
+          "name": "EV4 GT",
+          "category": "일반승용",
+          "discontinued": false,
+          "national": 255,
+          "conversionNational": 51,
+          "local": {
+            "jeju": 175
+          },
+          "conversionLocal": {
+            "jeju": 15
+          }
+        },
+        {
+          "id": "기아|EV5 롱레인지 2WD",
+          "maker": "기아",
+          "name": "EV5 롱레인지 2WD",
+          "category": "일반승용",
+          "discontinued": false,
+          "national": 552,
+          "conversionNational": 100,
+          "local": {
+            "jeju": 380
+          },
+          "conversionLocal": {
+            "jeju": 30
+          }
+        },
+        {
+          "id": "기아|EV5 롱레인지 4WD 18인치",
+          "maker": "기아",
+          "name": "EV5 롱레인지 4WD 18인치",
+          "category": "일반승용",
+          "discontinued": false,
+          "national": 499,
+          "conversionNational": 100,
+          "local": {
+            "jeju": 344
+          },
+          "conversionLocal": {
+            "jeju": 30
+          }
+        },
+        {
+          "id": "기아|EV5 롱레인지 4WD 19인치",
+          "maker": "기아",
+          "name": "EV5 롱레인지 4WD 19인치",
+          "category": "일반승용",
+          "discontinued": false,
+          "national": 493,
+          "conversionNational": 99,
+          "local": {
+            "jeju": 340
+          },
+          "conversionLocal": {
+            "jeju": 30
+          }
+        },
+        {
+          "id": "기아|EV5 GT",
+          "maker": "기아",
+          "name": "EV5 GT",
+          "category": "일반승용",
+          "discontinued": false,
+          "national": 232,
+          "conversionNational": 46,
+          "local": {
+            "jeju": 160
+          },
+          "conversionLocal": {
+            "jeju": 14
+          }
+        },
+        {
+          "id": "기아|EV9 롱레인지 2WD 19인치",
+          "maker": "기아",
+          "name": "EV9 롱레인지 2WD 19인치",
+          "category": "일반승용",
+          "discontinued": false,
+          "national": 270,
+          "conversionNational": 54,
+          "local": {
+            "jeju": 186
+          },
+          "conversionLocal": {
+            "jeju": 16
+          }
+        },
+        {
+          "id": "기아|EV9 롱레인지 2WD 20인치",
+          "maker": "기아",
+          "name": "EV9 롱레인지 2WD 20인치",
+          "category": "일반승용",
+          "discontinued": false,
+          "national": 268,
+          "conversionNational": 54,
+          "local": {
+            "jeju": 184
+          },
+          "conversionLocal": {
+            "jeju": 16
+          }
+        },
+        {
+          "id": "기아|EV9 롱레인지 4WD 19인치",
+          "maker": "기아",
+          "name": "EV9 롱레인지 4WD 19인치",
+          "category": "일반승용",
+          "discontinued": false,
+          "national": 254,
+          "conversionNational": 51,
+          "local": {
+            "jeju": 175
+          },
+          "conversionLocal": {
+            "jeju": 15
+          }
+        },
+        {
+          "id": "기아|EV9 롱레인지 4WD 21인치",
+          "maker": "기아",
+          "name": "EV9 롱레인지 4WD 21인치",
+          "category": "일반승용",
+          "discontinued": false,
+          "national": 260,
+          "conversionNational": 52,
+          "local": {
+            "jeju": 179
+          },
+          "conversionLocal": {
+            "jeju": 16
+          }
+        },
+        {
+          "id": "기아|EV9 롱레인지 GTL 4WD 21인치",
+          "maker": "기아",
+          "name": "EV9 롱레인지 GTL 4WD 21인치",
+          "category": "일반승용",
+          "discontinued": false,
+          "national": 252,
+          "conversionNational": 50,
+          "local": {
+            "jeju": 173
+          },
+          "conversionLocal": {
+            "jeju": 15
+          }
+        },
+        {
+          "id": "기아|EV9 스탠다드",
+          "maker": "기아",
+          "name": "EV9 스탠다드",
+          "category": "일반승용",
+          "discontinued": false,
+          "national": 237,
+          "conversionNational": 47,
+          "local": {
+            "jeju": 163
+          },
+          "conversionLocal": {
+            "jeju": 14
+          }
+        },
+        {
+          "id": "기아|EV9 GT",
+          "maker": "기아",
+          "name": "EV9 GT",
+          "category": "일반승용",
+          "discontinued": false,
+          "national": 245,
+          "conversionNational": 49,
+          "local": {
+            "jeju": 169
+          },
+          "conversionLocal": {
+            "jeju": 15
+          }
+        },
+        {
+          "id": "기아|PV5 패신저 5인승 롱레인지",
+          "maker": "기아",
+          "name": "PV5 패신저 5인승 롱레인지",
+          "category": "일반승용",
+          "discontinued": false,
+          "national": 458,
+          "conversionNational": 92,
+          "local": {
+            "jeju": 316
+          },
+          "conversionLocal": {
+            "jeju": 28
+          }
+        },
+        {
+          "id": "기아|Pv5 WAV(비용 미지원)",
+          "maker": "기아",
+          "name": "Pv5 WAV(비용 미지원)",
+          "category": "일반승용",
+          "discontinued": false,
+          "national": 648,
+          "conversionNational": 100,
+          "local": {
+            "jeju": 447
+          },
+          "conversionLocal": {
+            "jeju": 30
+          }
+        },
+        {
+          "id": "기아|Pv5 WAV(비용 지원)",
+          "maker": "기아",
+          "name": "Pv5 WAV(비용 지원)",
+          "category": "일반승용",
+          "discontinued": false,
+          "national": 448,
+          "conversionNational": 90,
+          "local": {
+            "jeju": 309
+          },
+          "conversionLocal": {
+            "jeju": 27
+          }
+        },
+        {
+          "id": "기아|The all-new Kia Niro EV",
+          "maker": "기아",
+          "name": "The all-new Kia Niro EV",
+          "category": "일반승용",
+          "discontinued": true,
+          "national": 489,
+          "conversionNational": 98,
+          "local": {
+            "jeju": 337
+          },
+          "conversionLocal": {
+            "jeju": 29
+          }
+        },
+        {
+          "id": "메르세데스벤츠코리아|EQA 250(Facelift)",
+          "maker": "메르세데스벤츠코리아",
+          "name": "EQA 250(Facelift)",
+          "category": "일반승용",
+          "discontinued": false,
+          "national": 190,
+          "conversionNational": 38,
+          "local": {
+            "jeju": 131
+          },
+          "conversionLocal": {
+            "jeju": 11
+          }
+        },
+        {
+          "id": "메르세데스벤츠코리아|EQB 300 4MATIC(Facelift)",
+          "maker": "메르세데스벤츠코리아",
+          "name": "EQB 300 4MATIC(Facelift)",
+          "category": "일반승용",
+          "discontinued": false,
+          "national": 154,
+          "conversionNational": 31,
+          "local": {
+            "jeju": 106
+          },
+          "conversionLocal": {
+            "jeju": 9
+          }
+        },
+        {
+          "id": "메르세데스벤츠코리아|EQB 300 4MATIC(Facelift)(CY25/2)",
+          "maker": "메르세데스벤츠코리아",
+          "name": "EQB 300 4MATIC(Facelift)(CY25/2)",
+          "category": "일반승용",
+          "discontinued": false,
+          "national": 162,
+          "conversionNational": 32,
+          "local": {
+            "jeju": 111
+          },
+          "conversionLocal": {
+            "jeju": 10
+          }
+        },
+        {
+          "id": "볼보자동차코리아|볼보 EX30 Single Motor ER",
+          "maker": "볼보자동차코리아",
+          "name": "볼보 EX30 Single Motor ER",
+          "category": "일반승용",
+          "discontinued": false,
+          "national": 247,
+          "conversionNational": 49,
+          "local": {
+            "jeju": 170
+          },
+          "conversionLocal": {
+            "jeju": 15
+          }
+        },
+        {
+          "id": "볼보자동차코리아|볼보 EX30CC Twin Motor Perf",
+          "maker": "볼보자동차코리아",
+          "name": "볼보 EX30CC Twin Motor Perf",
+          "category": "일반승용",
+          "discontinued": false,
+          "national": 222,
+          "conversionNational": 44,
+          "local": {
+            "jeju": 153
+          },
+          "conversionLocal": {
+            "jeju": 13
+          }
+        },
+        {
+          "id": "비와이디코리아|BYD ATTO 3",
+          "maker": "비와이디코리아",
+          "name": "BYD ATTO 3",
+          "category": "일반승용",
+          "discontinued": true,
+          "national": 126,
+          "conversionNational": 25,
+          "local": {
+            "jeju": 86
+          },
+          "conversionLocal": {
+            "jeju": 8
+          }
+        },
+        {
+          "id": "비와이디코리아|BYD DOLPHIN",
+          "maker": "비와이디코리아",
+          "name": "BYD DOLPHIN",
+          "category": "일반승용",
+          "discontinued": true,
+          "national": 109,
+          "conversionNational": 22,
+          "local": {
+            "jeju": 75
+          },
+          "conversionLocal": {
+            "jeju": 7
+          }
+        },
+        {
+          "id": "비와이디코리아|BYD DOLPHIN Active",
+          "maker": "비와이디코리아",
+          "name": "BYD DOLPHIN Active",
+          "category": "일반승용",
+          "discontinued": true,
+          "national": 132,
+          "conversionNational": 26,
+          "local": {
+            "jeju": 91
+          },
+          "conversionLocal": {
+            "jeju": 8
+          }
+        },
+        {
+          "id": "비와이디코리아|BYD SEAL",
+          "maker": "비와이디코리아",
+          "name": "BYD SEAL",
+          "category": "일반승용",
+          "discontinued": true,
+          "national": 169,
+          "conversionNational": 34,
+          "local": {
+            "jeju": 116
+          },
+          "conversionLocal": {
+            "jeju": 10
+          }
+        },
+        {
+          "id": "비와이디코리아|BYD SEAL Dynamic AWD",
+          "maker": "비와이디코리아",
+          "name": "BYD SEAL Dynamic AWD",
+          "category": "일반승용",
+          "discontinued": true,
+          "national": 151,
+          "conversionNational": 30,
+          "local": {
+            "jeju": 104
+          },
+          "conversionLocal": {
+            "jeju": 9
+          }
+        },
+        {
+          "id": "비와이디코리아|BYD SEALION 7",
+          "maker": "비와이디코리아",
+          "name": "BYD SEALION 7",
+          "category": "일반승용",
+          "discontinued": true,
+          "national": 152,
+          "conversionNational": 30,
+          "local": {
+            "jeju": 104
+          },
+          "conversionLocal": {
+            "jeju": 9
+          }
+        },
+        {
+          "id": "케이지모빌리티|토레스 EVX 18인치",
+          "maker": "케이지모빌리티",
+          "name": "토레스 EVX 18인치",
+          "category": "일반승용",
+          "discontinued": false,
+          "national": 354,
+          "conversionNational": 71,
+          "local": {
+            "jeju": 244
+          },
+          "conversionLocal": {
+            "jeju": 21
+          }
+        },
+        {
+          "id": "케이지모빌리티|토레스 EVX 18인치(2026)",
+          "maker": "케이지모빌리티",
+          "name": "토레스 EVX 18인치(2026)",
+          "category": "일반승용",
+          "discontinued": false,
+          "national": 361,
+          "conversionNational": 72,
+          "local": {
+            "jeju": 249
+          },
+          "conversionLocal": {
+            "jeju": 22
+          }
+        },
+        {
+          "id": "케이지모빌리티|토레스 EVX 20인치",
+          "maker": "케이지모빌리티",
+          "name": "토레스 EVX 20인치",
+          "category": "일반승용",
+          "discontinued": false,
+          "national": 344,
+          "conversionNational": 69,
+          "local": {
+            "jeju": 237
+          },
+          "conversionLocal": {
+            "jeju": 21
+          }
+        },
+        {
+          "id": "케이지모빌리티|토레스 EVX 20인치(2026)",
+          "maker": "케이지모빌리티",
+          "name": "토레스 EVX 20인치(2026)",
+          "category": "일반승용",
+          "discontinued": false,
+          "national": 354,
+          "conversionNational": 71,
+          "local": {
+            "jeju": 244
+          },
+          "conversionLocal": {
+            "jeju": 21
+          }
+        },
+        {
+          "id": "케이지모빌리티|토레스 EVX 2WD 18인치",
+          "maker": "케이지모빌리티",
+          "name": "토레스 EVX 2WD 18인치",
+          "category": "일반승용",
+          "discontinued": true,
+          "national": 327,
+          "conversionNational": 65,
+          "local": {
+            "jeju": 225
+          },
+          "conversionLocal": {
+            "jeju": 20
+          }
+        },
+        {
+          "id": "케이지모빌리티|토레스 EVX 2WD 20인치",
+          "maker": "케이지모빌리티",
+          "name": "토레스 EVX 2WD 20인치",
+          "category": "일반승용",
+          "discontinued": true,
+          "national": 312,
+          "conversionNational": 62,
+          "local": {
+            "jeju": 215
+          },
+          "conversionLocal": {
+            "jeju": 19
+          }
+        },
+        {
+          "id": "테슬라코리아|Model 3 Performance",
+          "maker": "테슬라코리아",
+          "name": "Model 3 Performance",
+          "category": "일반승용",
+          "discontinued": false,
+          "national": 200,
+          "conversionNational": 40,
+          "local": {
+            "jeju": 138
+          },
+          "conversionLocal": {
+            "jeju": 12
+          }
+        },
+        {
+          "id": "테슬라코리아|Model 3 Premium Long Range RWD",
+          "maker": "테슬라코리아",
+          "name": "Model 3 Premium Long Range RWD",
+          "category": "일반승용",
+          "discontinued": false,
+          "national": 420,
+          "conversionNational": 84,
+          "local": {
+            "jeju": 289
+          },
+          "conversionLocal": {
+            "jeju": 25
+          }
+        },
+        {
+          "id": "테슬라코리아|Model 3 Premium Long Range RWD(5999만원)",
+          "maker": "테슬라코리아",
+          "name": "Model 3 Premium Long Range RWD(5999만원)",
+          "category": "일반승용",
+          "discontinued": false,
+          "national": 210,
+          "conversionNational": 42,
+          "local": {
+            "jeju": 144
+          },
+          "conversionLocal": {
+            "jeju": 13
+          }
+        },
+        {
+          "id": "테슬라코리아|Model 3 RWD",
+          "maker": "테슬라코리아",
+          "name": "Model 3 RWD",
+          "category": "일반승용",
+          "discontinued": false,
+          "national": 168,
+          "conversionNational": 34,
+          "local": {
+            "jeju": 115
+          },
+          "conversionLocal": {
+            "jeju": 10
+          }
+        },
+        {
+          "id": "테슬라코리아|Model 3 RWD(2025)",
+          "maker": "테슬라코리아",
+          "name": "Model 3 RWD(2025)",
+          "category": "일반승용",
+          "discontinued": true,
+          "national": 168,
+          "conversionNational": 34,
+          "local": {
+            "jeju": 115
+          },
+          "conversionLocal": {
+            "jeju": 10
+          }
+        },
+        {
+          "id": "테슬라코리아|Model Y L AWD",
+          "maker": "테슬라코리아",
+          "name": "Model Y L AWD",
+          "category": "일반승용",
+          "discontinued": false,
+          "national": 215,
+          "conversionNational": 43,
+          "local": {
+            "jeju": 148
+          },
+          "conversionLocal": {
+            "jeju": 13
+          }
+        },
+        {
+          "id": "테슬라코리아|Model Y Long Range(2025)",
+          "maker": "테슬라코리아",
+          "name": "Model Y Long Range(2025)",
+          "category": "일반승용",
+          "discontinued": false,
+          "national": 210,
+          "conversionNational": 42,
+          "local": {
+            "jeju": 144
+          },
+          "conversionLocal": {
+            "jeju": 13
+          }
+        },
+        {
+          "id": "테슬라코리아|Model Y Premium Long Range",
+          "maker": "테슬라코리아",
+          "name": "Model Y Premium Long Range",
+          "category": "일반승용",
+          "discontinued": false,
+          "national": 210,
+          "conversionNational": 42,
+          "local": {
+            "jeju": 144
+          },
+          "conversionLocal": {
+            "jeju": 13
+          }
+        },
+        {
+          "id": "테슬라코리아|Model Y Premium RWD",
+          "maker": "테슬라코리아",
+          "name": "Model Y Premium RWD",
+          "category": "일반승용",
+          "discontinued": false,
+          "national": 170,
+          "conversionNational": 34,
+          "local": {
+            "jeju": 117
+          },
+          "conversionLocal": {
+            "jeju": 10
+          }
+        },
+        {
+          "id": "테슬라코리아|Model Y RWD(2025)",
+          "maker": "테슬라코리아",
+          "name": "Model Y RWD(2025)",
+          "category": "일반승용",
+          "discontinued": false,
+          "national": 170,
+          "conversionNational": 34,
+          "local": {
+            "jeju": 117
+          },
+          "conversionLocal": {
+            "jeju": 10
+          }
+        },
+        {
+          "id": "폭스바겐그룹코리아|ID.4 Pro",
+          "maker": "폭스바겐그룹코리아",
+          "name": "ID.4 Pro",
+          "category": "일반승용",
+          "discontinued": false,
+          "national": 432,
+          "conversionNational": 86,
+          "local": {
+            "jeju": 298
+          },
+          "conversionLocal": {
+            "jeju": 26
+          }
+        },
+        {
+          "id": "폭스바겐그룹코리아|iD.5 Pro",
+          "maker": "폭스바겐그룹코리아",
+          "name": "iD.5 Pro",
+          "category": "일반승용",
+          "discontinued": false,
+          "national": 473,
+          "conversionNational": 95,
+          "local": {
+            "jeju": 326
+          },
+          "conversionLocal": {
+            "jeju": 29
+          }
+        },
+        {
+          "id": "폭스바겐그룹코리아|Q4 45 e-tron",
+          "maker": "폭스바겐그룹코리아",
+          "name": "Q4 45 e-tron",
+          "category": "일반승용",
+          "discontinued": false,
+          "national": 206,
+          "conversionNational": 41,
+          "local": {
+            "jeju": 142
+          },
+          "conversionLocal": {
+            "jeju": 12
+          }
+        },
+        {
+          "id": "폭스바겐그룹코리아|Q4 Sportback 45 e-tron",
+          "maker": "폭스바겐그룹코리아",
+          "name": "Q4 Sportback 45 e-tron",
+          "category": "일반승용",
+          "discontinued": false,
+          "national": 206,
+          "conversionNational": 41,
+          "local": {
+            "jeju": 142
+          },
+          "conversionLocal": {
+            "jeju": 12
+          }
+        },
+        {
+          "id": "폭스바겐그룹코리아|Q6 e-tron performance",
+          "maker": "폭스바겐그룹코리아",
+          "name": "Q6 e-tron performance",
+          "category": "일반승용",
+          "discontinued": true,
+          "national": 220,
+          "conversionNational": 44,
+          "local": {
+            "jeju": 151
+          },
+          "conversionLocal": {
+            "jeju": 13
+          }
+        },
+        {
+          "id": "폴스타오토모티브코리아|Polestar 4 Coupe Dual Motor",
+          "maker": "폴스타오토모티브코리아",
+          "name": "Polestar 4 Coupe Dual Motor",
+          "category": "일반승용",
+          "discontinued": false,
+          "national": 168,
+          "conversionNational": 34,
+          "local": {
+            "jeju": 115
+          },
+          "conversionLocal": {
+            "jeju": 10
+          }
+        },
+        {
+          "id": "폴스타오토모티브코리아|Polestar 4 Coupe Rear Motor",
+          "maker": "폴스타오토모티브코리아",
+          "name": "Polestar 4 Coupe Rear Motor",
+          "category": "일반승용",
+          "discontinued": false,
+          "national": 181,
+          "conversionNational": 36,
+          "local": {
+            "jeju": 124
+          },
+          "conversionLocal": {
+            "jeju": 11
+          }
+        },
+        {
+          "id": "현대자동차|더 뉴 아이오닉5 2WD 롱레인지 19인치",
+          "maker": "현대자동차",
+          "name": "더 뉴 아이오닉5 2WD 롱레인지 19인치",
+          "category": "일반승용",
+          "discontinued": false,
+          "national": 564,
+          "conversionNational": 100,
+          "local": {
+            "jeju": 389
+          },
+          "conversionLocal": {
+            "jeju": 30
+          }
+        },
+        {
+          "id": "현대자동차|더 뉴 아이오닉5 2WD 롱레인지 19인치 빌트인 캠 미적용",
+          "maker": "현대자동차",
+          "name": "더 뉴 아이오닉5 2WD 롱레인지 19인치 빌트인 캠 미적용",
+          "category": "일반승용",
+          "discontinued": false,
+          "national": 567,
+          "conversionNational": 100,
+          "local": {
+            "jeju": 391
+          },
+          "conversionLocal": {
+            "jeju": 30
+          }
+        },
+        {
+          "id": "현대자동차|더 뉴 아이오닉5 2WD 롱레인지 20인치",
+          "maker": "현대자동차",
+          "name": "더 뉴 아이오닉5 2WD 롱레인지 20인치",
+          "category": "일반승용",
+          "discontinued": false,
+          "national": 559,
+          "conversionNational": 100,
+          "local": {
+            "jeju": 385
+          },
+          "conversionLocal": {
+            "jeju": 30
+          }
+        },
+        {
+          "id": "현대자동차|더 뉴 아이오닉5 2WD 롱레인지 N라인 20인치",
+          "maker": "현대자동차",
+          "name": "더 뉴 아이오닉5 2WD 롱레인지 N라인 20인치",
+          "category": "일반승용",
+          "discontinued": false,
+          "national": 541,
+          "conversionNational": 100,
+          "local": {
+            "jeju": 373
+          },
+          "conversionLocal": {
+            "jeju": 30
+          }
+        },
+        {
+          "id": "현대자동차|더 뉴 아이오닉5 2WD 스탠다드 19인치",
+          "maker": "현대자동차",
+          "name": "더 뉴 아이오닉5 2WD 스탠다드 19인치",
+          "category": "일반승용",
+          "discontinued": false,
+          "national": 483,
+          "conversionNational": 97,
+          "local": {
+            "jeju": 333
+          },
+          "conversionLocal": {
+            "jeju": 29
+          }
+        },
+        {
+          "id": "현대자동차|더 뉴 아이오닉5 AWD 롱레인지 19인치",
+          "maker": "현대자동차",
+          "name": "더 뉴 아이오닉5 AWD 롱레인지 19인치",
+          "category": "일반승용",
+          "discontinued": false,
+          "national": 558,
+          "conversionNational": 100,
+          "local": {
+            "jeju": 385
+          },
+          "conversionLocal": {
+            "jeju": 30
+          }
+        },
+        {
+          "id": "현대자동차|더 뉴 아이오닉5 AWD 롱레인지 20인치",
+          "maker": "현대자동차",
+          "name": "더 뉴 아이오닉5 AWD 롱레인지 20인치",
+          "category": "일반승용",
+          "discontinued": false,
+          "national": 532,
+          "conversionNational": 100,
+          "local": {
+            "jeju": 367
+          },
+          "conversionLocal": {
+            "jeju": 30
+          }
+        },
+        {
+          "id": "현대자동차|더 뉴 아이오닉5 AWD 롱레인지 N라인 20인치",
+          "maker": "현대자동차",
+          "name": "더 뉴 아이오닉5 AWD 롱레인지 N라인 20인치",
+          "category": "일반승용",
+          "discontinued": false,
+          "national": 510,
+          "conversionNational": 100,
+          "local": {
+            "jeju": 351
+          },
+          "conversionLocal": {
+            "jeju": 30
+          }
+        },
+        {
+          "id": "현대자동차|더 뉴 아이오닉6 2WD 롱레인지 18인치",
+          "maker": "현대자동차",
+          "name": "더 뉴 아이오닉6 2WD 롱레인지 18인치",
+          "category": "일반승용",
+          "discontinued": false,
+          "national": 570,
+          "conversionNational": 100,
+          "local": {
+            "jeju": 393
+          },
+          "conversionLocal": {
+            "jeju": 30
+          }
+        },
+        {
+          "id": "현대자동차|더 뉴 아이오닉6 2WD 롱레인지 20인치",
+          "maker": "현대자동차",
+          "name": "더 뉴 아이오닉6 2WD 롱레인지 20인치",
+          "category": "일반승용",
+          "discontinued": false,
+          "national": 570,
+          "conversionNational": 100,
+          "local": {
+            "jeju": 393
+          },
+          "conversionLocal": {
+            "jeju": 30
+          }
+        },
+        {
+          "id": "현대자동차|더 뉴 아이오닉6 2WD 롱레인지 N라인 20인치",
+          "maker": "현대자동차",
+          "name": "더 뉴 아이오닉6 2WD 롱레인지 N라인 20인치",
+          "category": "일반승용",
+          "discontinued": false,
+          "national": 570,
+          "conversionNational": 100,
+          "local": {
+            "jeju": 393
+          },
+          "conversionLocal": {
+            "jeju": 30
+          }
+        },
+        {
+          "id": "현대자동차|더 뉴 아이오닉6 2WD 스탠다드 18인치",
+          "maker": "현대자동차",
+          "name": "더 뉴 아이오닉6 2WD 스탠다드 18인치",
+          "category": "일반승용",
+          "discontinued": false,
+          "national": 560,
+          "conversionNational": 100,
+          "local": {
+            "jeju": 386
+          },
+          "conversionLocal": {
+            "jeju": 30
+          }
+        },
+        {
+          "id": "현대자동차|더 뉴 아이오닉6 AWD 롱레인지 18인치",
+          "maker": "현대자동차",
+          "name": "더 뉴 아이오닉6 AWD 롱레인지 18인치",
+          "category": "일반승용",
+          "discontinued": false,
+          "national": 570,
+          "conversionNational": 100,
+          "local": {
+            "jeju": 393
+          },
+          "conversionLocal": {
+            "jeju": 30
+          }
+        },
+        {
+          "id": "현대자동차|더 뉴 아이오닉6 AWD 롱레인지 20인치",
+          "maker": "현대자동차",
+          "name": "더 뉴 아이오닉6 AWD 롱레인지 20인치",
+          "category": "일반승용",
+          "discontinued": false,
+          "national": 553,
+          "conversionNational": 100,
+          "local": {
+            "jeju": 381
+          },
+          "conversionLocal": {
+            "jeju": 30
+          }
+        },
+        {
+          "id": "현대자동차|더 뉴 아이오닉6 AWD 롱레인지 N라인 20인치",
+          "maker": "현대자동차",
+          "name": "더 뉴 아이오닉6 AWD 롱레인지 N라인 20인치",
+          "category": "일반승용",
+          "discontinued": false,
+          "national": 537,
+          "conversionNational": 100,
+          "local": {
+            "jeju": 370
+          },
+          "conversionLocal": {
+            "jeju": 30
+          }
+        },
+        {
+          "id": "현대자동차|스타리아 라운지 일렉트릭 7인승",
+          "maker": "현대자동차",
+          "name": "스타리아 라운지 일렉트릭 7인승",
+          "category": "일반승용",
+          "discontinued": false,
+          "national": 229,
+          "conversionNational": 46,
+          "local": {
+            "jeju": 158
+          },
+          "conversionLocal": {
+            "jeju": 14
+          }
+        },
+        {
+          "id": "현대자동차|스타리아 리무진 일렉트릭 6인승",
+          "maker": "현대자동차",
+          "name": "스타리아 리무진 일렉트릭 6인승",
+          "category": "일반승용",
+          "discontinued": false,
+          "national": 229,
+          "conversionNational": 46,
+          "local": {
+            "jeju": 158
+          },
+          "conversionLocal": {
+            "jeju": 14
+          }
+        },
+        {
+          "id": "현대자동차|아이오닉6 N",
+          "maker": "현대자동차",
+          "name": "아이오닉6 N",
+          "category": "일반승용",
+          "discontinued": false,
+          "national": 250,
+          "conversionNational": 50,
+          "local": {
+            "jeju": 172
+          },
+          "conversionLocal": {
+            "jeju": 15
+          }
+        },
+        {
+          "id": "현대자동차|아이오닉9 성능형 AWD",
+          "maker": "현대자동차",
+          "name": "아이오닉9 성능형 AWD",
+          "category": "일반승용",
+          "discontinued": false,
+          "national": 272,
+          "conversionNational": 54,
+          "local": {
+            "jeju": 187
+          },
+          "conversionLocal": {
+            "jeju": 16
+          }
+        },
+        {
+          "id": "현대자동차|아이오닉9 항속형 2WD",
+          "maker": "현대자동차",
+          "name": "아이오닉9 항속형 2WD",
+          "category": "일반승용",
+          "discontinued": false,
+          "national": 274,
+          "conversionNational": 55,
+          "local": {
+            "jeju": 189
+          },
+          "conversionLocal": {
+            "jeju": 17
+          }
+        },
+        {
+          "id": "현대자동차|아이오닉9 항속형 AWD",
+          "maker": "현대자동차",
+          "name": "아이오닉9 항속형 AWD",
+          "category": "일반승용",
+          "discontinued": false,
+          "national": 271,
+          "conversionNational": 54,
+          "local": {
+            "jeju": 186
+          },
+          "conversionLocal": {
+            "jeju": 16
+          }
+        },
+        {
+          "id": "현대자동차|캐스퍼 일렉트릭 기본형 15인치",
+          "maker": "현대자동차",
+          "name": "캐스퍼 일렉트릭 기본형 15인치",
+          "category": "경·소형",
+          "discontinued": false,
+          "national": 490,
+          "conversionNational": 98,
+          "local": {
+            "jeju": 369
+          },
+          "conversionLocal": {
+            "jeju": 29
+          }
+        },
+        {
+          "id": "현대자동차|캐스퍼 일렉트릭 크로스 17인치",
+          "maker": "현대자동차",
+          "name": "캐스퍼 일렉트릭 크로스 17인치",
+          "category": "경·소형",
+          "discontinued": false,
+          "national": 487,
+          "conversionNational": 97,
+          "local": {
+            "jeju": 366
+          },
+          "conversionLocal": {
+            "jeju": 29
+          }
+        },
+        {
+          "id": "현대자동차|캐스퍼 일렉트릭 항속형 15인치",
+          "maker": "현대자동차",
+          "name": "캐스퍼 일렉트릭 항속형 15인치",
+          "category": "경·소형",
+          "discontinued": false,
+          "national": 490,
+          "conversionNational": 98,
+          "local": {
+            "jeju": 369
+          },
+          "conversionLocal": {
+            "jeju": 29
+          }
+        },
+        {
+          "id": "현대자동차|캐스퍼 일렉트릭 항속형 17인치(라운지포함)",
+          "maker": "현대자동차",
+          "name": "캐스퍼 일렉트릭 항속형 17인치(라운지포함)",
+          "category": "경·소형",
+          "discontinued": false,
+          "national": 490,
+          "conversionNational": 98,
+          "local": {
+            "jeju": 369
+          },
+          "conversionLocal": {
+            "jeju": 29
+          }
+        },
+        {
+          "id": "현대자동차|코나 일렉트릭 2WD 롱레인지 17인치",
+          "maker": "현대자동차",
+          "name": "코나 일렉트릭 2WD 롱레인지 17인치",
+          "category": "일반승용",
+          "discontinued": false,
+          "national": 514,
+          "conversionNational": 100,
+          "local": {
+            "jeju": 354
+          },
+          "conversionLocal": {
+            "jeju": 30
+          }
+        },
+        {
+          "id": "현대자동차|코나 일렉트릭 2WD 롱레인지 17인치 빌트인 캠 미적용",
+          "maker": "현대자동차",
+          "name": "코나 일렉트릭 2WD 롱레인지 17인치 빌트인 캠 미적용",
+          "category": "일반승용",
+          "discontinued": false,
+          "national": 514,
+          "conversionNational": 100,
+          "local": {
+            "jeju": 354
+          },
+          "conversionLocal": {
+            "jeju": 30
+          }
+        },
+        {
+          "id": "현대자동차|코나 일렉트릭 2WD 롱레인지 19인치",
+          "maker": "현대자동차",
+          "name": "코나 일렉트릭 2WD 롱레인지 19인치",
+          "category": "일반승용",
+          "discontinued": false,
+          "national": 459,
+          "conversionNational": 92,
+          "local": {
+            "jeju": 316
+          },
+          "conversionLocal": {
+            "jeju": 28
+          }
+        },
+        {
+          "id": "현대자동차|코나 일렉트릭 2WD 스탠다드 17인치",
+          "maker": "현대자동차",
+          "name": "코나 일렉트릭 2WD 스탠다드 17인치",
+          "category": "일반승용",
+          "discontinued": false,
+          "national": 437,
+          "conversionNational": 87,
+          "local": {
+            "jeju": 301
+          },
+          "conversionLocal": {
+            "jeju": 26
+          }
+        },
+        {
+          "id": "현대자동차|ELECTRIFIED G80",
+          "maker": "현대자동차",
+          "name": "ELECTRIFIED G80",
+          "category": "일반승용",
+          "discontinued": false,
+          "national": 270,
+          "conversionNational": 54,
+          "local": {
+            "jeju": 186
+          },
+          "conversionLocal": {
+            "jeju": 16
+          }
+        },
+        {
+          "id": "현대자동차|ELECTRIFIED GV70 AWD 19인치",
+          "maker": "현대자동차",
+          "name": "ELECTRIFIED GV70 AWD 19인치",
+          "category": "일반승용",
+          "discontinued": false,
+          "national": 261,
+          "conversionNational": 52,
+          "local": {
+            "jeju": 180
+          },
+          "conversionLocal": {
+            "jeju": 16
+          }
+        },
+        {
+          "id": "현대자동차|ELECTRIFIED GV70 AWD 20인치",
+          "maker": "현대자동차",
+          "name": "ELECTRIFIED GV70 AWD 20인치",
+          "category": "일반승용",
+          "discontinued": false,
+          "national": 245,
+          "conversionNational": 49,
+          "local": {
+            "jeju": 169
+          },
+          "conversionLocal": {
+            "jeju": 15
+          }
+        },
+        {
+          "id": "현대자동차|GV60 스탠다드 2WD 19인치",
+          "maker": "현대자동차",
+          "name": "GV60 스탠다드 2WD 19인치",
+          "category": "일반승용",
+          "discontinued": false,
+          "national": 285,
+          "conversionNational": 57,
+          "local": {
+            "jeju": 196
+          },
+          "conversionLocal": {
+            "jeju": 17
+          }
+        },
+        {
+          "id": "현대자동차|GV60 스탠다드 AWD 19인치",
+          "maker": "현대자동차",
+          "name": "GV60 스탠다드 AWD 19인치",
+          "category": "일반승용",
+          "discontinued": false,
+          "national": 272,
+          "conversionNational": 54,
+          "local": {
+            "jeju": 187
+          },
+          "conversionLocal": {
+            "jeju": 16
+          }
+        },
+        {
+          "id": "현대자동차|GV60 스탠다드 AWD 20인치",
+          "maker": "현대자동차",
+          "name": "GV60 스탠다드 AWD 20인치",
+          "category": "일반승용",
+          "discontinued": false,
+          "national": 261,
+          "conversionNational": 52,
+          "local": {
+            "jeju": 180
+          },
+          "conversionLocal": {
+            "jeju": 16
+          }
+        },
+        {
+          "id": "BMW|i4 eDrive 40 LCI(21HD)",
+          "maker": "BMW",
+          "name": "i4 eDrive 40 LCI(21HD)",
+          "category": "일반승용",
+          "discontinued": false,
+          "national": 244,
+          "conversionNational": 49,
+          "local": {
+            "jeju": 168
+          },
+          "conversionLocal": {
+            "jeju": 15
+          }
+        },
+        {
+          "id": "BMW|i4 eDrive 40 LCI(61HD)",
+          "maker": "BMW",
+          "name": "i4 eDrive 40 LCI(61HD)",
+          "category": "일반승용",
+          "discontinued": false,
+          "national": 256,
+          "conversionNational": 51,
+          "local": {
+            "jeju": 176
+          },
+          "conversionLocal": {
+            "jeju": 15
+          }
+        },
+        {
+          "id": "BMW|i4 M60 LCI(71HD)",
+          "maker": "BMW",
+          "name": "i4 M60 LCI(71HD)",
+          "category": "일반승용",
+          "discontinued": false,
+          "national": 233,
+          "conversionNational": 47,
+          "local": {
+            "jeju": 160
+          },
+          "conversionLocal": {
+            "jeju": 14
+          }
+        },
+        {
+          "id": "BMW|i5 eDrive 40",
+          "maker": "BMW",
+          "name": "i5 eDrive 40",
+          "category": "일반승용",
+          "discontinued": false,
+          "national": 262,
+          "conversionNational": 52,
+          "local": {
+            "jeju": 180
+          },
+          "conversionLocal": {
+            "jeju": 16
+          }
+        },
+        {
+          "id": "BMW|iX1 eDrive20",
+          "maker": "BMW",
+          "name": "iX1 eDrive20",
+          "category": "일반승용",
+          "discontinued": false,
+          "national": 212,
+          "conversionNational": 42,
+          "local": {
+            "jeju": 146
+          },
+          "conversionLocal": {
+            "jeju": 13
+          }
+        },
+        {
+          "id": "BMW|iX1 eDrive20(11HM)",
+          "maker": "BMW",
+          "name": "iX1 eDrive20(11HM)",
+          "category": "일반승용",
+          "discontinued": false,
+          "national": 235,
+          "conversionNational": 47,
+          "local": {
+            "jeju": 162
+          },
+          "conversionLocal": {
+            "jeju": 14
+          }
+        },
+        {
+          "id": "BMW|iX1 xDrive30",
+          "maker": "BMW",
+          "name": "iX1 xDrive30",
+          "category": "일반승용",
+          "discontinued": false,
+          "national": 192,
+          "conversionNational": 38,
+          "local": {
+            "jeju": 132
+          },
+          "conversionLocal": {
+            "jeju": 11
+          }
+        },
+        {
+          "id": "BMW|iX2 eDrive20",
+          "maker": "BMW",
+          "name": "iX2 eDrive20",
+          "category": "일반승용",
+          "discontinued": false,
+          "national": 214,
+          "conversionNational": 43,
+          "local": {
+            "jeju": 147
+          },
+          "conversionLocal": {
+            "jeju": 13
+          }
+        },
+        {
+          "id": "BMW|iX2 eDrive20(71GN)",
+          "maker": "BMW",
+          "name": "iX2 eDrive20(71GN)",
+          "category": "일반승용",
+          "discontinued": false,
+          "national": 239,
+          "conversionNational": 48,
+          "local": {
+            "jeju": 164
+          },
+          "conversionLocal": {
+            "jeju": 14
+          }
+        },
+        {
+          "id": "BMW|iX3 50 xDrive",
+          "maker": "BMW",
+          "name": "iX3 50 xDrive",
+          "category": "일반승용",
+          "discontinued": false,
+          "national": 275,
+          "conversionNational": 55,
+          "local": {
+            "jeju": 189
+          },
+          "conversionLocal": {
+            "jeju": 17
+          }
+        },
+        {
+          "id": "BMW|MINI Aceman E",
+          "maker": "BMW",
+          "name": "MINI Aceman E",
+          "category": "일반승용",
+          "discontinued": false,
+          "national": 400,
+          "conversionNational": 80,
+          "local": {
+            "jeju": 276
+          },
+          "conversionLocal": {
+            "jeju": 24
+          }
+        },
+        {
+          "id": "BMW|MINI Aceman SE",
+          "maker": "BMW",
+          "name": "MINI Aceman SE",
+          "category": "일반승용",
+          "discontinued": false,
+          "national": 400,
+          "conversionNational": 80,
+          "local": {
+            "jeju": 276
+          },
+          "conversionLocal": {
+            "jeju": 24
+          }
+        },
+        {
+          "id": "BMW|MINI Cooper SE",
+          "maker": "BMW",
+          "name": "MINI Cooper SE",
+          "category": "일반승용",
+          "discontinued": false,
+          "national": 396,
+          "conversionNational": 79,
+          "local": {
+            "jeju": 273
+          },
+          "conversionLocal": {
+            "jeju": 24
+          }
+        },
+        {
+          "id": "BMW|MINI Countryman E",
+          "maker": "BMW",
+          "name": "MINI Countryman E",
+          "category": "일반승용",
+          "discontinued": false,
+          "national": 217,
+          "conversionNational": 43,
+          "local": {
+            "jeju": 149
+          },
+          "conversionLocal": {
+            "jeju": 13
+          }
+        },
+        {
+          "id": "BMW|MINI Countryman SE ALL4",
+          "maker": "BMW",
+          "name": "MINI Countryman SE ALL4",
+          "category": "일반승용",
+          "discontinued": false,
+          "national": 203,
+          "conversionNational": 41,
+          "local": {
+            "jeju": 140
+          },
+          "conversionLocal": {
+            "jeju": 12
+          }
+        },
+        {
+          "id": "BMW|MINI JCW Aceman E",
+          "maker": "BMW",
+          "name": "MINI JCW Aceman E",
+          "category": "일반승용",
+          "discontinued": false,
+          "national": 197,
+          "conversionNational": 39,
+          "local": {
+            "jeju": 135
+          },
+          "conversionLocal": {
+            "jeju": 12
+          }
+        },
+        {
+          "id": "BMW|MINI JCW E",
+          "maker": "BMW",
+          "name": "MINI JCW E",
+          "category": "일반승용",
+          "discontinued": false,
+          "national": 191,
+          "conversionNational": 38,
+          "local": {
+            "jeju": 131
+          },
+          "conversionLocal": {
+            "jeju": 11
+          }
+        }
+      ],
+      "unit": "만원",
+      "source_name": "공공데이터포털 「제주특별자치도_전기자동차보조금지원대상현황_20260917」(제주특별자치도 제공, 이용허락범위 제한 없음)",
+      "source_url": "https://www.data.go.kr/data/15048678/fileData.do",
+      "effective_date": "2026-09-17",
+      "checked_at": "2026-11-01",
+      "verified": true,
+      "note": "차종 120개. 국비·전환지원 국비는 제주 파일의 값이다. 지방비(local)는 지역별로 따로 확인한 값만 넣는다."
+    }
+  },
+  "rules": {
+    "nationalUniform": {
+      "value": null,
+      "unit": "규칙",
+      "source_name": "2026년 전기자동차 보급사업 보조금 업무처리지침(기후에너지환경부)",
+      "source_url": "https://ev.or.kr/",
+      "effective_date": null,
+      "checked_at": null,
+      "verified": false,
+      "todo": "제주 파일의 국비 금액이 다른 지역에도 똑같이 적용되는지 지침 원문으로 확인 (무공해차 통합누리집은 자동 수집 불가 — 운영자가 지침 PDF를 내려받아 확인)"
+    },
+    "conversionEligibility": {
+      "value": null,
+      "unit": "규칙",
+      "source_name": "2026년 전기자동차 보급사업 보조금 업무처리지침(기후에너지환경부)",
+      "source_url": "https://ev.or.kr/",
+      "effective_date": null,
+      "checked_at": null,
+      "verified": false,
+      "todo": "전환지원금을 받는 조건(내연기관차 폐차·판매, 보유 기간, 신청 기한 등)을 지침 원문으로 확인"
+    }
+  }
+}

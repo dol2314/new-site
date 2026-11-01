@@ -29,3 +29,4 @@ export {
   type PenaltyResult,
   type PenaltyTier,
 } from "./inspection";
+export { calcEvSubsidy, type EvModel, type EvSubsidyInput, type EvSubsidyResult } from "./evSubsidy";
