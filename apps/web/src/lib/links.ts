@@ -22,6 +22,6 @@ export const LINKS = {
     desc: "차종별 국비·지방비 원자료(CSV)",
     verified: true,
   },
-  evPortal: { label: "무공해차 통합누리집", href: "https://ev.or.kr/", desc: "보조금 지침·공고 확인", verified: true },
+  evPortal: { label: "무공해차 통합누리집 보조금 계산기", href: "https://ev.or.kr/", desc: "지역·차종·조건별 공식 보조금 계산(메인 화면)", verified: true },
   kotsa: { label: "한국교통안전공단", href: "https://www.kotsa.or.kr/", desc: "자동차 검사 예약·안내", verified: false },
 } satisfies Record<string, OfficialLink>;
