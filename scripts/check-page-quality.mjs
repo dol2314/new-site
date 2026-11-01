@@ -2,7 +2,7 @@
 //   node scripts/check-page-quality.mjs            → 모든 도구 페이지
 //   node scripts/check-page-quality.mjs car-tax    → 한 도구만
 // 실패(구조 누락)는 종료 코드 1. 경고(검수 전, 미확인 링크, 확인 대기 기능, 초안 표시)는 공개 전에 해결할 목록.
-import { existsSync, readFileSync } from "node:fs";
+import { existsSync, readdirSync, readFileSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 
@@ -43,6 +43,32 @@ for (const id of only ? [only] : TOOL_IDS) {
 
   const status = errors.length ? "실패" : warns.length ? "통과(경고)" : "통과";
   console.log(`\n[${id}] ${status} — 사례 ${count(/data-example="true"/g)} · FAQ ${count(/data-faq-item="true"/g)}`);
+  for (const e of errors) console.log(`  실패: ${e}`);
+  for (const w of warns) console.log(`  경고: ${w}`);
+  if (errors.length) failed += 1;
+}
+
+// 사례 분석 글 (/guides/*/): 섹션, 본문 1,500자 이상, 변형 2개 이상, FAQ 3개 이상
+const ARTICLE_SECTIONS = ["summary", "conditions", "steps", "variations", "pitfalls", "faq", "related", "sources"];
+const guidesDir = join(out, "guides");
+const guideSlugs = existsSync(guidesDir) ? readdirSync(guidesDir).filter((n) => existsSync(join(guidesDir, n, "index.html"))) : [];
+for (const slug of only ? guideSlugs.filter((s) => s === only) : guideSlugs) {
+  const html = readFileSync(join(guidesDir, slug, "index.html"), "utf8");
+  const errors = [];
+  const warns = [];
+  const count = (re) => (html.match(re) ?? []).length;
+  for (const s of ARTICLE_SECTIONS) if (!html.includes(`data-article-section="${s}"`)) errors.push(`섹션 없음: ${s}`);
+  const article = html.match(/<article[\s\S]*?<\/article>/)?.[0] ?? "";
+  const text = article.replace(/<script[\s\S]*?<\/script>/g, "").replace(/<[^>]+>/g, "").replace(/\s+/g, " ");
+  if (text.length < 1500) errors.push(`본문 ${text.length}자 (1,500자 이상 필요)`);
+  if (count(/data-variation="true"/g) < 2) errors.push(`변형 ${count(/data-variation="true"/g)}개 (2개 이상 필요)`);
+  if (count(/data-faq-item="true"/g) < 3) errors.push(`FAQ ${count(/data-faq-item="true"/g)}개 (3개 이상 필요)`);
+  if (!/class="sources"/.test(html)) errors.push("근거 목록 없음");
+  if (count(/<h1[\s>]/g) !== 1) errors.push("h1이 1개가 아님");
+  if (html.includes("data-unreviewed")) warns.push("운영자 검수 전 (lib/guides.ts reviewed=false)");
+  if (html.includes("data-draft")) warns.push("공개 전 초안 (lib/guides.ts published=false)");
+  const status = errors.length ? "실패" : warns.length ? "통과(경고)" : "통과";
+  console.log(`\n[guides/${slug}] ${status} — 본문 ${text.length}자 · 변형 ${count(/data-variation="true"/g)} · FAQ ${count(/data-faq-item="true"/g)}`);
   for (const e of errors) console.log(`  실패: ${e}`);
   for (const w of warns) console.log(`  경고: ${w}`);
   if (errors.length) failed += 1;

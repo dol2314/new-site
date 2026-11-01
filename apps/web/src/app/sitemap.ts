@@ -1,4 +1,5 @@
 import type { MetadataRoute } from "next";
+import { publishedGuides } from "@/lib/guides";
 import { publishedTools } from "@/lib/tools";
 import { absoluteUrl, site } from "@/site.config";
 
@@ -8,5 +9,5 @@ const STATIC_PATHS = ["/", "/about/", "/data/", "/contact/", "/privacy/", "/term
 
 export default function sitemap(): MetadataRoute.Sitemap {
   if (!site.indexable) return [];
-  return [...STATIC_PATHS, ...publishedTools().map((t) => t.path)].map((path) => ({ url: absoluteUrl(path) }));
+  return [...STATIC_PATHS, ...publishedTools().map((t) => t.path), ...publishedGuides().map((g) => `/guides/${g.slug}/`)].map((path) => ({ url: absoluteUrl(path) }));
 }

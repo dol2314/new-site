@@ -1,9 +1,10 @@
+import { publishedGuides } from "@/lib/guides";
 import { absoluteUrl, site } from "@/site.config";
 
 export const dynamic = "force-static";
 
-/** 사례 글(/guides/)이 생기면 여기에 항목을 추가한다(프롬프트 08). */
-const ITEMS: { title: string; path: string; date: string; description: string }[] = [];
+/** 공개된 사례 글만 */
+const ITEMS = publishedGuides().map((g) => ({ title: g.title, path: `/guides/${g.slug}/`, date: g.updatedAt, description: g.description }));
 
 const esc = (s: string) => s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
 
