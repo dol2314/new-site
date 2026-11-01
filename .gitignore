@@ -1,0 +1,11 @@
+node_modules/
+.next/
+apps/web/out/
+apps/web/next-env.d.ts
+*.tsbuildinfo
+.env
+.env.*
+!.env.example
+# 빌드 때 환경변수로 생성
+apps/web/public/ads.txt
+.DS_Store
