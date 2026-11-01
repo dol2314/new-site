@@ -302,10 +302,11 @@ export function evChargingData(): EvChargingData {
   const publicTiers = pick<ChargeTier[]>(doc, "values.publicTiers", missing);
   pick(doc, "rules.publicScope", missing);
   pick(doc, "rules.publicChange", missing);
+  pick(doc, "rules.weekendDiscount", missing);
   return {
     publicTiers,
     effectiveDate: doc.values.publicTiers?.effective_date ?? null,
-    sources: refs(doc, ["values.publicTiers", "rules.publicScope", "rules.publicChange"]),
+    sources: refs(doc, ["values.publicTiers", "rules.publicScope", "rules.publicChange", "rules.weekendDiscount"]),
     missing,
   };
 }

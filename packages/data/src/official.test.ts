@@ -203,6 +203,18 @@ describe("전기차 공공 충전요금 (기후에너지환경부, 2026-08-01 �
     expect(Math.round((324.4 - tierForKw(7, c.publicTiers).wonPerKwh) * 10) / 10).toBe(29.4);
     expect(Math.round((tierForKw(350, c.publicTiers).wonPerKwh - 347.2) * 10) / 10).toBe(45.9);
   });
+  it("사례 글 4편: 300kWh × 100~200kW 348.4원 = 104,520원, 완속 80% + 초급속 20% = 70,800 + 23,586 = 94,386원", () => {
+    const f = calcChargingCost({ monthlyKm: 1500, kmPerKwh: 5, mix: [{ label: "x", share: 1, wonPerKwh: tierForKw(100, c.publicTiers).wonPerKwh }] });
+    const m = calcChargingCost({
+      monthlyKm: 1500,
+      kmPerKwh: 5,
+      mix: [
+        { label: "완속", share: 0.8, wonPerKwh: tierForKw(7, c.publicTiers).wonPerKwh },
+        { label: "초급속", share: 0.2, wonPerKwh: tierForKw(350, c.publicTiers).wonPerKwh },
+      ],
+    });
+    expect([f.kwh, f.monthlyCost, m.monthlyCost]).toEqual([300, 104_520, 94_386]);
+  });
   it("월 1,500km · 5km/kWh: 완속만 88,500원, 200kW 이상만 117,930원", () => {
     const run = (kw: number) => calcChargingCost({ monthlyKm: 1500, kmPerKwh: 5, mix: [{ label: "x", share: 1, wonPerKwh: tierForKw(kw, c.publicTiers).wonPerKwh }] }).monthlyCost;
     expect([run(7), run(350)]).toEqual([88_500, 117_930]);
