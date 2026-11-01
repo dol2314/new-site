@@ -1,4 +1,4 @@
-# Cloudflare Pages 응답 헤더
+# Cloudflare 정적 자산 응답 헤더 (Workers·Pages 공통 형식)
 /_next/static/*
   Cache-Control: public, max-age=31536000, immutable
 

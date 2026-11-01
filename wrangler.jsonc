@@ -1,0 +1,14 @@
+// Cloudflare Workers 정적 자산 배포 설정 (서버 코드 없음).
+// 빌드: npm run build → apps/web/out 을 그대로 올린다.
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "new-site",
+  "compatibility_date": "2026-10-01",
+  "assets": {
+    "directory": "./apps/web/out",
+    // /about → /about/ 처럼 끝 슬래시 규칙을 맞춘다 (Next trailingSlash: true 와 같은 규칙)
+    "html_handling": "auto-trailing-slash",
+    // 없는 주소는 apps/web/out/404.html 을 404 상태로 보여 준다
+    "not_found_handling": "404-page"
+  }
+}

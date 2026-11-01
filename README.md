@@ -11,7 +11,7 @@
 
 | 경로 | 내용 |
 |---|---|
-| `apps/web` | Next.js(App Router) 정적 출력 → Cloudflare Pages |
+| `apps/web` | Next.js(App Router) 정적 출력 → Cloudflare Workers 정적 자산 (`wrangler.jsonc`) |
 | `apps/mobile` | 안드로이드 앱 자리 (프롬프트 11) |
 | `packages/calc-core` | 순수 계산 함수 + 테스트 |
 | `packages/data` | 기준 데이터 형식·출처 목록 |
