@@ -254,7 +254,7 @@ th {
   font-weight: 600;
   margin-bottom: 4px;
 }
-.calc-form input:not([type="checkbox"]),
+.calc-form input:not([type="checkbox"]):not([type="radio"]),
 .calc-form select {
   width: 100%;
   max-width: 320px;
@@ -266,7 +266,8 @@ th {
   border: 1px solid var(--border);
   border-radius: 8px;
 }
-.calc-form input[type="checkbox"] {
+.calc-form input[type="checkbox"],
+.calc-form input[type="radio"] {
   width: 20px;
   height: 20px;
   vertical-align: middle;
@@ -341,4 +342,14 @@ tr.passed td {
 .result th[scope="row"] {
   white-space: nowrap;
   width: 1%;
+}
+fieldset.field {
+  border: 0;
+  padding: 0;
+  margin: 0 0 14px;
+}
+fieldset.field legend {
+  font-weight: 600;
+  margin-bottom: 4px;
+  padding: 0;
 }
