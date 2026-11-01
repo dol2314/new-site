@@ -213,6 +213,7 @@ const REG_KEYS = [
   "rules.noEducationTax",
   "rules.noRuralSpecialTax",
   "rules.overlap",
+  "rules.subsidyInBase",
 ];
 
 export function registrationTaxData(): RegistrationTaxData {
