@@ -15,11 +15,11 @@ if (!existsSync(dir)) {
   process.exit(0);
 }
 const paras = (html) => {
-  // 출처 목록은 글마다 같은 법령을 인용하므로 비교에서 뺀다
+  // 출처 목록·관련 계산기 카드는 글마다 같은 문구라 비교에서 뺀다
   const article = (
     html.match(/<article[\s\S]*?<\/article>/)?.[0] ?? ""
   ).replace(
-    /<section[^>]*data-article-section="sources"[\s\S]*?<\/section>/,
+    /<section[^>]*data-article-section="(?:sources|related)"[\s\S]*?<\/section>/g,
     "",
   );
   return [...article.matchAll(/<(p|li)[^>]*>([\s\S]*?)<\/\1>/g)]

@@ -40,6 +40,17 @@ export const GUIDES: GuideMeta[] = [
     published: false,
     reviewed: false,
   },
+  {
+    slug: "car-tax-transfer-proration",
+    title: "차 팔 때 자동차세, 이전등록일로 나눈다 — 판 사람·산 사람 일할계산 예시",
+    description:
+      "과세기간 중 차를 팔면 자동차세를 소유 일수만큼 나눠 각자 냅니다. 2027년 기준으로 상반기·하반기 이전, 등록 지연, 새 차, 2천원 미만 사례를 계산하고 계약일 기준 신청과 연납 환급을 정리했습니다.",
+    asOf: "2026-11-01",
+    updatedAt: "2026-11-01",
+    tools: ["car-tax"],
+    published: false,
+    reviewed: false,
+  },
 ];
 
 export const publishedGuides = () => GUIDES.filter((g) => g.published);
