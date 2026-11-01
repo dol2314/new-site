@@ -24,6 +24,8 @@ jobs:
         run: npm run build
       - name: SEO 검사 (공개 전 모드)
         run: npm run check:seo
+      - name: 도구 페이지 품질 검사
+        run: npm run check:quality
       - name: 빌드 (공개 모드 미리 점검)
         run: npm run build
         env:

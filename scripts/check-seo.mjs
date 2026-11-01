@@ -58,6 +58,7 @@ function pageInfo(html) {
 const files = walk(out);
 const seen = { title: new Map(), description: new Map(), canonical: new Map() };
 let pages = 0;
+const pageIndex = [];
 
 for (const file of files) {
   const rel = relative(out, file).split(sep).join("/");
@@ -76,8 +77,8 @@ for (const file of files) {
   }
 
   pages += 1;
-  if (indexable && noindex) err(rel, "공개 모드인데 noindex");
   if (!indexable && !noindex) err(rel, "공개 전 모드인데 noindex 아님");
+  pageIndex.push({ rel, noindex });
   if (info.h1 !== 1) err(rel, `h1 ${info.h1}개`);
   if (info.descriptions.length !== 1 || !info.descriptions[0]) err(rel, "description 없음/중복");
   if (info.canonicals.length !== 1) err(rel, `canonical ${info.canonicals.length}개`);
@@ -107,8 +108,15 @@ if (!indexable) {
 } else {
   if (!/Sitemap:\s*https?:\/\//.test(robotsTxt)) errors.push("robots.txt에 Sitemap 없음");
   if (sitemapUrls.length === 0) errors.push("사이트맵이 비어 있음");
-  if (sitemapUrls.length > 0 && sitemapUrls.length !== pages)
-    warnings.push(`사이트맵 URL ${sitemapUrls.length}개 / 페이지 ${pages}개 (도구 페이지 published 여부 확인)`);
+  // 사이트맵과 noindex가 서로 맞아야 한다: 사이트맵에 있으면 색인 허용, 색인 허용이면 사이트맵에 있어야 함
+  const inSitemap = new Set(sitemapUrls.map((u) => u.replace(siteUrl, "")));
+  for (const { rel, noindex } of pageIndex) {
+    const path = `/${rel.replace(/index\.html$/, "")}`;
+    if (inSitemap.has(path) && noindex) err(rel, "사이트맵에 있는데 noindex");
+    if (!inSitemap.has(path) && !noindex) err(rel, "색인 허용인데 사이트맵에 없음 (공개 전 페이지면 noindex여야 함)");
+  }
+  const drafts = pageIndex.filter((x) => x.noindex).map((x) => x.rel);
+  if (drafts.length) warnings.push(`공개 전(noindex) 페이지 ${drafts.length}개: ${drafts.join(", ")}`);
   if (!siteUrl.startsWith("https://")) errors.push(`공개 모드인데 사이트 주소가 https가 아님: ${siteUrl}`);
 }
 if (!existsSync(join(out, "rss.xml"))) errors.push("rss.xml 없음");
