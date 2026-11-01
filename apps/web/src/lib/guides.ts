@@ -51,6 +51,17 @@ export const GUIDES: GuideMeta[] = [
     published: false,
     reviewed: false,
   },
+  {
+    slug: "home-vs-fast-charging-cost",
+    title: "집 충전 vs 급속 충전, 월 1,500km면 얼마 차이? — 단가별 충전비 계산",
+    description:
+      "2026년 8월 개편된 공공 충전요금 5단계로 월 1,500km 충전비를 계산하고, 집 충전 단가에 따라 급속보다 얼마나 아끼는지 손익 기준을 정리했습니다.",
+    asOf: "2026-11-01",
+    updatedAt: "2026-11-01",
+    tools: ["ev-charging", "car-loan"],
+    published: false,
+    reviewed: false,
+  },
 ];
 
 export const publishedGuides = () => GUIDES.filter((g) => g.published);

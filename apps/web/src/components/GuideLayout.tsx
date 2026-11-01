@@ -17,10 +17,22 @@ interface Props {
   children: ReactNode;
   faq: FaqItem[];
   sources: SourceRef[];
+  /** 면책 문구. 없으면 세금 글 기본 문구 */
+  disclaimer?: string;
 }
 
+const TAX_DISCLAIMER =
+  "예시 조건은 이해를 돕기 위한 가정이며, 실제 세액은 관할 지자체의 결정으로 정해집니다. 법이 바뀌면 이 글을 고칩니다.";
+
 /** 사례 분석 글 공통 틀. data-article-section 표시를 scripts/check-page-quality.mjs가 검사한다. */
-export function GuideLayout({ meta, summary, children, faq, sources }: Props) {
+export function GuideLayout({
+  meta,
+  summary,
+  children,
+  faq,
+  sources,
+  disclaimer = TAX_DISCLAIMER,
+}: Props) {
   const path = `/guides/${meta.slug}/`;
   return (
     <article className="container prose guide">
@@ -81,10 +93,7 @@ export function GuideLayout({ meta, summary, children, faq, sources }: Props) {
         <SourcesList sources={sources} />
       </section>
       <section data-section="disclaimer" className="muted small">
-        <p>
-          예시 조건은 이해를 돕기 위한 가정이며, 실제 세액은 관할 지자체의
-          결정으로 정해집니다. 법이 바뀌면 이 글을 고칩니다.
-        </p>
+        <p>{disclaimer}</p>
         <p>
           검수일:{" "}
           {meta.reviewedAt ? (
