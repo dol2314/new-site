@@ -23,5 +23,7 @@ export const LINKS = {
     verified: true,
   },
   evPortal: { label: "무공해차 통합누리집 보조금 계산기", href: "https://ev.or.kr/", desc: "지역·차종·조건별 공식 보조금 계산(메인 화면)", verified: true },
+  chargingPolicy: { label: "정책브리핑: 전기차 공공충전요금 개편", href: "https://www.korea.kr/news/policyNewsView.do?newsId=148967451", desc: "기후에너지환경부 2026-07-01 발표, 8월 1일 시행", verified: true },
+  opinet: { label: "오피넷", href: "https://www.opinet.co.kr/", desc: "한국석유공사 전국 주유소 기름값", verified: true },
   kotsa: { label: "한국교통안전공단", href: "https://www.kotsa.or.kr/", desc: "자동차 검사 예약·안내", verified: false },
 } satisfies Record<string, OfficialLink>;
