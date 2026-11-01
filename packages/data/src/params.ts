@@ -2,7 +2,7 @@
  * 확인된(verified) 데이터만 계산 엔진 매개변수로 바꿔 준다.
  * 확인 전 항목이 하나라도 필요하면 missing에 이름이 들어가고, 그 기능을 쓰는 화면은 공개하지 않는다.
  */
-import type { CarTaxParams, CapRelief, EvModel, RegistrationTaxParams, InspectionCycle, InspectionParams, PenaltyTier, PrepayParams, PrepayPeriod } from "@site/calc-core";
+import type { CarTaxParams, CapRelief, EvModel, EvSubsidyRules, RegistrationTaxParams, InspectionCycle, InspectionParams, PenaltyTier, PrepayParams, PrepayPeriod } from "@site/calc-core";
 import car2026 from "../data/car-tax/2026.json";
 import car2027 from "../data/car-tax/2027.json";
 import ev2026 from "../data/ev-subsidy/2026.json";
@@ -146,6 +146,7 @@ export interface EvRegion {
 export interface EvSubsidyData {
   year: number;
   models: EvModel[];
+  rules: EvSubsidyRules;
   regions: EvRegion[];
   baseDate: string;
   /**
@@ -172,14 +173,23 @@ export function evSubsidyData(year: number): EvSubsidyData {
   const models = pick<EvModel[]>(doc, "values.models", regionData) ?? [];
   pick(doc, "rules.nationalUniform", nationwide);
   pick(doc, "rules.conversionEligibility", conversion);
+  const rules: EvSubsidyRules = {
+    lowIncomeRate: pick(doc, "values.lowIncomeRate", nationwide),
+    youthFirstCarRate: pick(doc, "values.youthFirstCarRate", nationwide),
+    multiChildManwon: pick(doc, "values.multiChildManwon", nationwide),
+    conversion: pick(doc, "values.conversion", conversion),
+    bmsScrap: pick(doc, "values.bmsScrap", nationwide),
+    localMinRatio: pick(doc, "values.localMinRatio", nationwide),
+  };
   const regions = Object.entries(doc.regions).map(([code, r]) => ({ code, ...r }));
   return {
     year,
     models,
+    rules,
     regions,
     baseDate: doc.values.models?.effective_date ?? "",
     missing: { regionData, nationwide, conversion },
-    sources: refs(doc, ["values.models"]),
+    sources: refs(doc, ["values.models", "rules.nationalUniform", "rules.conversionEligibility"]),
   };
 }
 

@@ -2,7 +2,7 @@
  * 확인된 법령값으로 엔진을 검증한다. 기대값은 법령 산식으로 손으로 계산한 값
  * (지방세법 제127조·제128조·제151조, 시행령 제122조·제125조, 국고금 관리법 제47조, 자동차관리법 시행령 별표 2).
  */
-import { calcCarTax, calcEvSubsidy, calcRegistrationTax, calcInspectionPenalty, calcPrepay, inspectionWindow, penaltyForDays } from "@site/calc-core";
+import { calcCarTax, calcEvSubsidy, calcRegistrationTax, expectedConversionNational, calcInspectionPenalty, calcPrepay, inspectionWindow, penaltyForDays } from "@site/calc-core";
 import { describe, expect, it } from "vitest";
 import { carTaxData, evSubsidyData, inspectionData, registrationTaxData } from "./params";
 
@@ -87,8 +87,8 @@ describe("전기차 보조금 (제주 공공데이터 2026-09-17)", () => {
     const d = evSubsidyData(2026);
     expect(d.models).toHaveLength(120);
     expect(d.missing.regionData).toEqual([]);
-    expect(d.missing.nationwide).toEqual(["rules.nationalUniform"]);
-    expect(d.missing.conversion).toEqual(["rules.conversionEligibility"]);
+    expect(d.missing.nationwide).toEqual([]);
+    expect(d.missing.conversion).toEqual([]);
   });
   it("EV3 롱레인지 2WD 19인치, 제주: 국비 555만 + 도비 382만 = 937만원, 전환지원 포함 1,067만원", () => {
     const m = evSubsidyData(2026).models.find((x) => x.name === "EV3 롱레인지 2WD 19인치");
@@ -125,4 +125,26 @@ describe("취득세 (법령값)", () => {
     expect([r.computedTax, r.relief?.amount, r.payable]).toEqual([2_545_450, 2_163_630, 381_820]);
   });
   it("면세점: 50만원 이하 0원", () => expect(calcRegistrationTax({ ...base, price: 500_000, vatIncluded: false }, p).payable).toBe(0));
+});
+
+describe("보조금 지침 (2026-06-23) 규칙", () => {
+  const d = evSubsidyData(2026);
+  const fake = (national: number) => ({ id: "x", maker: "x", name: "x", category: "일반승용", discontinued: false, national, conversionNational: 0, local: {}, conversionLocal: {} });
+  it("지침 계산 예시: 국비 500만원, 차상위 + 자녀 3명 → 500 + 500×20% + 200 = 800만원", () => {
+    const r = calcEvSubsidy({ model: fake(500), region: null, conversion: false, lowIncome: true, children: 3 }, d.rules);
+    expect(r.total).toBe(8_000_000);
+  });
+  it("지침 계산 예시: 청년 생애 첫 차 추가 100만원, 지방비가 국비의 30%면 지방비 몫 100×30/130 ≈ 23만원", () => {
+    const r = calcEvSubsidy({ model: fake(500), region: null, userLocal: 150, conversion: false, youthFirstCar: true }, d.rules);
+    expect(r.rateAdditions).toBe(1_000_000);
+    expect(Math.round((r.additionalLocalShare ?? 0) / 10_000)).toBe(23);
+  });
+  it("차종 120개 모두 전환지원 국비가 지침 산식과 일치", () => {
+    const bad = d.models.filter((m) => m.conversionNational !== expectedConversionNational(m.national, d.rules.conversion));
+    expect(bad.map((m) => `${m.name}: ${m.national} → ${m.conversionNational}`)).toEqual([]);
+  });
+  it("모든 차종의 제주 지방비가 국비의 30% 이상", () => {
+    const low = d.models.filter((m) => (m.local.jeju ?? 0) < m.national * d.rules.localMinRatio);
+    expect(low.map((m) => m.name)).toEqual([]);
+  });
 });
