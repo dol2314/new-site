@@ -29,6 +29,17 @@ export const GUIDES: GuideMeta[] = [
     published: false,
     reviewed: false,
   },
+  {
+    slug: "car-tax-prepay-timing",
+    title: "자동차세 연납, 2,000cc급은 1월에 22,600원 아낀다 — 3·6·9월 신청과 비교",
+    description:
+      "2027년 자동차세 연납 공제를 1·3·6·9월 신청 시기별로 계산했습니다. 배기량별·오래된 차·전기차로 나눠 아끼는 금액과 분할납부·이사·차 판매 때 주의할 점을 정리했습니다.",
+    asOf: "2026-11-01",
+    updatedAt: "2026-11-01",
+    tools: ["car-tax"],
+    published: false,
+    reviewed: false,
+  },
 ];
 
 export const publishedGuides = () => GUIDES.filter((g) => g.published);

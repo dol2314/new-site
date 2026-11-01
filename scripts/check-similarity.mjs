@@ -15,10 +15,27 @@ if (!existsSync(dir)) {
   process.exit(0);
 }
 const paras = (html) => {
-  const article = html.match(/<article[\s\S]*?<\/article>/)?.[0] ?? "";
+  // 출처 목록은 글마다 같은 법령을 인용하므로 비교에서 뺀다
+  const article = (
+    html.match(/<article[\s\S]*?<\/article>/)?.[0] ?? ""
+  ).replace(
+    /<section[^>]*data-article-section="sources"[\s\S]*?<\/section>/,
+    "",
+  );
   return [...article.matchAll(/<(p|li)[^>]*>([\s\S]*?)<\/\1>/g)]
-    .map((m) => m[2].replace(/<[^>]+>/g, "").replace(/[\d,.]+/g, "#").replace(/\s+/g, " ").trim())
-    .filter((t) => t.length >= MIN_LEN && !t.startsWith("예시 조건은") && !t.startsWith("검수일"));
+    .map((m) =>
+      m[2]
+        .replace(/<[^>]+>/g, "")
+        .replace(/[\d,.]+/g, "#")
+        .replace(/\s+/g, " ")
+        .trim(),
+    )
+    .filter(
+      (t) =>
+        t.length >= MIN_LEN &&
+        !t.startsWith("예시 조건은") &&
+        !t.startsWith("검수일"),
+    );
 };
 const grams = (t) => {
   const s = new Set();
@@ -33,7 +50,12 @@ const jaccard = (a, b) => {
 
 const docs = readdirSync(dir)
   .filter((n) => existsSync(join(dir, n, "index.html")))
-  .map((slug) => ({ slug, paras: paras(readFileSync(join(dir, slug, "index.html"), "utf8")).map((t) => ({ t, g: grams(t) })) }));
+  .map((slug) => ({
+    slug,
+    paras: paras(readFileSync(join(dir, slug, "index.html"), "utf8")).map(
+      (t) => ({ t, g: grams(t) }),
+    ),
+  }));
 
 let fails = 0;
 for (let i = 0; i < docs.length; i++) {
@@ -43,11 +65,15 @@ for (let i = 0; i < docs.length; i++) {
         const sim = jaccard(a.g, b.g);
         if (sim >= LIMIT) {
           fails++;
-          console.log(`실패 ${sim.toFixed(2)}: ${docs[i].slug} ↔ ${docs[j].slug}\n  - ${a.t.slice(0, 80)}\n  - ${b.t.slice(0, 80)}`);
+          console.log(
+            `실패 ${sim.toFixed(2)}: ${docs[i].slug} ↔ ${docs[j].slug}\n  - ${a.t.slice(0, 80)}\n  - ${b.t.slice(0, 80)}`,
+          );
         }
       }
     }
   }
 }
-console.log(`사례 글 ${docs.length}편, 문단 ${docs.reduce((s, d) => s + d.paras.length, 0)}개 비교 · 기준 ${LIMIT} · 실패 ${fails}`);
+console.log(
+  `사례 글 ${docs.length}편, 문단 ${docs.reduce((s, d) => s + d.paras.length, 0)}개 비교 · 기준 ${LIMIT} · 실패 ${fails}`,
+);
 process.exit(fails ? 1 : 0);
