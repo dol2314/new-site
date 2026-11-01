@@ -2,17 +2,10 @@
   "topic": "car-tax",
   "year": 2026,
   "title": "2026년 비영업용 승용자동차 자동차세·지방교육세·연납",
-  "scope": "비영업용 승용자동차만. 영업용·승합·화물·이륜은 범위 밖",
+  "scope": "비영업용 승용자동차. 영업용·승합·화물, 연중 등록·이전 일할계산, 지자체 조례 세율은 범위 밖",
   "values": {
     "ccBrackets": {
-      "value": null,
-      "unit": "원/cc",
-      "source_name": "지방세법 제127조 제1항(비영업용 승용자동차 세율)",
-      "source_url": "https://www.law.go.kr/법령/지방세법/제127조",
-      "effective_date": null,
-      "checked_at": null,
-      "verified": false,
-      "candidate": [
+      "value": [
         {
           "maxCc": 1000,
           "wonPerCc": 80
@@ -26,126 +19,164 @@
           "wonPerCc": 200
         }
       ],
-      "candidate_source": "2차 자료(웹 검색 요약, 2026-11-01) — 법령으로 확인 필요",
-      "todo": "배기량 구간과 cc당 세액 확인"
+      "unit": "원/cc",
+      "source_name": "지방세법(법률 제21308호, 2026-07-01 시행 현행본) 제127조제1항제1호 표(비영업용)",
+      "source_url": "https://www.law.go.kr/법령/지방세법/제127조",
+      "effective_date": "2026-07-01",
+      "checked_at": "2026-11-01",
+      "verified": true,
+      "note": "조문 표 이미지로 확인. 지자체는 조례로 표준세율의 50%까지 초과해 정할 수 있음(같은 조 제3항)"
     },
     "flatAnnualWon": {
-      "value": null,
+      "value": 100000,
       "unit": "원/년",
-      "source_name": "지방세법 제127조 제1항(그 밖의 승용자동차: 전기·수소 등)",
+      "source_name": "지방세법(법률 제21308호, 2026-07-01 시행 현행본) 제127조제1항제3호 표(그 밖의 승용자동차, 비영업용)",
       "source_url": "https://www.law.go.kr/법령/지방세법/제127조",
-      "effective_date": null,
-      "checked_at": null,
-      "verified": false,
-      "candidate": 100000,
-      "candidate_source": "작성자(AI) 사전 지식 — 2차 자료보다 약함, 반드시 법령으로 확인",
-      "todo": "배기량으로 과세하지 않는 승용차의 연 세액 확인"
+      "effective_date": "2026-07-01",
+      "checked_at": "2026-11-01",
+      "verified": true,
+      "note": "그 밖의 승용자동차 = 전기·태양열·알코올을 이용하는 승용자동차(시행령 제123조제2호). 차령 경감 대상 아님(제2호는 제1호 차량만)"
     },
     "educationTaxRate": {
-      "value": null,
+      "value": 0.3,
       "unit": "비율",
-      "source_name": "지방세법 제151조(지방교육세 — 자동차세액 기준 세율)",
+      "source_name": "지방세법(법률 제21308호, 2026-07-01 시행 현행본) 제151조제1항제7호",
       "source_url": "https://www.law.go.kr/법령/지방세법/제151조",
-      "effective_date": null,
-      "checked_at": null,
-      "verified": false,
-      "candidate": 0.3,
-      "candidate_source": "2차 자료(웹 검색 요약, 2026-11-01) — 법령으로 확인 필요",
-      "todo": "자동차세분 지방교육세율 확인. 전기차 등 정액 차량에도 같은 비율이 붙는지 확인"
+      "effective_date": "2026-07-01",
+      "checked_at": "2026-11-01",
+      "verified": true,
+      "note": "납부하여야 할 자동차세액의 100분의 30. 조례로 50% 범위에서 가감 가능(같은 조 제2항)"
     },
     "ageReduction": {
-      "value": null,
-      "unit": "비율",
-      "source_name": "지방세법 제127조 제3항(차령 경감)",
-      "source_url": "https://www.law.go.kr/법령/지방세법/제127조",
-      "effective_date": null,
-      "checked_at": null,
-      "verified": false,
-      "candidate": {
-        "startAge": 3,
+      "value": {
         "perYearRate": 0.05,
-        "maxRate": 0.5
+        "minAge": 2,
+        "maxAge": 12
       },
-      "candidate_source": "작성자(AI) 사전 지식 — 2차 자료보다 약함, 반드시 법령으로 확인",
-      "todo": "경감 시작 차령, 연간 경감률, 최대 경감률 확인"
+      "unit": "비율",
+      "source_name": "지방세법(법률 제21308호, 2026-07-01 시행 현행본) 제127조제1항제2호",
+      "source_url": "https://www.law.go.kr/법령/지방세법/제127조",
+      "effective_date": "2026-07-01",
+      "checked_at": "2026-11-01",
+      "verified": true,
+      "note": "각 기분세액 = A/2 - (A/2 × 5/100)(n - 2), 2 ≤ n ≤ 12, 차령 12년 초과는 12년"
     },
     "truncateUnit": {
-      "value": null,
+      "value": 10,
       "unit": "원",
-      "source_name": "지방세 끝수 처리 규정",
-      "source_url": "https://www.law.go.kr/법령/지방세기본법",
-      "effective_date": null,
-      "checked_at": null,
-      "verified": false,
-      "candidate": 10,
-      "candidate_source": "작성자(AI) 사전 지식 — 2차 자료보다 약함, 반드시 법령으로 확인",
-      "todo": "세액 10원 미만 절사 규정과 적용 법령(지방세기본법 또는 국고금 관리법 준용) 확인"
+      "source_name": "국고금 관리법 제47조제1항 (지방세기본법 제59조로 준용)",
+      "source_url": "https://www.law.go.kr/법령/국고금관리법/제47조",
+      "effective_date": "2026-01-02",
+      "checked_at": "2026-11-01",
+      "verified": true,
+      "note": "10원 미만 끝수는 계산하지 않음. 기분별 징수금마다 적용한다고 보고 계산"
     },
     "prepayRate": {
-      "value": null,
+      "value": 0.05,
       "unit": "비율",
-      "source_name": "지방세법 제128조 제3항 및 같은 법 시행령(연세액 일시납부 공제)",
-      "source_url": "https://www.law.go.kr/법령/지방세법/제128조",
-      "effective_date": null,
-      "checked_at": null,
-      "verified": false,
-      "candidate": 0.05,
-      "candidate_source": "2차 자료(웹 검색 요약, 2026-11-01) — 법령으로 확인 필요",
-      "todo": "2026년 연납 공제율 확인 (2026년은 5% 유지 보도 — 시행령 조문으로 확인)"
+      "source_name": "지방세법 시행령(대통령령 제36736호, 2026-10-01 시행 현행본) 제125조제6항",
+      "source_url": "https://www.law.go.kr/법령/지방세법시행령/제125조",
+      "effective_date": "2026-10-01",
+      "checked_at": "2026-11-01",
+      "verified": true,
+      "note": "'대통령령으로 정하는 이자율'은 100분의 5 (개정 2024-12-31)"
     },
-    "prepayMonths": {
-      "value": null,
-      "unit": "월",
-      "source_name": "지방세법 제128조 제3항 및 같은 법 시행령",
-      "source_url": "https://www.law.go.kr/법령/지방세법/제128조",
-      "effective_date": null,
-      "checked_at": null,
-      "verified": false,
-      "candidate": [
-        1,
-        3,
-        6,
-        9
+    "prepayPeriods": {
+      "value": [
+        {
+          "month": 1,
+          "start": "01-16",
+          "end": "01-31",
+          "basis": "annual-prorated"
+        },
+        {
+          "month": 3,
+          "start": "03-16",
+          "end": "03-31",
+          "basis": "annual-prorated"
+        },
+        {
+          "month": 6,
+          "start": "06-16",
+          "end": "06-30",
+          "basis": "second-half"
+        },
+        {
+          "month": 9,
+          "start": "09-16",
+          "end": "09-30",
+          "basis": "second-half-prorated"
+        }
       ],
-      "candidate_source": "2차 자료(웹 검색 요약, 2026-11-01) — 법령으로 확인 필요",
-      "todo": "연납 신청 가능 월과 기간(1월 16~31일 등), 연세액 10만 원 미만 차량의 예외 확인"
+      "unit": "기간·계산식",
+      "source_name": "지방세법(법률 제21308호, 2026-07-01 시행 현행본) 제128조제3항 표, 지방세법 시행령(대통령령 제36736호, 2026-10-01 시행 현행본) 제125조제3항",
+      "source_url": "https://www.law.go.kr/법령/지방세법/제128조",
+      "effective_date": "2026-07-01",
+      "checked_at": "2026-11-01",
+      "verified": true,
+      "note": "1·3월: 연세액 × (납부기한 다음 날~12/31 일수 ÷ 365, 윤년 366) × 이자율 / 6월: 제2기분세액 × 이자율 / 9월: 제2기분세액 × 일수 ÷ 184 × 이자율"
+    },
+    "secondHalfDays": {
+      "value": 184,
+      "unit": "일",
+      "source_name": "지방세법(법률 제21308호, 2026-07-01 시행 현행본) 제128조제3항 표(9월 계산식 분모)",
+      "source_url": "https://www.law.go.kr/법령/지방세법/제128조",
+      "effective_date": "2026-07-01",
+      "checked_at": "2026-11-01",
+      "verified": true
     },
     "dueDates": {
-      "value": null,
-      "unit": "기간",
-      "source_name": "지방세법 제128조 제1항(납기)",
-      "source_url": "https://www.law.go.kr/법령/지방세법/제128조",
-      "effective_date": null,
-      "checked_at": null,
-      "verified": false,
-      "candidate": {
-        "first": "06-16~06-30",
-        "second": "12-16~12-31"
+      "value": {
+        "first": {
+          "months": "1~6월",
+          "due": "06-16~06-30"
+        },
+        "second": {
+          "months": "7~12월",
+          "due": "12-16~12-31"
+        }
       },
-      "candidate_source": "2차 자료(웹 검색 요약, 2026-11-01) — 법령으로 확인 필요",
-      "todo": "1기(6월)·2기(12월) 납기 기간 확인"
+      "unit": "기간",
+      "source_name": "지방세법(법률 제21308호, 2026-07-01 시행 현행본) 제128조제1항 표",
+      "source_url": "https://www.law.go.kr/법령/지방세법/제128조",
+      "effective_date": "2026-07-01",
+      "checked_at": "2026-11-01",
+      "verified": true,
+      "note": "분할 신청 시 각 기분의 절반을 3월 16~31일, 9월 16~30일에 낼 수 있음(같은 항 단서)"
+    },
+    "smallTaxRule": {
+      "value": {
+        "thresholdWon": 100000
+      },
+      "unit": "원",
+      "source_name": "지방세법(법률 제21308호, 2026-07-01 시행 현행본) 제128조제4항",
+      "source_url": "https://www.law.go.kr/법령/지방세법/제128조",
+      "effective_date": "2026-07-01",
+      "checked_at": "2026-11-01",
+      "verified": true,
+      "note": "연세액 10만원 이하는 제1기분 부과 때 전액 부과할 수 있고(재량), 이때 제2기분세액 × 이자율을 공제"
     }
   },
   "rules": {
     "carAge": {
-      "value": null,
+      "value": "기분별 차령: 기산일 1~6월이면 과세연도-기산연도+1, 7~12월이면 1기분은 과세연도-기산연도, 2기분은 +1. 기산일은 제작연도 등록이면 최초 신규등록일, 아니면 제작연도 말일",
       "unit": "규칙",
-      "source_name": "지방세법 제127조 제3항(차령 산정)",
-      "source_url": "https://www.law.go.kr/법령/지방세법/제127조",
-      "effective_date": null,
-      "checked_at": null,
-      "verified": false,
-      "todo": "차령 산정 기준(과세연도-최초등록연도+1인지, 등록 시기별 처리) 확인 — calc-core carAge()가 이 규칙을 씀"
+      "source_name": "지방세법 시행령(대통령령 제36736호, 2026-10-01 시행 현행본) 제122조제2항, 자동차관리법 시행령 제3조",
+      "source_url": "https://www.law.go.kr/법령/지방세법시행령/제122조",
+      "effective_date": "2026-10-01",
+      "checked_at": "2026-11-01",
+      "verified": true,
+      "note": "calc-core ageStartDate()·carAgeByHalf()"
     },
     "prepayDiscount": {
-      "value": null,
+      "value": "PrepayPeriod.basis 세 가지 계산식. 공제 후 자동차세를 10원 미만 버림, 지방교육세는 공제 후 자동차세 기준",
       "unit": "규칙",
-      "source_name": "지방세법 시행령(연납 공제액 산식)",
-      "source_url": "https://www.law.go.kr/법령/지방세법시행령",
-      "effective_date": null,
-      "checked_at": null,
-      "verified": false,
-      "todo": "공제액 = 연세액 × 공제율 × (납부 월 다음 달 1일~12월 31일 일수 ÷ 연 일수) 인지 확인 — calc-core calcPrepay()가 이 규칙을 씀. 보도된 실효 절감률(1월 약 4.57%, 3월 약 3.76%, 6월 약 2.51%, 9월 약 1.25%)과는 일치함"
+      "source_name": "지방세법(법률 제21308호, 2026-07-01 시행 현행본) 제128조제3항, 지방세법 시행령(대통령령 제36736호, 2026-10-01 시행 현행본) 제125조제3항·제6항",
+      "source_url": "https://www.law.go.kr/법령/지방세법/제128조",
+      "effective_date": "2026-07-01",
+      "checked_at": "2026-11-01",
+      "verified": true,
+      "note": "calc-core calcPrepay()"
     }
   }
 }

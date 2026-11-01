@@ -19,6 +19,8 @@ export interface SourcedValue<T = number> {
   /** 후보값을 어디서 봤는지 (2차 자료면 그렇게 적는다) */
   candidate_source?: string;
   todo?: string;
+  /** 확인된 값에 붙이는 주의 사항(해석, 조례 차이 등) */
+  note?: string;
 }
 
 const DATE = /^\d{4}-\d{2}-\d{2}$/;

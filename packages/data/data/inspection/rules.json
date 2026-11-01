@@ -1,28 +1,40 @@
 {
   "topic": "inspection",
-  "title": "자동차 검사 기간·주기·지연 과태료 (비사업용 승용 우선)",
-  "scope": "비사업용 승용자동차부터. 사업용·승합·화물은 확인 후 추가",
+  "title": "자동차 정기검사 기간·유효기간·미수검 과태료 (비사업용 승용)",
+  "scope": "비사업용 승용자동차. 사업용·승합·화물은 범위 밖. 종합검사 대상 여부와 수수료는 확인 전",
   "values": {
     "windowDays": {
-      "value": null,
-      "unit": "일",
-      "source_name": "자동차관리법 시행규칙(검사 기간)",
-      "source_url": "https://www.law.go.kr/법령/자동차관리법시행규칙",
-      "effective_date": null,
-      "checked_at": null,
-      "verified": false,
-      "candidate": {
-        "before": 31,
+      "value": {
+        "before": 90,
         "after": 31
       },
-      "candidate_source": "2차 자료(웹 검색 요약, 2026-11-01) — 법령으로 확인 필요",
-      "todo": "검사 유효기간 만료일 전후 며칠이 검사 기간인지 확인"
+      "unit": "일",
+      "source_name": "자동차관리법 시행규칙(국토교통부령 제1167호, 2026-10-02 시행 현행본) 제77조제2항",
+      "source_url": "https://www.law.go.kr/법령/자동차관리법시행규칙/제77조",
+      "effective_date": "2025-01-01",
+      "checked_at": "2026-11-01",
+      "verified": true,
+      "note": "검사유효기간 만료일 전 90일부터 후 31일까지(개정 2024-12-17, 2025-01-01 시행, 이후 정기검사를 받는 모든 차). 기간 안에 합격하면 만료일에 받은 것으로 봄. 만료 후 소유권이 바뀐 차는 이전등록일부터 31일 이내(같은 조 제3항)"
     },
     "cyclePassengerPrivate": {
+      "value": {
+        "everyYears": 2,
+        "firstAfterYears": 5,
+        "appliesToRegisteredFrom": "2025-01-01"
+      },
+      "unit": "년",
+      "source_name": "자동차관리법 시행규칙(국토교통부령 제1167호, 2026-10-02 시행 현행본) 별표 15의2 (개정 2024-12-17), 부칙(국토교통부령 제1415호) 제3조",
+      "source_url": "https://www.law.go.kr/법령별표서식/(자동차관리법 시행규칙,20261002,별표15의2)",
+      "effective_date": "2025-01-01",
+      "checked_at": "2026-11-01",
+      "verified": true,
+      "note": "비사업용 승용 2년, 신조차 최초 5년. 최초 5년은 2025-01-01 이후 신규등록 차부터 적용(말소 후 재등록 제외)"
+    },
+    "cyclePassengerPrivatePre2025": {
       "value": null,
       "unit": "년",
-      "source_name": "자동차관리법 시행규칙(검사 유효기간 별표)",
-      "source_url": "https://www.law.go.kr/법령/자동차관리법시행규칙",
+      "source_name": "자동차관리법 시행규칙 별표 15의2 개정 전 규정(2024-12-17 개정 전)",
+      "source_url": "https://www.law.go.kr/법령별표서식/(자동차관리법 시행규칙,20261002,별표15의2)",
       "effective_date": null,
       "checked_at": null,
       "verified": false,
@@ -30,8 +42,57 @@
         "firstAfterYears": 4,
         "everyYears": 2
       },
-      "candidate_source": "작성자(AI) 사전 지식 — 2차 자료보다 약함, 반드시 법령으로 확인",
-      "todo": "비사업용 승용 신차 최초 검사까지 연수와 이후 주기 확인"
+      "candidate_source": "작성자(AI) 사전 지식 — 개정 전 별표로 확인 필요",
+      "todo": "2024-12-31 이전 신규등록 차의 최초 검사 유효기간 확인(개정 전 별표)"
+    },
+    "penaltyTiers": {
+      "value": [
+        {
+          "fromDay": 1,
+          "toDay": 30,
+          "baseWon": 40000
+        },
+        {
+          "fromDay": 31,
+          "toDay": 114,
+          "baseWon": 40000,
+          "stepDays": 3,
+          "stepWon": 20000
+        },
+        {
+          "fromDay": 115,
+          "toDay": null,
+          "baseWon": 600000
+        }
+      ],
+      "unit": "원",
+      "source_name": "자동차관리법 시행령(대통령령 제36376호, 2026-06-03 시행 현행본) 별표 2 제2호 소목 (정기검사·종합검사를 받지 않은 경우)",
+      "source_url": "https://www.law.go.kr/법령별표서식/(자동차관리법 시행령,20260603,별표2)",
+      "effective_date": "2026-06-03",
+      "checked_at": "2026-11-01",
+      "verified": true,
+      "note": "30일 이내 4만원 / 30일 초과 114일 이내 '4만원에 31일째부터 계산하여 3일 초과 시마다 2만원을 더한 금액' / 115일 이상 60만원. 가산은 4만원 + ⌊(지연일수-31)÷3⌋×2만원으로 해석(115일째 60만원과 이어짐)"
+    },
+    "penaltyCapWon": {
+      "value": 600000,
+      "unit": "원",
+      "source_name": "자동차관리법 시행령(대통령령 제36376호, 2026-06-03 시행 현행본) 별표 2 제2호 소목",
+      "source_url": "https://www.law.go.kr/법령별표서식/(자동차관리법 시행령,20260603,별표2)",
+      "effective_date": "2026-06-03",
+      "checked_at": "2026-11-01",
+      "verified": true
+    },
+    "penaltyDiscretion": {
+      "value": {
+        "maxReductionRate": 0.5
+      },
+      "unit": "비율",
+      "source_name": "자동차관리법 시행령(대통령령 제36376호, 2026-06-03 시행 현행본) 별표 2 제1호 마목(일반기준)",
+      "source_url": "https://www.law.go.kr/법령별표서식/(자동차관리법 시행령,20260603,별표2)",
+      "effective_date": "2026-06-03",
+      "checked_at": "2026-11-01",
+      "verified": true,
+      "note": "부과권자는 사소한 부주의·시정 노력 등이 인정되면 2분의 1 범위에서 줄일 수 있음(체납자는 제외). 검사기간이 연장·유예된 기간은 지연기간에서 뺌(라목)"
     },
     "comprehensiveScope": {
       "value": null,
@@ -43,32 +104,6 @@
       "verified": false,
       "todo": "정기검사 대신 종합검사를 받는 지역·차령 기준 확인"
     },
-    "penaltyTiers": {
-      "value": null,
-      "unit": "원",
-      "source_name": "자동차관리법 시행령 별표(과태료 부과기준)",
-      "source_url": "https://www.law.go.kr/법령/자동차관리법시행령",
-      "effective_date": null,
-      "checked_at": null,
-      "verified": false,
-      "candidate": {
-        "note": "2차 자료: 30일 이내 4만 원, 이후 가산, 상한 60만 원 — 구간 세부는 확인 필요"
-      },
-      "candidate_source": "2차 자료(웹 검색 요약, 2026-11-01) — 법령으로 확인 필요",
-      "todo": "지연 일수별 과태료 구간·가산 방식·상한 확인. 2차 자료에 상한 도달 시점이 115일/180일로 엇갈림"
-    },
-    "penaltyCapWon": {
-      "value": null,
-      "unit": "원",
-      "source_name": "자동차관리법 시행령 별표(과태료 부과기준)",
-      "source_url": "https://www.law.go.kr/법령/자동차관리법시행령",
-      "effective_date": null,
-      "checked_at": null,
-      "verified": false,
-      "candidate": 600000,
-      "candidate_source": "2차 자료(웹 검색 요약, 2026-11-01) — 법령으로 확인 필요",
-      "todo": "과태료 상한과 시행일 확인 (2배 상향 보도)"
-    },
     "fees": {
       "value": null,
       "unit": "원",
@@ -77,29 +112,39 @@
       "effective_date": null,
       "checked_at": null,
       "verified": false,
-      "todo": "정기검사·종합검사 수수료(차종별) 확인. 민간 검사소는 다를 수 있어 범위로 표시"
+      "todo": "정기검사·종합검사 수수료 확인(이 세션에서 kotsa.or.kr 연결 시간 초과). 민간 검사소는 다를 수 있어 범위로 표시"
     }
   },
   "rules": {
+    "validityStart": {
+      "value": "검사유효기간은 신규등록일부터 기산, 정기검사를 받은 차는 받은 날 다음 날부터. 정기검사 기간 안에 합격하면 종전 만료일 다음 날부터",
+      "unit": "규칙",
+      "source_name": "자동차관리법 시행규칙(국토교통부령 제1167호, 2026-10-02 시행 현행본) 제74조제2항·제3항",
+      "source_url": "https://www.law.go.kr/법령/자동차관리법시행규칙/제74조",
+      "effective_date": "2026-10-02",
+      "checked_at": "2026-11-01",
+      "verified": true,
+      "note": "calc-core estimateExpiry()의 다음 주기 = 종전 만료일 + 주기"
+    },
     "firstExpiry": {
       "value": null,
       "unit": "규칙",
-      "source_name": "자동차관리법 시행규칙(검사 유효기간 기산일)",
-      "source_url": "https://www.law.go.kr/법령/자동차관리법시행규칙",
+      "source_name": "자동차관리법 시행규칙 제74조제2항 + 민법 기간 계산(제157조·제160조)",
+      "source_url": "https://www.law.go.kr/법령/민법/제160조",
       "effective_date": null,
       "checked_at": null,
       "verified": false,
-      "todo": "최초 만료일 = 최초등록일 + N년 - 1일 인지 확인 — calc-core estimateExpiry()가 이 규칙을 씀"
+      "todo": "신규등록일부터 기산한 N년의 만료일 = 신규등록일 + N년 - 1일 인지 확인 — calc-core estimateExpiry()"
     },
     "overdueCount": {
       "value": null,
       "unit": "규칙",
-      "source_name": "자동차관리법 시행령 별표(과태료 부과기준)",
-      "source_url": "https://www.law.go.kr/법령/자동차관리법시행령",
+      "source_name": "자동차관리법 시행령(대통령령 제36376호, 2026-06-03 시행 현행본) 별표 2 제2호 소목 '검사 지연기간'",
+      "source_url": "https://www.law.go.kr/법령별표서식/(자동차관리법 시행령,20260603,별표2)",
       "effective_date": null,
       "checked_at": null,
       "verified": false,
-      "todo": "지연 일수를 검사 기간 끝난 다음 날부터 세는지 확인 — calc-core calcInspectionPenalty()가 이 규칙을 씀"
+      "todo": "검사 지연기간을 정기검사 기간(만료일 후 31일)이 끝난 다음 날부터 1일로 세는지 확인 — 별표에 기산일 명시 없음. calc-core calcInspectionPenalty()"
     }
   }
 }
