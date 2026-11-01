@@ -2,9 +2,9 @@
  * 확인된 법령값으로 엔진을 검증한다. 기대값은 법령 산식으로 손으로 계산한 값
  * (지방세법 제127조·제128조·제151조, 시행령 제122조·제125조, 국고금 관리법 제47조, 자동차관리법 시행령 별표 2).
  */
-import { calcCarTax, calcTransferProrate, calcEvSubsidy, calcRegistrationTax, expectedConversionNational, calcInspectionPenalty, calcPrepay, inspectionWindow, penaltyForDays } from "@site/calc-core";
+import { calcCarTax, calcChargingCost, tierForKw, calcTransferProrate, calcEvSubsidy, calcRegistrationTax, expectedConversionNational, calcInspectionPenalty, calcPrepay, inspectionWindow, penaltyForDays } from "@site/calc-core";
 import { describe, expect, it } from "vitest";
-import { carTaxData, carTaxProrateData, evSubsidyData, inspectionData, registrationTaxData } from "./params";
+import { carTaxData, carTaxProrateData, evChargingData, evSubsidyData, inspectionData, registrationTaxData } from "./params";
 
 const d26 = carTaxData(2026);
 const d27 = carTaxData(2027);
@@ -191,5 +191,20 @@ describe("보조금 지침 (2026-06-23) 규칙", () => {
   it("모든 차종의 제주 지방비가 국비의 30% 이상", () => {
     const low = d.models.filter((m) => (m.local.jeju ?? 0) < m.national * d.rules.localMinRatio);
     expect(low.map((m) => m.name)).toEqual([]);
+  });
+});
+
+describe("전기차 공공 충전요금 (기후에너지환경부, 2026-08-01 시행)", () => {
+  const c = evChargingData();
+  it("확인 완료", () => expect(c.missing).toEqual([]));
+  it("5단계: 7kW 295.0 · 50kW 325.6 · 100kW 348.4 · 350kW 393.1원/kWh", () =>
+    expect([7, 30, 50, 100, 199, 200, 350].map((kw) => tierForKw(kw, c.publicTiers).wonPerKwh)).toEqual([295, 307.2, 325.6, 348.4, 348.4, 393.1, 393.1]));
+  it("개편 폭: 완속 324.4 → 295.0 (−29.4원), 초급속 347.2 → 393.1 (+45.9원) — 보도자료 숫자와 일치", () => {
+    expect(Math.round((324.4 - tierForKw(7, c.publicTiers).wonPerKwh) * 10) / 10).toBe(29.4);
+    expect(Math.round((tierForKw(350, c.publicTiers).wonPerKwh - 347.2) * 10) / 10).toBe(45.9);
+  });
+  it("월 1,500km · 5km/kWh: 완속만 88,500원, 200kW 이상만 117,930원", () => {
+    const run = (kw: number) => calcChargingCost({ monthlyKm: 1500, kmPerKwh: 5, mix: [{ label: "x", share: 1, wonPerKwh: tierForKw(kw, c.publicTiers).wonPerKwh }] }).monthlyCost;
+    expect([run(7), run(350)]).toEqual([88_500, 117_930]);
   });
 });

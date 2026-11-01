@@ -1,0 +1,65 @@
+{
+  "topic": "ev-charging",
+  "title": "전기차 공공 충전요금 (기후에너지환경부)",
+  "scope": "기후에너지환경부가 설치·운영하는 공공 충전기와, 정부와 협약한 민간 충전기에서 기후부 회원카드로 결제(로밍)할 때의 요금. 민간 사업자 자체 요금·아파트 충전 요금·주택용 전기요금은 범위 밖(사용자 입력)",
+  "values": {
+    "publicTiers": {
+      "value": [
+        {
+          "minKw": 0,
+          "maxKw": 30,
+          "wonPerKwh": 295.0
+        },
+        {
+          "minKw": 30,
+          "maxKw": 50,
+          "wonPerKwh": 307.2
+        },
+        {
+          "minKw": 50,
+          "maxKw": 100,
+          "wonPerKwh": 325.6
+        },
+        {
+          "minKw": 100,
+          "maxKw": 200,
+          "wonPerKwh": 348.4
+        },
+        {
+          "minKw": 200,
+          "maxKw": null,
+          "wonPerKwh": 393.1
+        }
+      ],
+      "unit": "원/kWh",
+      "source_name": "기후에너지환경부, 전기차 공공충전요금 체계 개편안(8.1 시행) — 대한민국 정책브리핑 카드뉴스(2026-07-09)",
+      "source_url": "https://www.korea.kr/multi/visualNewsView.do?newsId=148967839",
+      "effective_date": "2026-08-01",
+      "checked_at": "2026-11-01",
+      "verified": true,
+      "note": "30kW 미만 295.0 / 30~50kW 미만 307.2 / 50~100kW 미만 325.6 / 100~200kW 미만 348.4 / 200kW 이상 393.1. 기존: 100kW 미만 324.4, 100kW 이상 347.2. 무공해차 통합누리집은 자동 수집 차단이라 정책브리핑으로 확인"
+    }
+  },
+  "rules": {
+    "publicScope": {
+      "value": "개편 요금은 기후부가 설치해 운영하는 공공충전기를 이용하거나, 정부와 협약을 체결한 민간충전기에서 기후부 회원카드로 결제하는 경우(로밍)에 적용",
+      "unit": "규칙",
+      "source_name": "대한민국 정책브리핑, 「전기차 공공충전요금 개편…완속, kWh당 29.4원 인하」(기후에너지환경부, 2026-07-01)",
+      "source_url": "https://www.korea.kr/news/policyNewsView.do?newsId=148967451",
+      "effective_date": "2026-08-01",
+      "checked_at": "2026-11-01",
+      "verified": true,
+      "note": "단가에는 충전기 운영 전기요금·운영비·법정검사비 반영. 향후 계시별 전기요금 연동 요금제로 추가 개편 예정 — 개편 시 갱신"
+    },
+    "publicChange": {
+      "value": "개편 전 2단계(100kW 미만 324.4원, 100kW 이상 347.2원)에서 5단계로. 30kW 미만은 kWh당 29.4원(9.1%) 인하, 200kW 이상은 45.9원(약 13.2%) 인상",
+      "unit": "규칙",
+      "source_name": "기후에너지환경부, 전기차 공공충전요금 체계 개편안(8.1 시행) — 대한민국 정책브리핑 카드뉴스(2026-07-09)",
+      "source_url": "https://www.korea.kr/multi/visualNewsView.do?newsId=148967839",
+      "effective_date": "2026-08-01",
+      "checked_at": "2026-11-01",
+      "verified": true,
+      "note": "완속충전기는 전체의 약 90%, 200kW 이상은 약 2.3%(같은 자료)"
+    }
+  }
+}

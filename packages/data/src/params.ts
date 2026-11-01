@@ -2,12 +2,13 @@
  * 확인된(verified) 데이터만 계산 엔진 매개변수로 바꿔 준다.
  * 확인 전 항목이 하나라도 필요하면 missing에 이름이 들어가고, 그 기능을 쓰는 화면은 공개하지 않는다.
  */
-import type { CarTaxParams, CapRelief, EvModel, EvSubsidyRules, RegistrationTaxParams, InspectionCycle, InspectionParams, PenaltyTier, PrepayParams, PrepayPeriod, ProrateParams } from "@site/calc-core";
+import type { CarTaxParams, CapRelief, EvModel, EvSubsidyRules, RegistrationTaxParams, InspectionCycle, InspectionParams, PenaltyTier, PrepayParams, PrepayPeriod, ProrateParams, ChargeTier } from "@site/calc-core";
 import car2026 from "../data/car-tax/2026.json";
 import car2027 from "../data/car-tax/2027.json";
 import ev2026 from "../data/ev-subsidy/2026.json";
 import regDoc from "../data/registration-tax/rules.json";
 import inspectionDoc from "../data/inspection/rules.json";
+import chargingDoc from "../data/ev-charging/public.json";
 import type { SourcedValue } from "./schema";
 
 interface DataDoc {
@@ -285,4 +286,26 @@ export function registrationTaxData(): RegistrationTaxData {
   };
   for (const k of REG_KEYS.filter((k) => k.startsWith("rules."))) pick(doc, k, missing);
   return { params, missing, sources: refs(doc, REG_KEYS) };
+}
+
+export interface EvChargingData {
+  /** 공공 충전요금 단계 (확인된 값만) */
+  publicTiers: ChargeTier[];
+  effectiveDate: string | null;
+  sources: SourceRef[];
+  missing: string[];
+}
+
+export function evChargingData(): EvChargingData {
+  const doc = chargingDoc as unknown as DataDoc;
+  const missing: string[] = [];
+  const publicTiers = pick<ChargeTier[]>(doc, "values.publicTiers", missing);
+  pick(doc, "rules.publicScope", missing);
+  pick(doc, "rules.publicChange", missing);
+  return {
+    publicTiers,
+    effectiveDate: doc.values.publicTiers?.effective_date ?? null,
+    sources: refs(doc, ["values.publicTiers", "rules.publicScope", "rules.publicChange"]),
+    missing,
+  };
 }
