@@ -3,7 +3,7 @@
 ## 이 프로젝트
 - 한국 차 주인·예비 구매자를 위한 돈 계산 사이트 + 안드로이드 앱. 한국어, 1인 운영, 애드센스(웹)·AdMob(앱) 수익.
 - 기획안: `docs/plan/README.md`. 작업 전 관련 절을 먼저 읽는다.
-- 구조(모노레포): `apps/web`(Next.js, 정적 출력, Cloudflare Pages), `apps/mobile`(Capacitor + React), `packages/calc-core`(순수 계산 함수), `packages/data`(연도별·출처별 기준 데이터 JSON + 스키마), `scripts/`(데이터 수집·검사).
+- 구조(모노레포): `apps/web`(Next.js, 정적 출력, Cloudflare Workers 정적 자산 — `wrangler.jsonc`), `apps/mobile`(Capacitor + React), `packages/calc-core`(순수 계산 함수), `packages/data`(연도별·출처별 기준 데이터 JSON + 스키마), `scripts/`(데이터 수집·검사).
 
 ## 절대 규칙
 1. **세율·보조금·요금·과태료는 공식 출처로 확인한 값만 쓴다.** 허용: 법제처 국가법령정보센터(지방세법, 지방세특례제한법, 자동차관리법 등), 행정안전부·위택스, 환경부·무공해차 통합누리집, 지자체 공고, 한국전력, 오피넷(한국석유공사), 한국교통안전공단, 정부 보도자료(korea.kr). 블로그·뉴스·자동차 플랫폼 글은 "어디서 발표됐는지" 찾는 실마리로만 쓴다.
