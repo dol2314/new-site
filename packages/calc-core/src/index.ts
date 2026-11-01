@@ -50,3 +50,4 @@ export {
 } from "./registrationTax";
 export { calcLoan, type LoanInput, type LoanMethod, type LoanResult, type LoanRow } from "./loan";
 export { calcPurchase, type PurchaseInput, type PurchaseResult } from "./purchase";
+export { calcChargingCost, tierForKw, type ChargeTier, type ChargingInput, type ChargingMixItem, type ChargingResult } from "./charging";
