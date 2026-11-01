@@ -1,6 +1,6 @@
 /**
- * 테스트 전용 매개변수. ★법령값이 아니다★ 산식(구간 찾기, 절사, 경감, 날짜 계산)을 검증하려고
- * 일부러 실제 값과 헷갈리지 않는 숫자를 썼다. 실제 값은 packages/data 에서 확인 후 넣는다.
+ * 테스트 전용 가짜 매개변수. ★법령값이 아니다★ 구간 찾기·절사·경감·날짜 계산 같은 산식만 검증한다.
+ * 법령값 검증은 packages/data 의 확인된 데이터로 하는 official.test.ts 에서 한다.
  */
 import type { CarTaxParams, PrepayParams } from "./carTax";
 import type { InspectionParams } from "./inspection";
@@ -13,11 +13,21 @@ export const FAKE_CAR_TAX: CarTaxParams = {
   ],
   flatAnnualWon: 50_000,
   educationTaxRate: 0.1,
-  ageReduction: { startAge: 3, perYearRate: 0.1, maxRate: 0.3 },
+  ageReduction: { perYearRate: 0.1, minAge: 2, maxAge: 5 },
   truncateUnit: 10,
 };
 
-export const FAKE_PREPAY: PrepayParams = { rate: 0.1, months: [1, 3, 6, 9], educationTaxRate: 0.1, truncateUnit: 10 };
+export const FAKE_PREPAY: PrepayParams = {
+  rate: 0.1,
+  periods: [
+    { month: 1, start: "01-16", end: "01-31", basis: "annual-prorated" },
+    { month: 6, start: "06-16", end: "06-30", basis: "second-half" },
+    { month: 9, start: "09-16", end: "09-30", basis: "second-half-prorated" },
+  ],
+  secondHalfDays: 184,
+  educationTaxRate: 0.1,
+  truncateUnit: 10,
+};
 
 export const FAKE_INSPECTION: InspectionParams = {
   windowDaysBefore: 10,

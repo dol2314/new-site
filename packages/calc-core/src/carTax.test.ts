@@ -1,61 +1,79 @@
 import { describe, expect, it } from "vitest";
-import { ageReductionRate, calcCarTax, calcPrepay, carAge } from "./carTax";
+import { ageStartDate, calcCarTax, calcPrepay, carAgeByHalf, reductionRate } from "./carTax";
 import { FAKE_CAR_TAX, FAKE_PREPAY } from "./fixtures.test-util";
 
-// 모든 기대값은 FAKE 매개변수로 손으로 계산한 값이다(법령값 검증 아님).
-describe("carAge / ageReductionRate", () => {
-  it("등록 연도 = 1년", () => expect(carAge(2026, 2026)).toBe(1));
-  it("과세 연도가 앞서면 오류", () => expect(() => carAge(2026, 2025)).toThrow(RangeError));
-  it("시작 차령 전엔 경감 없음", () => expect(ageReductionRate(2, FAKE_CAR_TAX.ageReduction)).toBe(0));
-  it("시작 차령에서 1단계", () => expect(ageReductionRate(3, FAKE_CAR_TAX.ageReduction)).toBe(0.1));
-  it("상한", () => expect(ageReductionRate(20, FAKE_CAR_TAX.ageReduction)).toBe(0.3));
+// 기대값은 FAKE 매개변수로 손으로 계산한 값(산식 검증용, 법령값 아님)
+describe("ageStartDate (차령기산일 규칙)", () => {
+  it("제작연도에 등록 → 등록일", () => expect(ageStartDate("2024-08-10", 2024)).toBe("2024-08-10"));
+  it("제작연도 모름 → 등록일", () => expect(ageStartDate("2024-08-10")).toBe("2024-08-10"));
+  it("이전 연도 제작 → 제작연도 말일", () => expect(ageStartDate("2025-02-03", 2024)).toBe("2024-12-31"));
+  it("제작연도가 늦으면 오류", () => expect(() => ageStartDate("2024-02-03", 2025)).toThrow(RangeError));
+});
+
+describe("carAgeByHalf (기분별 차령)", () => {
+  it("1~6월 기산: 두 기분 같음", () => expect(carAgeByHalf("2023-06-30", 2026)).toEqual([4, 4]));
+  it("7~12월 기산: 1기분이 1 적음", () => expect(carAgeByHalf("2023-07-01", 2026)).toEqual([3, 4]));
+  it("기산 당해 7월 이후 등록: 1기분 0", () => expect(carAgeByHalf("2026-09-01", 2026)).toEqual([0, 1]));
+  it("과세연도가 앞서면 오류", () => expect(() => carAgeByHalf("2026-01-01", 2025)).toThrow(RangeError));
+});
+
+describe("reductionRate", () => {
+  const p = FAKE_CAR_TAX.ageReduction; // (min(n,5) - 2) × 10%
+  it("minAge 이하 0", () => expect(reductionRate(2, p)).toBe(0));
+  it("1단계", () => expect(reductionRate(3, p)).toBe(0.1));
+  it("maxAge에서 멈춤", () => expect(reductionRate(9, p)).toBe(0.3));
 });
 
 describe("calcCarTax", () => {
-  it("구간 경계: 1000cc는 첫 구간", () => {
-    const r = calcCarTax({ fuelType: "gasoline", displacementCc: 1000, firstRegisteredYear: 2026, taxYear: 2026 }, FAKE_CAR_TAX);
-    expect(r.carTax).toBe(10_000);
-    expect(r.educationTax).toBe(1_000);
+  it("1000cc 첫 구간, 신차", () => {
+    const r = calcCarTax({ fuelType: "gasoline", displacementCc: 1000, ageStartDate: "2026-02-01", taxYear: 2026 }, FAKE_CAR_TAX);
+    expect(r.baseAnnual).toBe(10_000);
+    expect(r.halves.map((h) => h.carTax)).toEqual([5_000, 5_000]);
     expect(r.annualTotal).toBe(11_000);
   });
-  it("구간 경계: 1001cc는 둘째 구간", () => {
-    const r = calcCarTax({ fuelType: "gasoline", displacementCc: 1001, firstRegisteredYear: 2026, taxYear: 2026 }, FAKE_CAR_TAX);
-    expect(r.carTax).toBe(20_020);
+  it("1001cc는 둘째 구간", () =>
+    expect(calcCarTax({ fuelType: "gasoline", displacementCc: 1001, ageStartDate: "2026-02-01", taxYear: 2026 }, FAKE_CAR_TAX).baseAnnual).toBe(20_020));
+  it("기분별 차령이 다르면 기분별 경감도 다름 + 기분별 절사", () => {
+    // A = 1999×20 = 39,980, A/2 = 19,990. 기산 2023-08 → 2026년 차령 [3,4] → 경감 [10%, 20%]
+    // 1기: 17,991 → 17,990 / 교육세 1,799 → 1,790 · 2기: 15,992 → 15,990 / 1,599 → 1,590
+    const r = calcCarTax({ fuelType: "hybrid", displacementCc: 1999, ageStartDate: "2023-08-15", taxYear: 2026 }, FAKE_CAR_TAX);
+    expect(r.halves.map((h) => h.carAge)).toEqual([3, 4]);
+    expect(r.halves.map((h) => h.carTax)).toEqual([17_990, 15_990]);
+    expect(r.halves.map((h) => h.educationTax)).toEqual([1_790, 1_590]);
+    expect(r.carTax).toBe(33_980);
   });
-  it("차령 경감 + 절사: 1999cc, 차령 4년(20% 경감)", () => {
-    // 1999 × 20 = 39,980 → ×0.8 = 31,984 → 10원 미만 절사 31,980 / 교육세 3,198 → 3,190
-    const r = calcCarTax({ fuelType: "hybrid", displacementCc: 1999, firstRegisteredYear: 2023, taxYear: 2026 }, FAKE_CAR_TAX);
-    expect(r.carAge).toBe(4);
-    expect(r.carTax).toBe(31_980);
-    expect(r.educationTax).toBe(3_190);
-  });
-  it("전기차는 정액", () => {
-    const r = calcCarTax({ fuelType: "electric", firstRegisteredYear: 2026, taxYear: 2026 }, FAKE_CAR_TAX);
+  it("정액(전기)은 차령 경감 없음", () => {
+    const r = calcCarTax({ fuelType: "electric", ageStartDate: "2015-01-01", taxYear: 2026 }, FAKE_CAR_TAX);
+    expect(r.flat).toBe(true);
     expect(r.carTax).toBe(50_000);
   });
   it("배기량 누락 오류", () =>
-    expect(() => calcCarTax({ fuelType: "gasoline", firstRegisteredYear: 2026, taxYear: 2026 }, FAKE_CAR_TAX)).toThrow(RangeError));
+    expect(() => calcCarTax({ fuelType: "gasoline", ageStartDate: "2026-01-01", taxYear: 2026 }, FAKE_CAR_TAX)).toThrow(RangeError));
 });
 
 describe("calcPrepay", () => {
-  const annual = { carTax: 36_500 };
-  it("1월 납부: 2/1~12/31 = 334일 (평년)", () => {
-    const r = calcPrepay(annual, 1, 2027, FAKE_PREPAY);
+  // 연세액 36,500 (A/2 = 18,250씩), 교육세 10%
+  const tax = calcCarTax({ fuelType: "electric", ageStartDate: "2026-01-01", taxYear: 2027 }, { ...FAKE_CAR_TAX, flatAnnualWon: 36_500 });
+  it("1월: 연세액 × 334/365 × 10%", () => {
+    const r = calcPrepay(tax, 1, 2027, FAKE_PREPAY);
     expect(r.coveredDays).toBe(334);
-    // 36,500 × 0.1 × 334/365 = 3,340
+    // 36,500 × 334/365 × 0.1 = 3,340 → 자동차세 33,160 / 교육세 3,316 → 3,310
     expect(r.carTaxDiscount).toBe(3_340);
+    expect(r.payTotal).toBe(33_160 + 3_310);
+    // 고지 기준 연 합계: 기분별 교육세 1,825 → 1,820 (절사) ×2 = 3,640 → 40,140
+    expect(tax.annualTotal).toBe(40_140);
+    expect(r.saving).toBe(40_140 - (33_160 + 3_310));
   });
-  it("9월 납부: 10/1~12/31 = 92일", () => expect(calcPrepay(annual, 9, 2027, FAKE_PREPAY).coveredDays).toBe(92));
-  it("윤년은 366일 기준", () => {
-    const r = calcPrepay(annual, 1, 2028, FAKE_PREPAY);
-    expect(r.coveredDays).toBe(335);
-    expect(r.effectiveRate).toBeCloseTo(0.1 * 335 / 366, 10);
+  it("윤년 1월은 335/366", () => expect(calcPrepay(tax, 1, 2028, FAKE_PREPAY).coveredDays).toBe(335));
+  it("6월: 제2기분 × 10%", () => {
+    const r = calcPrepay(tax, 6, 2027, FAKE_PREPAY);
+    expect(r.coveredDays).toBeNull();
+    expect(r.carTaxDiscount).toBe(1_830); // 18,250 × 0.1 = 1,825 → 36,500-1,825=34,675 → 34,670
   });
-  it("총 절감액 = 자동차세 공제 + 교육세 감소", () => {
-    const r = calcPrepay(annual, 1, 2027, FAKE_PREPAY);
-    // 교육세: 전 3,650 → 후 (33,160×0.1=3,316→3,310) → 340 감소
-    expect(r.totalSaving).toBe(3_340 + 340);
-    expect(r.payAmount).toBe(33_160 + 3_310);
+  it("9월: 제2기분 × 92/184 × 10%", () => {
+    const r = calcPrepay(tax, 9, 2027, FAKE_PREPAY);
+    expect(r.coveredDays).toBe(92);
+    expect(r.carTaxDiscount).toBe(920); // 18,250 × 0.5 × 0.1 = 912.5 → 35,587.5 → 35,580
   });
-  it("허용되지 않은 월 거부", () => expect(() => calcPrepay(annual, 2, 2027, FAKE_PREPAY)).toThrow(RangeError));
+  it("허용 안 된 월", () => expect(() => calcPrepay(tax, 3, 2027, FAKE_PREPAY)).toThrow(RangeError));
 });

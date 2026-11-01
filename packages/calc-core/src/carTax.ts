@@ -1,32 +1,40 @@
 /**
- * 자동차세(비영업용 승용) + 지방교육세 + 연납 공제.
+ * 비영업용 승용자동차 자동차세 + 지방교육세 + 연납(연세액 일시납부) 공제.
  *
- * 세율·경감률·공제율 같은 법령값은 이 파일에 쓰지 않는다. 모두 CarTaxParams로 받아서 계산한다.
- * 실제 값은 packages/data 의 연도별 데이터 파일(공식 출처·기준일·verified 포함)에서 온다.
+ * 법령값(세율·경감률·공제 이자율·기간)은 이 파일에 쓰지 않는다. CarTaxParams·PrepayParams로 받는다.
+ * 실제 값과 출처는 packages/data/data/car-tax/{연도}.json.
  *
- * 아래 "규칙" 주석의 계산 방식도 법령(지방세법 제127조·제128조, 같은 법 시행령)으로 확인해야 하는 항목이다.
- * 확인 전까지 이 함수를 쓰는 화면은 공개하지 않는다(packages/data RULES 의 verified 참고).
+ * 계산 구조 (2026-11-01 국가법령정보센터 현행본으로 확인):
+ * - 연세액 A = 배기량 × cc당 세액 (지방세법 제127조제1항제1호) / 전기 등 그 밖의 승용 = 정액 (같은 항 제3호)
+ * - 차령 경감은 배기량 과세 승용차에만, 기분(1~6월, 7~12월)별로:
+ *     각 기분세액 = A/2 - (A/2 × 5/100)(n - 2), 2 ≤ n ≤ 12, 12년 초과는 12년 (같은 항 제2호)
+ * - 기분별 차령 n (지방세법 시행령 제122조제2항, 기산일은 자동차관리법 시행령 제3조):
+ *     기산일이 1~6월: 과세연도 - 기산연도 + 1 (두 기분 같음)
+ *     기산일이 7~12월: 1기분 = 과세연도 - 기산연도, 2기분 = 과세연도 - 기산연도 + 1
+ * - 지방교육세 = 납부할 자동차세액 × 30% (지방세법 제151조제1항제7호)
+ * - 10원 미만 끝수 버림 (지방세기본법 제59조 → 국고금 관리법 제47조제1항). 기분별 징수금마다 적용한다.
+ * - 연납 공제 (지방세법 제128조제3항, 시행령 제125조제3항·제6항): PrepayPeriod.basis 참고
+ *
+ * 범위 밖: 영업용·승합·화물, 연중 신규등록·이전의 일할계산(시행령 제126조), 지자체 조례로 바꾼 세율(법 제127조제3항, 제151조제2항).
  */
+import { daysInYear, diffDays, formatDate, parseDate, type IsoDate } from "./dates";
 import { truncateTo } from "./money";
-import { daysInYear, diffDays, formatDate } from "./dates";
 
 export type FuelType = "gasoline" | "diesel" | "lpg" | "hybrid" | "electric" | "hydrogen";
 
-/** 배기량이 maxCc 이하인 구간의 cc당 세액. maxCc가 null이면 그 위 전부. 오름차순. */
 export interface CcBracket {
+  /** 이 배기량 이하. null이면 그 위 전부. 오름차순 */
   maxCc: number | null;
   wonPerCc: number;
 }
 
 export interface CarTaxParams {
   ccBrackets: CcBracket[];
-  /** 배기량으로 과세하지 않는 승용차(전기·수소 등)의 연 세액 */
+  /** 그 밖의 승용자동차(전기 등) 연세액 */
   flatAnnualWon: number;
-  /** 지방교육세율 (자동차세액에 곱함) */
   educationTaxRate: number;
-  /** 차령 경감: 차령이 startAge 이상이면 (차령 - startAge + 1) × perYearRate, 최대 maxRate */
-  ageReduction: { startAge: number; perYearRate: number; maxRate: number };
-  /** 끝수 처리 단위(원). 이 단위 미만 절사 */
+  /** 기분세액 경감: (min(n, maxAge) - minAge) × perYearRate, n ≤ minAge면 0 */
+  ageReduction: { perYearRate: number; minAge: number; maxAge: number };
   truncateUnit: number;
 }
 
@@ -34,9 +42,8 @@ export interface CarTaxInput {
   fuelType: FuelType;
   /** 배기량(cc). 전기·수소는 무시 */
   displacementCc?: number;
-  /** 최초 등록 연도 */
-  firstRegisteredYear: number;
-  /** 과세 연도 */
+  /** 차령기산일 (ageStartDate()로 구함) */
+  ageStartDate: IsoDate;
   taxYear: number;
 }
 
@@ -46,115 +53,179 @@ export interface Breakdown {
   rule: string;
 }
 
-export interface CarTaxResult {
+export interface HalfTax {
+  /** 1 = 제1기분(1~6월, 6월 납기), 2 = 제2기분(7~12월, 12월 납기) */
+  half: 1 | 2;
   carAge: number;
-  ageReductionRate: number;
-  /** 자동차세(연) */
+  reductionRate: number;
   carTax: number;
-  /** 지방교육세(연) */
   educationTax: number;
-  /** 연 합계 */
+  total: number;
+}
+
+export interface CarTaxResult {
+  /** 경감 전 연세액 A */
+  baseAnnual: number;
+  halves: [HalfTax, HalfTax];
+  carTax: number;
+  educationTax: number;
   annualTotal: number;
+  /** 배기량이 아닌 정액 과세(전기 등) */
+  flat: boolean;
   breakdown: Breakdown[];
 }
 
 const FLAT_FUELS: FuelType[] = ["electric", "hydrogen"];
 
 /**
- * 차령. 규칙(확인 필요): 과세 연도 - 최초 등록 연도 + 1.
- * 실제 법령의 차령 기준일·상반기/하반기 등록 처리와 다를 수 있다.
+ * 차령기산일. 제작연도에 등록된 차는 최초 신규등록일, 아니면 제작연도의 말일 (자동차관리법 시행령 제3조).
+ * productionYear를 모르면 최초등록일을 쓴다(대부분 제작연도에 등록됨).
  */
-export function carAge(firstRegisteredYear: number, taxYear: number): number {
-  if (!Number.isInteger(firstRegisteredYear) || !Number.isInteger(taxYear)) throw new RangeError("연도는 정수");
-  if (taxYear < firstRegisteredYear) throw new RangeError("과세 연도가 등록 연도보다 앞섬");
-  return taxYear - firstRegisteredYear + 1;
+export function ageStartDate(firstRegisteredAt: IsoDate, productionYear?: number): IsoDate {
+  const regYear = new Date(parseDate(firstRegisteredAt)).getUTCFullYear();
+  if (productionYear === undefined || productionYear === regYear) return firstRegisteredAt;
+  if (productionYear > regYear) throw new RangeError("제작연도가 등록연도보다 늦음");
+  return `${productionYear}-12-31`;
 }
 
-export function ageReductionRate(age: number, p: CarTaxParams["ageReduction"]): number {
-  if (age < p.startAge) return 0;
-  const raw = (age - p.startAge + 1) * p.perYearRate;
-  return Math.min(round6(raw), p.maxRate);
+/** 기분별 차령 (지방세법 시행령 제122조제2항) */
+export function carAgeByHalf(start: IsoDate, taxYear: number): [number, number] {
+  const d = new Date(parseDate(start));
+  const y = d.getUTCFullYear();
+  if (taxYear < y) throw new RangeError("과세연도가 차령기산일보다 앞섬");
+  const firstHalfStart = d.getUTCMonth() < 6; // 1~6월
+  const second = taxYear - y + 1;
+  return [firstHalfStart ? second : taxYear - y, second];
+}
+
+export function reductionRate(age: number, p: CarTaxParams["ageReduction"]): number {
+  const n = Math.min(age, p.maxAge);
+  if (n <= p.minAge) return 0;
+  return round6((n - p.minAge) * p.perYearRate);
 }
 
 export function calcCarTax(input: CarTaxInput, params: CarTaxParams): CarTaxResult {
+  const flat = FLAT_FUELS.includes(input.fuelType);
   const breakdown: Breakdown[] = [];
-  let base: number;
-
-  if (FLAT_FUELS.includes(input.fuelType)) {
-    base = params.flatAnnualWon;
-    breakdown.push({ label: "기본 세액(정액)", value: base, rule: "배기량으로 과세하지 않는 승용차의 연 세액" });
+  let A: number;
+  if (flat) {
+    A = params.flatAnnualWon;
+    breakdown.push({ label: "연세액(정액)", value: A, rule: "전기 등 그 밖의 승용자동차 — 차령 경감 없음" });
   } else {
     const cc = input.displacementCc;
     if (cc === undefined || !Number.isFinite(cc) || cc <= 0) throw new RangeError("배기량(cc)을 입력해야 함");
     const bracket = params.ccBrackets.find((b) => b.maxCc === null || cc <= b.maxCc);
     if (!bracket) throw new RangeError(`배기량 구간 없음: ${cc}cc`);
-    base = cc * bracket.wonPerCc;
-    breakdown.push({ label: "기본 세액", value: base, rule: `${cc}cc × cc당 ${bracket.wonPerCc}원` });
+    A = cc * bracket.wonPerCc;
+    breakdown.push({ label: "연세액(경감 전)", value: A, rule: `${cc}cc × cc당 ${bracket.wonPerCc}원` });
   }
 
-  const age = carAge(input.firstRegisteredYear, input.taxYear);
-  const rate = ageReductionRate(age, params.ageReduction);
-  const reduced = base * (1 - rate);
-  if (rate > 0) {
-    breakdown.push({ label: "차령 경감", value: -(base - reduced), rule: `차령 ${age}년 → ${round6(rate * 100)}% 경감` });
-  }
-  const carTax = truncateTo(reduced, params.truncateUnit);
-  const educationTax = truncateTo(carTax * params.educationTaxRate, params.truncateUnit);
-  breakdown.push({ label: "자동차세", value: carTax, rule: `${params.truncateUnit}원 미만 절사` });
-  breakdown.push({ label: "지방교육세", value: educationTax, rule: `자동차세 × ${round6(params.educationTaxRate * 100)}%` });
+  const ages = carAgeByHalf(input.ageStartDate, input.taxYear);
+  const halves = ([1, 2] as const).map((half, i) => {
+    const age = ages[i] as number;
+    const rate = flat ? 0 : reductionRate(age, params.ageReduction);
+    const raw = A / 2 - (A / 2) * rate;
+    const carTax = truncateTo(raw, params.truncateUnit);
+    const educationTax = truncateTo(carTax * params.educationTaxRate, params.truncateUnit);
+    return { half, carAge: age, reductionRate: rate, carTax, educationTax, total: carTax + educationTax };
+  }) as [HalfTax, HalfTax];
 
-  return { carAge: age, ageReductionRate: rate, carTax, educationTax, annualTotal: carTax + educationTax, breakdown };
+  for (const h of halves) {
+    breakdown.push({
+      label: `제${h.half}기분 자동차세`,
+      value: h.carTax,
+      rule: h.reductionRate > 0 ? `A/2에서 차령 ${h.carAge}년 경감 ${round6(h.reductionRate * 100)}%` : `A/2 (차령 ${h.carAge}년, 경감 없음)`,
+    });
+  }
+  const carTax = halves[0].carTax + halves[1].carTax;
+  const educationTax = halves[0].educationTax + halves[1].educationTax;
+  breakdown.push({ label: "지방교육세", value: educationTax, rule: `기분별 자동차세 × ${round6(params.educationTaxRate * 100)}%` });
+  return { baseAnnual: A, halves, carTax, educationTax, annualTotal: carTax + educationTax, flat, breakdown };
+}
+
+/**
+ * 연납 공제 계산식 종류 (지방세법 제128조제3항 표):
+ * - "annual-prorated": 연세액 × (납부기한 다음 날~12월 31일 일수 / 365, 윤년 366) × 이자율   — 1월, 3월
+ * - "second-half": 제2기분세액 × 이자율                                                   — 6월
+ * - "second-half-prorated": 제2기분세액 × (납부기한 다음 날~12월 31일 일수 / 184) × 이자율   — 9월
+ */
+export type PrepayBasis = "annual-prorated" | "second-half" | "second-half-prorated";
+
+export interface PrepayPeriod {
+  month: number;
+  /** 신고납부기간 "MM-DD" */
+  start: string;
+  end: string;
+  basis: PrepayBasis;
 }
 
 export interface PrepayParams {
-  /** 법정 연납 공제율 */
+  /** 대통령령으로 정하는 이자율 */
   rate: number;
-  /** 연납 신청 가능 월 (예: [1, 3, 6, 9]) */
-  months: number[];
+  periods: PrepayPeriod[];
+  /** second-half-prorated 계산식의 분모 일수 */
+  secondHalfDays: number;
   educationTaxRate: number;
   truncateUnit: number;
 }
 
 export interface PrepayResult {
-  payMonth: number;
-  /** 공제 대상 기간(일): 납부 월 다음 달 1일 ~ 12월 31일 */
-  coveredDays: number;
-  /** 실제 절감률 = rate × coveredDays / 연 일수 */
-  effectiveRate: number;
+  month: number;
+  periodStart: IsoDate;
+  periodEnd: IsoDate;
+  /** 납부기한 다음 날 ~ 12월 31일 일수 (6월 방식은 해당 없음 → null) */
+  coveredDays: number | null;
   carTaxDiscount: number;
-  /** 지방교육세 감소분 포함 총 절감액 */
-  totalSaving: number;
-  payAmount: number;
+  /** 공제 후 연 자동차세 + 지방교육세 */
+  payTotal: number;
+  /** 고지대로 낼 때보다 줄어드는 금액 (지방교육세 감소 포함) */
+  saving: number;
   breakdown: Breakdown[];
 }
 
-/**
- * 연납 공제. 규칙(확인 필요): 공제액 = 연 자동차세 × 공제율 × (납부 월 다음 달 1일부터 12월 31일까지 일수 ÷ 연 일수).
- * 지방교육세는 공제 후 자동차세에 다시 교육세율을 곱한다.
- */
-export function calcPrepay(annual: Pick<CarTaxResult, "carTax">, payMonth: number, year: number, p: PrepayParams): PrepayResult {
-  if (!p.months.includes(payMonth)) throw new RangeError(`연납 신청 월이 아님: ${payMonth}월`);
-  const start = formatDate(Date.UTC(year, payMonth, 1)); // 다음 달 1일
-  const end = formatDate(Date.UTC(year, 11, 31));
-  const coveredDays = diffDays(start, end) + 1;
-  const yearDays = daysInYear(year);
-  const effectiveRate = p.rate * (coveredDays / yearDays);
-  const carTaxDiscount = truncateTo(annual.carTax * effectiveRate, p.truncateUnit);
-  const carTaxAfter = annual.carTax - carTaxDiscount;
-  const eduAfter = truncateTo(carTaxAfter * p.educationTaxRate, p.truncateUnit);
-  const eduBefore = truncateTo(annual.carTax * p.educationTaxRate, p.truncateUnit);
-  const totalSaving = carTaxDiscount + (eduBefore - eduAfter);
+export function calcPrepay(tax: CarTaxResult, month: number, year: number, p: PrepayParams): PrepayResult {
+  const period = p.periods.find((x) => x.month === month);
+  if (!period) throw new RangeError(`연납 신고납부 월이 아님: ${month}월`);
+  const periodStart = `${year}-${period.start}`;
+  const periodEnd = `${year}-${period.end}`;
+  const nextDay = formatDate(parseDate(periodEnd) + 86_400_000);
+  const days = diffDays(nextDay, `${year}-12-31`) + 1;
+  const second = tax.halves[1].carTax;
+
+  let raw: number;
+  let rule: string;
+  let coveredDays: number | null = days;
+  switch (period.basis) {
+    case "annual-prorated":
+      raw = tax.carTax * (days / daysInYear(year)) * p.rate;
+      rule = `연세액 ${tax.carTax.toLocaleString("ko-KR")}원 × ${days}/${daysInYear(year)} × ${round6(p.rate * 100)}%`;
+      break;
+    case "second-half":
+      raw = second * p.rate;
+      coveredDays = null;
+      rule = `제2기분세액 ${second.toLocaleString("ko-KR")}원 × ${round6(p.rate * 100)}%`;
+      break;
+    case "second-half-prorated":
+      raw = second * (days / p.secondHalfDays) * p.rate;
+      rule = `제2기분세액 ${second.toLocaleString("ko-KR")}원 × ${days}/${p.secondHalfDays} × ${round6(p.rate * 100)}%`;
+      break;
+  }
+
+  const payCarTax = truncateTo(tax.carTax - raw, p.truncateUnit);
+  const payEdu = truncateTo(payCarTax * p.educationTaxRate, p.truncateUnit);
+  const payTotal = payCarTax + payEdu;
   return {
-    payMonth,
+    month,
+    periodStart,
+    periodEnd,
     coveredDays,
-    effectiveRate,
-    carTaxDiscount,
-    totalSaving,
-    payAmount: carTaxAfter + eduAfter,
+    carTaxDiscount: tax.carTax - payCarTax,
+    payTotal,
+    saving: tax.annualTotal - payTotal,
     breakdown: [
-      { label: "공제 대상 기간", value: coveredDays, rule: `${start} ~ ${end} (${yearDays}일 중)` },
-      { label: "자동차세 공제", value: -carTaxDiscount, rule: `자동차세 × ${round6(p.rate * 100)}% × ${coveredDays}/${yearDays}` },
-      { label: "지방교육세 감소", value: -(eduBefore - eduAfter), rule: "공제 후 자동차세 기준으로 다시 계산" },
+      { label: "공제 계산", value: Math.round(raw), rule },
+      { label: "공제 후 자동차세", value: payCarTax, rule: `${p.truncateUnit}원 미만 버림` },
+      { label: "지방교육세", value: payEdu, rule: `공제 후 자동차세 × ${round6(p.educationTaxRate * 100)}%` },
     ],
   };
 }

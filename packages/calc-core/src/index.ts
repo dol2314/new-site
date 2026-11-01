@@ -1,17 +1,21 @@
 export { formatWon, roundTo, truncateTo } from "./money";
 export { addDays, addYears, daysInYear, diffDays, isLeapYear, parseDate, type IsoDate } from "./dates";
 export {
-  ageReductionRate,
+  ageStartDate,
   calcCarTax,
   calcPrepay,
-  carAge,
+  carAgeByHalf,
+  reductionRate,
   type Breakdown,
   type CarTaxInput,
   type CarTaxParams,
   type CarTaxResult,
   type CcBracket,
   type FuelType,
+  type HalfTax,
+  type PrepayBasis,
   type PrepayParams,
+  type PrepayPeriod,
   type PrepayResult,
 } from "./carTax";
 export {
