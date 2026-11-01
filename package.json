@@ -20,7 +20,9 @@
     "validate:data": "node scripts/validate-data.mjs",
     "check:quality": "node scripts/check-page-quality.mjs",
     "data:ev": "node scripts/data/import-ev-subsidy.mjs",
-    "check:similarity": "node scripts/check-similarity.mjs"
+    "check:similarity": "node scripts/check-similarity.mjs",
+    "check:launch": "node scripts/check-launch.mjs",
+    "check:all": "npm run typecheck && npm run lint && npm test && npm run build && npm run check:seo && npm run check:quality && npm run check:similarity && npm run check:launch && npm run validate:data"
   },
   "devDependencies": {
     "@types/node": "22.20.5",

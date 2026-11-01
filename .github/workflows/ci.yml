@@ -28,6 +28,8 @@ jobs:
         run: npm run check:quality
       - name: 사례 글 유사도 검사
         run: npm run check:similarity
+      - name: 공개 뒤 구조 미리 점검 (LAUNCH_PREVIEW, 링크·3클릭·준비 중 문구)
+        run: LAUNCH_PREVIEW=1 npm run build && npm run check:launch
       - name: 빌드 (공개 모드 미리 점검)
         run: npm run build
         env:
@@ -42,3 +44,5 @@ jobs:
           NEXT_PUBLIC_SITE_URL: https://example.com
           NEXT_PUBLIC_OPERATOR_NAME: CI 점검용
           NEXT_PUBLIC_OPERATOR_EMAIL: ci@example.com
+      - name: 공개 점검 (공개 모드)
+        run: npm run check:launch
