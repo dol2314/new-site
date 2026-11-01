@@ -12,6 +12,7 @@ import {
 import { useEffect, useRef, useState } from "react";
 import { track, type ResultBand } from "@/lib/analytics";
 import { useTodayKst } from "@/lib/use-today";
+import { CostCompare, type CompareData } from "./CostCompare";
 
 const POWER: { id: Powertrain; label: string }[] = [
   { id: "electric", label: "전기" },
@@ -39,9 +40,11 @@ function band(real: number): ResultBand {
 export function CarLoanCalculator({
   regParams,
   officialSubsidyUrl,
+  compareData,
 }: {
   regParams: RegistrationTaxParams;
   officialSubsidyUrl: string;
+  compareData: CompareData;
 }) {
   const [price, setPrice] = useState("4500");
   const [power, setPower] = useState<Powertrain>("electric");
@@ -403,6 +406,20 @@ export function CarLoanCalculator({
           </>
         )}
       </output>
+
+      <CostCompare
+        carA={
+          calc?.purchase && acquiredOn
+            ? {
+                realPrice: calc.purchase.realPrice,
+                power,
+                acquiredOn,
+              }
+            : null
+        }
+        regParams={regParams}
+        data={compareData}
+      />
     </form>
   );
 }

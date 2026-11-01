@@ -1,13 +1,17 @@
 import {
   calcLoan,
+  calcOwnershipCost,
   calcPurchase,
+  tierForKw,
   calcRegistrationTax,
   formatWon,
   type RegistrationTaxInput,
 } from "@site/calc-core";
 import {
   EV_SUBSIDY_YEARS,
+  evChargingData,
   evSubsidyData,
+  ownershipData,
   registrationTaxData,
 } from "@site/data";
 import { SourcesList } from "@/components/tool/SourcesList";
@@ -22,6 +26,8 @@ const tool = toolById("car-loan");
 const reg = registrationTaxData();
 const ev = evSubsidyData(EV_SUBSIDY_YEARS[EV_SUBSIDY_YEARS.length - 1]!);
 const p = reg.params;
+const own = ownershipData();
+const charging = evChargingData();
 
 export const metadata = pageMetadata({
   title: "자동차 실구매가·할부 계산기",
@@ -91,6 +97,45 @@ const lb = calcLoan({
   balloonRate: 0.4,
 });
 
+// 5년 비용 비교 사례: 차값·보조금·주행거리·전비·연비·기름값은 예시 가정값, 세금·충전요금은 확인된 데이터
+const START = "2027-01-04";
+const carTaxFor = (y: number) => own.carTaxByYear[Math.min(y, own.latestYear)]!;
+const slowWon = tierForKw(7, charging.publicTiers).wonPerKwh;
+const KM_YEAR = 15_000;
+const evOwn = calcOwnershipCost({
+  start: START,
+  years: 5,
+  purchase: p2.realPrice,
+  fuelType: "electric",
+  carTaxParamsFor: carTaxFor,
+  newRegistration: own.newRegistration,
+  annualEnergy: (KM_YEAR / 5) * slowWon,
+  annualInsurance: 0,
+});
+const iceReal = calcPurchase({
+  price: 30_000_000,
+  subsidy: 0,
+  registrationTax: calcRegistrationTax(
+    { ...T, price: 30_000_000, powertrain: "ice", acquiredOn: START },
+    p,
+  ).payable,
+  extra: 0,
+  downPayment: 0,
+  financeTaxAndExtra: false,
+}).realPrice;
+const iceOwn = calcOwnershipCost({
+  start: START,
+  years: 5,
+  purchase: iceReal,
+  fuelType: "gasoline",
+  displacementCc: 1598,
+  carTaxParamsFor: carTaxFor,
+  newRegistration: own.newRegistration,
+  annualEnergy: (KM_YEAR / 12) * 1_700,
+  annualInsurance: 0,
+});
+const y0 = Number(START.slice(0, 4));
+
 const examples: Example[] = [
   {
     title: "4,500만원 전기차, 보조금 900만원 — 12월 인도 vs 1월 인도",
@@ -113,8 +158,8 @@ const examples: Example[] = [
         취득세 {formatWon(ice.payable)}는 처음에 따로 내고, 할부 원금은{" "}
         {formatWon(ip.financed)}입니다. 원리금균등은 매달{" "}
         {formatWon(lp.firstPayment)}, 총이자 {formatWon(lp.totalInterest)}
-        입니다. 원금균등은 첫 달 {formatWon(lq.firstPayment)}으로 시작해 줄어들고,
-        총이자는 {formatWon(lq.totalInterest)}으로{" "}
+        입니다. 원금균등은 첫 달 {formatWon(lq.firstPayment)}으로 시작해
+        줄어들고, 총이자는 {formatWon(lq.totalInterest)}으로{" "}
         {formatWon(lp.totalInterest - lq.totalInterest)} 적습니다. (금리는 예시)
       </p>
     ),
@@ -131,6 +176,26 @@ const examples: Example[] = [
       </p>
     ),
   },
+  {
+    title: `5년 비교: 위 전기차(1월 인도) vs 3,000만원 1,598cc 휘발유차`,
+    body: (
+      <p>
+        1년 {KM_YEAR.toLocaleString("ko-KR")}km를 달린다고 보고 {y0}~{y0 + 4}
+        년을 더했습니다. 전기차는 실구매가 {formatWon(evOwn.totals.purchase)},
+        자동차세 {formatWon(evOwn.totals.carTax)}, 공공 완속 충전비{" "}
+        {formatWon(evOwn.totals.energy)}으로 합계 {formatWon(evOwn.totals.all)}
+        입니다. 휘발유차(연비 12km/L, 기름값 1L에 1,700원 가정)는 실구매가{" "}
+        {formatWon(iceOwn.totals.purchase)}, 자동차세{" "}
+        {formatWon(iceOwn.totals.carTax)}, 기름값{" "}
+        {formatWon(iceOwn.totals.energy)}으로 합계 {formatWon(iceOwn.totals.all)}
+        입니다.{" "}
+        {evOwn.totals.all <= iceOwn.totals.all
+          ? `전기차가 ${formatWon(iceOwn.totals.all - evOwn.totals.all)} 덜 듭니다.`
+          : `휘발유차가 ${formatWon(evOwn.totals.all - iceOwn.totals.all)} 덜 듭니다.`}{" "}
+        (보험료·중고 시세 제외)
+      </p>
+    ),
+  },
 ];
 
 const sources = [
@@ -143,6 +208,8 @@ const sources = [
     ].includes(s.key),
   ),
   ...ev.sources.filter((s) => s.key === "rules.nationalUniform"),
+  ...own.sources,
+  ...charging.sources.filter((s) => s.key === "values.publicTiers"),
 ];
 
 export default function CarLoanPage() {
@@ -152,12 +219,18 @@ export default function CarLoanPage() {
       summary={[
         "실구매가는 차값에서 보조금을 빼고 취득세와 기타 비용을 더한 금액입니다. 보조금은 지자체가 제작사에 주고, 구매자는 차액만 냅니다.",
         "취득세는 보조금을 빼기 전 차값(부가세 제외) 기준이라, 보조금을 받아도 취득세는 줄지 않습니다.",
-        "할부는 원리금균등·원금균등·유예할부의 월 납입금과 총이자를 나란히 비교할 수 있습니다. 금리는 금융사 견적을 넣으세요.",
+        "할부는 원리금균등·원금균등·유예할부의 월 납입금과 총이자를 나란히 비교하고, 다른 차와 5년 동안 드는 돈(자동차세·연료비 포함)도 비교할 수 있습니다.",
       ]}
       calculator={
         <CarLoanCalculator
           regParams={p}
           officialSubsidyUrl={LINKS.evPortal.href}
+          compareData={{
+            carTaxByYear: own.carTaxByYear,
+            latestYear: own.latestYear,
+            newRegistration: own.newRegistration,
+            tiers: charging.publicTiers,
+          }}
         />
       }
       examples={examples}
@@ -181,6 +254,18 @@ export default function CarLoanPage() {
             <li>
               금융사는 일할 이자·수수료 등을 따로 계산할 수 있어 실제 금액과
               조금 다를 수 있습니다.
+            </li>
+            <li>
+              5년 비용 = 실구매가 + 자동차세 + 연료·충전비 + 보험료. 등록한 해는
+              등록일부터 연말까지만 셉니다. 자동차세는 등록한 기분을 등록일부터
+              일할계산하고, 다음 해부터 차령 경감을 반영합니다.{" "}
+              {own.latestYear + 1}년 이후는 {own.latestYear}년 세율이 그대로라고
+              가정합니다.
+            </li>
+            <li>
+              전기차 충전비는 공공 충전요금(기후에너지환경부) 또는 입력한 요금,
+              기름값·보험료는 입력한 값입니다. 중고 시세, 정비비, 할부 이자,
+              연납 공제는 넣지 않습니다.
             </li>
           </ol>
           <SourcesList sources={sources} />
@@ -239,6 +324,10 @@ export default function CarLoanPage() {
         {
           q: "금리는 얼마로 넣어야 하나요?",
           a: "금리는 신용도와 금융사, 프로모션에 따라 다르므로 이 사이트는 기본값을 정하지 않습니다. 받은 견적서의 연 금리를 넣으세요.",
+        },
+        {
+          q: "5년 비용 비교에는 무엇이 빠져 있나요?",
+          a: "중고로 팔 때 받는 돈(감가), 정비·타이어 비용, 할부 이자, 자동차세 연납 공제는 빠져 있습니다. 공식 기준이 없거나 사람마다 차이가 커서입니다. 보험료는 받은 견적을 넣으면 더해집니다.",
         },
         {
           q: "보조금 합계는 어디서 확인하나요?",
