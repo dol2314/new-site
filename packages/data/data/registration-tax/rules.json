@@ -1,0 +1,193 @@
+{
+  "topic": "registration-tax",
+  "title": "자동차 취득세(비영업용 승용) 세율·과세표준·감면",
+  "scope": "개인이 사는 비영업용 승용자동차(경형 포함). 영업용·승합·화물·이륜, 장애인·국가유공자 감면, 공채 매입·번호판·등록 수수료는 범위 밖",
+  "values": {
+    "rates": {
+      "value": {
+        "passenger": 0.07,
+        "compact": 0.04
+      },
+      "unit": "비율",
+      "source_name": "지방세법(법률 제21308호, 2026-07-01 시행 현행본) 제12조제1항제2호가목",
+      "source_url": "https://www.law.go.kr/법령/지방세법/제12조",
+      "effective_date": "2026-07-01",
+      "checked_at": "2026-11-01",
+      "verified": true,
+      "note": "비영업용 승용자동차 1천분의 70, 경자동차 1천분의 40"
+    },
+    "taxFreeThresholdWon": {
+      "value": 500000,
+      "unit": "원",
+      "source_name": "지방세법(법률 제21308호, 2026-07-01 시행 현행본) 제17조제1항",
+      "source_url": "https://www.law.go.kr/법령/지방세법/제17조",
+      "effective_date": "2026-07-01",
+      "checked_at": "2026-11-01",
+      "verified": true,
+      "note": "취득가액 50만원 이하는 취득세를 부과하지 않음"
+    },
+    "truncateUnit": {
+      "value": 10,
+      "unit": "원",
+      "source_name": "국고금 관리법 제47조제1항 (지방세기본법 제59조로 준용)",
+      "source_url": "https://www.law.go.kr/법령/국고금관리법/제47조",
+      "effective_date": "2026-01-02",
+      "checked_at": "2026-11-01",
+      "verified": true
+    },
+    "evRelief": {
+      "value": {
+        "capWon": 1400000,
+        "until": "2026-12-31"
+      },
+      "unit": "원",
+      "source_name": "지방세특례제한법(법률 제21738호, 2026-06-02 시행 현행본) 제66조제4항",
+      "source_url": "https://www.law.go.kr/법령/지방세특례제한법/제66조",
+      "effective_date": "2026-06-02",
+      "checked_at": "2026-11-01",
+      "verified": true,
+      "note": "고시된 전기자동차: 취득세 140만원 이하 면제, 초과 시 140만원 공제. 12월 국회 지방세특례제한법 개정으로 일몰이 바뀔 수 있음 — 12월 말 재확인"
+    },
+    "hydrogenRelief": {
+      "value": {
+        "capWon": 1400000,
+        "until": "2027-12-31"
+      },
+      "unit": "원",
+      "source_name": "지방세특례제한법(법률 제21738호, 2026-06-02 시행 현행본) 제66조제5항",
+      "source_url": "https://www.law.go.kr/법령/지방세특례제한법/제66조",
+      "effective_date": "2026-06-02",
+      "checked_at": "2026-11-01",
+      "verified": true,
+      "note": "고시된 수소전기자동차(화물 제외): 140만원 이하 면제, 초과 시 140만원 공제"
+    },
+    "hybridRelief": {
+      "value": {
+        "capWon": 400000,
+        "until": "2024-12-31"
+      },
+      "unit": "원",
+      "source_name": "지방세특례제한법(법률 제21738호, 2026-06-02 시행 현행본) 제66조제3항",
+      "source_url": "https://www.law.go.kr/법령/지방세특례제한법/제66조",
+      "effective_date": "2026-06-02",
+      "checked_at": "2026-11-01",
+      "verified": true,
+      "note": "하이브리드 감면은 2024-12-31로 끝남(현재 적용 없음)"
+    },
+    "compactRelief": {
+      "value": {
+        "capWon": 750000,
+        "until": "2027-12-31"
+      },
+      "unit": "원",
+      "source_name": "지방세특례제한법(법률 제21738호, 2026-06-02 시행 현행본) 제67조제1항",
+      "source_url": "https://www.law.go.kr/법령/지방세특례제한법/제67조",
+      "effective_date": "2026-06-02",
+      "checked_at": "2026-11-01",
+      "verified": true,
+      "note": "경형 비영업용 승용: 75만원 이하 면제, 초과 시 75만원 공제. 1년 안에 영업용으로 쓰면 추징"
+    },
+    "compactDefinition": {
+      "value": {
+        "maxCcExclusive": 1000,
+        "maxLengthM": 3.6,
+        "maxWidthM": 1.6,
+        "maxHeightM": 2.0,
+        "electricDimensionsOnly": true
+      },
+      "unit": "기준",
+      "source_name": "지방세특례제한법 시행령(대통령령 제36587호, 2026-09-18 시행 현행본) 제31조제1항",
+      "source_url": "https://www.law.go.kr/법령/지방세특례제한법시행령/제31조",
+      "effective_date": "2026-09-18",
+      "checked_at": "2026-11-01",
+      "verified": true,
+      "note": "배기량 1천cc 미만, 길이 3.6m·너비 1.6m·높이 2.0m 이하. 전기만 쓰는 차는 크기 기준만"
+    },
+    "multiChild": {
+      "value": {
+        "until": "2027-12-31",
+        "threePlus": {
+          "vanExempt": true,
+          "otherPassengerCapWon": 1400000
+        },
+        "two": {
+          "vanRate": 0.5,
+          "otherPassengerRate": 0.5,
+          "otherPassengerThresholdWon": 1400000,
+          "otherPassengerFixedWon": 700000
+        }
+      },
+      "unit": "규칙",
+      "source_name": "지방세특례제한법(법률 제21738호, 2026-06-02 시행 현행본) 제22조의2제1항·제2항",
+      "source_url": "https://www.law.go.kr/법령/지방세특례제한법/제22조의2",
+      "effective_date": "2026-06-02",
+      "checked_at": "2026-11-01",
+      "verified": true,
+      "note": "18세 미만 자녀 3명 이상: 7~10인승 승용 면제, 그 밖의 승용은 140만원 이하 면제·초과 시 140만원 공제. 2명: 7~10인승 50% 경감, 그 밖의 승용은 140만원 이하면 50%·초과 시 70만원 공제. 먼저 신청한 1대, 종전 감면차 보유·제3자 공동등록이면 제외, 1년 안에 이전하면 추징"
+    },
+    "minimumTax": {
+      "value": {
+        "exemptOverWon": 2000000,
+        "reliefRate": 0.85,
+        "exceptArticles": [
+          "제17조",
+          "제66조"
+        ]
+      },
+      "unit": "규칙",
+      "source_name": "지방세특례제한법(법률 제21738호, 2026-06-02 시행 현행본) 제177조의2제1항",
+      "source_url": "https://www.law.go.kr/법령/지방세특례제한법/제177조의2",
+      "effective_date": "2026-06-02",
+      "checked_at": "2026-11-01",
+      "verified": true,
+      "note": "면제(100%) 대상이라도 산출 취득세가 200만원을 넘으면 85%만 감면. 제66조(전기·수소차 등)·제17조(장애인) 감면 등은 예외. 지자체 감면조례로 다르게 정할 수 있음(같은 조 제2·3항)"
+    }
+  },
+  "rules": {
+    "taxBase": {
+      "value": "유상승계취득(신차·중고차 구입)은 사실상취득가격. 신고가액이 없거나 시가표준액보다 적으면 시가표준액. 무상취득은 시가표준액",
+      "unit": "규칙",
+      "source_name": "지방세법(법률 제21308호, 2026-07-01 시행 현행본) 제10조의5제1항",
+      "source_url": "https://www.law.go.kr/법령/지방세법/제10조의5",
+      "effective_date": "2026-07-01",
+      "checked_at": "2026-11-01",
+      "verified": true
+    },
+    "actualPrice": {
+      "value": "사실상취득가격에 부가가치세는 넣지 않음. 개인은 할부 이자·연체료를 빼고, 일시급 할인을 받았으면 할인된 금액",
+      "unit": "규칙",
+      "source_name": "지방세법 시행령(대통령령 제36736호, 2026-10-01 시행 현행본) 제18조제1항 단서·제2항제4호",
+      "source_url": "https://www.law.go.kr/법령/지방세법시행령/제18조",
+      "effective_date": "2026-10-01",
+      "checked_at": "2026-11-01",
+      "verified": true
+    },
+    "noEducationTax": {
+      "value": "자동차 취득세에는 지방교육세 납세의무 없음(지방교육세 대상 취득은 부동산·기계장비(자동차 제외)·항공기·선박)",
+      "unit": "규칙",
+      "source_name": "지방세법(법률 제21308호, 2026-07-01 시행 현행본) 제150조제1호",
+      "source_url": "https://www.law.go.kr/법령/지방세법/제150조",
+      "effective_date": "2026-07-01",
+      "checked_at": "2026-11-01",
+      "verified": true
+    },
+    "noRuralSpecialTax": {
+      "value": "지방세법 제124조 자동차의 취득세에는 농어촌특별세를 부과하지 않음",
+      "unit": "규칙",
+      "source_name": "농어촌특별세법(법률 제21611호, 2026-05-12 시행 현행본) 제4조제10호의2",
+      "source_url": "https://www.law.go.kr/법령/농어촌특별세법/제4조",
+      "effective_date": "2026-05-12",
+      "checked_at": "2026-11-01",
+      "verified": true
+    },
+    "overlap": {
+      "value": "같은 세목에 감면이 둘 이상이면 감면세액이 큰 것 하나만",
+      "unit": "규칙",
+      "source_name": "지방세특례제한법(법률 제21738호, 2026-06-02 시행 현행본) 제180조",
+      "source_url": "https://www.law.go.kr/법령/지방세특례제한법/제180조",
+      "effective_date": "2026-06-02",
+      "checked_at": "2026-11-01",
+      "verified": true
+    }
+  }
+}
