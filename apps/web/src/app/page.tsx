@@ -1,30 +1,52 @@
 import Link from "next/link";
 import { JsonLd } from "@/components/JsonLd";
 import { pageMetadata, siteJsonLd } from "@/lib/seo";
+import { publishedGuides } from "@/lib/guides";
 import { TOOLS, type Tool } from "@/lib/tools";
-import { site } from "@/site.config";
+import { site, launchPreview } from "@/site.config";
 
 export const metadata = pageMetadata({
-  title: `${site.name} — 자동차 세금·검사·보조금·할부 계산`,
+  title: `${site.name} — 자동차 세금·보조금·할부·충전비 계산`,
   description: site.description,
   path: "/",
 });
 
+/** 마지막 글자 받침에 따라 을/를 */
+function withObjectParticle(text: string): string {
+  const code = text.charCodeAt(text.length - 1) - 0xac00;
+  const hasFinal = code >= 0 && code <= 11171 && code % 28 !== 0;
+  return `${text}${hasFinal ? "을" : "를"}`;
+}
+
 const GROUPS: { stage: Tool["stage"]; title: string; lead: string }[] = [
-  { stage: "before-buy", title: "차 사기 전", lead: "보조금을 빼고, 세금을 더하면 실제로 얼마인지 계산합니다." },
-  { stage: "after-buy", title: "차 산 뒤", lead: "놓치면 돈이 나가는 세금·검사 날짜와 금액을 확인합니다." },
+  {
+    stage: "before-buy",
+    title: "차 사기 전",
+    lead: "보조금을 빼고, 세금을 더하면 실제로 얼마인지 계산합니다.",
+  },
+  {
+    stage: "after-buy",
+    title: "차 산 뒤",
+    lead: "차를 산 뒤 해마다 드는 세금과 충전비를 확인합니다.",
+  },
 ];
 
 export default function HomePage() {
   // 공개 전(검색 노출 꺼짐)에는 준비 중인 도구 이름도 보여 주고, 공개 후에는 공개된 도구만 보여 준다.
-  const visible = TOOLS.filter((t) => t.published || !site.indexable);
+  const visible = TOOLS.filter(
+    (t) => t.published || (!site.indexable && !launchPreview),
+  );
+  const guides = [...publishedGuides()]
+    .sort((a, b) => b.updatedAt.localeCompare(a.updatedAt))
+    .slice(0, 5);
   return (
     <div className="container">
       <JsonLd data={siteJsonLd()} />
       <h1>{site.name}</h1>
       <p className="lead">
-        자동차세, 검사 기간과 과태료, 전기차 보조금, 취등록세, 할부, 충전요금을 <strong>공식 기준과 기준일</strong>을 붙여
-        계산합니다. 입력한 값은 내 기기 밖으로 보내지 않습니다.
+        {withObjectParticle(visible.map((t) => t.short).join(", "))}{" "}
+        <strong>공식 기준과 기준일</strong>을 붙여 계산합니다. 입력한 값은 내
+        기기 밖으로 보내지 않습니다.
       </p>
 
       {GROUPS.map((g) => {
@@ -55,14 +77,35 @@ export default function HomePage() {
         );
       })}
 
+      {guides.length > 0 && (
+        <section aria-labelledby="group-guides">
+          <h2 id="group-guides">사례 분석</h2>
+          <p className="muted">조건 하나를 정해 끝까지 계산한 글입니다.</p>
+          <ul>
+            {guides.map((g) => (
+              <li key={g.slug}>
+                <Link href={`/guides/${g.slug}/`}>{g.title}</Link>
+              </li>
+            ))}
+          </ul>
+          <p>
+            <Link href="/guides/">사례 분석 전체 보기</Link>
+          </p>
+        </section>
+      )}
+
       <h2>이 사이트의 계산 원칙</h2>
       <ul>
-        <li>세율·보조금·과태료는 법령과 정부 공지에서 확인한 값만 쓰고, 값마다 출처와 기준일을 적습니다.</li>
+        <li>
+          세율·보조금·과태료는 법령과 정부 공지에서 확인한 값만 쓰고, 값마다
+          출처와 기준일을 적습니다.
+        </li>
         <li>계산 방법(산식과 가정값)을 결과 아래에 모두 공개합니다.</li>
         <li>확인하지 못한 값이 필요한 계산기는 공개하지 않습니다.</li>
       </ul>
       <p>
-        자세한 내용은 <Link href="/about/">소개</Link>와 <Link href="/data/">데이터 출처</Link>에 있습니다.
+        자세한 내용은 <Link href="/about/">소개</Link>와{" "}
+        <Link href="/data/">데이터 출처</Link>에 있습니다.
       </p>
     </div>
   );

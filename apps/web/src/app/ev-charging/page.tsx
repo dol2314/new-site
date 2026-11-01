@@ -187,6 +187,7 @@ export default function EvChargingPage() {
         ],
         links: [LINKS.chargingPolicy, LINKS.opinet],
       }}
+      disclaimer="이 계산은 모의 계산입니다. 실제 충전요금은 충전기 운영자, 결제 방법, 시간대에 따라 다르고, 충전 중 손실과 계절에 따라 결제 금액이 달라질 수 있습니다."
       checkedAt={data.sources[0]?.checked_at ?? "2026-11-01"}
     />
   );

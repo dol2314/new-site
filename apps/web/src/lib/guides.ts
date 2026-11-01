@@ -2,6 +2,7 @@
  * 사례 분석 글 목록. published=true인 글만 사이트맵·RSS에 들어가고 색인을 허용한다.
  * 글을 공개하려면: 품질·유사도 검사 통과 → 운영자 검수(reviewed, reviewedAt) → published.
  */
+import { launchPreview } from "@/site.config";
 import type { ToolId } from "./tools";
 
 export interface GuideMeta {
@@ -15,9 +16,11 @@ export interface GuideMeta {
   published: boolean;
   reviewed: boolean;
   reviewedAt?: string;
+  /** 공개하면 안 되는 이유(확인 전 데이터 등). 있으면 LAUNCH_PREVIEW에서도 공개로 바꾸지 않는다 */
+  hold?: string;
 }
 
-export const GUIDES: GuideMeta[] = [
+const RAW_GUIDES: GuideMeta[] = [
   {
     slug: "ev-acquisition-tax-year-end",
     title: "전기차 취득세, 12월에 인도받으면 140만원 덜 낸다 — 2026년 말 감면 종료 계산",
@@ -50,6 +53,7 @@ export const GUIDES: GuideMeta[] = [
     tools: ["car-tax"],
     published: false,
     reviewed: false,
+    hold: "이전일 당일 귀속 규칙 확인 전 (car-tax rules.prorateDayBoundary)",
   },
   {
     slug: "home-vs-fast-charging-cost",
@@ -74,6 +78,13 @@ export const GUIDES: GuideMeta[] = [
     reviewed: false,
   },
 ];
+
+for (const x of RAW_GUIDES) {
+  if (x.published && x.hold) throw new Error(`공개할 수 없는 항목이 published=true: ${x.slug} — ${x.hold}`);
+}
+
+/** LAUNCH_PREVIEW(로컬 점검)에서는 hold 없는 글을 공개로 본다 */
+export const GUIDES: GuideMeta[] = launchPreview ? RAW_GUIDES.map((g) => (g.hold ? g : { ...g, published: true })) : RAW_GUIDES;
 
 export const publishedGuides = () => GUIDES.filter((g) => g.published);
 export const guideBySlug = (slug: string) => GUIDES.find((g) => g.slug === slug);

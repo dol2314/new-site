@@ -342,6 +342,7 @@ export default function CarLoanPage() {
         ],
         links: [LINKS.evPortal],
       }}
+      disclaimer="이 계산은 모의 계산입니다. 실제 차값·보조금·금리는 판매사·지자체·금융회사의 견적과 심사로 정해지고, 5년 비용은 입력한 가정값에 따라 달라집니다."
       checkedAt={reg.sources[0]?.checked_at ?? "2026-11-01"}
     />
   );

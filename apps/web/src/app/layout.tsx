@@ -3,11 +3,12 @@ import type { ReactNode } from "react";
 import { Analytics } from "@/components/Analytics";
 import { Footer } from "@/components/Footer";
 import { Header } from "@/components/Header";
-import { site } from "@/site.config";
+import { launchPreview, site } from "@/site.config";
 import "./globals.css";
 
 const verificationOther: Record<string, string> = {};
-if (site.verification.naver) verificationOther["naver-site-verification"] = site.verification.naver;
+if (site.verification.naver)
+  verificationOther["naver-site-verification"] = site.verification.naver;
 
 export const metadata: Metadata = {
   metadataBase: new URL(site.url),
@@ -18,7 +19,9 @@ export const metadata: Metadata = {
   // robots는 페이지별로 넣는다(lib/seo.ts). 여기 넣으면 404 페이지에서 Next가 넣는 noindex와 중복된다.
   verification: {
     ...(site.verification.google ? { google: site.verification.google } : {}),
-    ...(Object.keys(verificationOther).length ? { other: verificationOther } : {}),
+    ...(Object.keys(verificationOther).length
+      ? { other: verificationOther }
+      : {}),
   },
   formatDetection: { telephone: false },
 };
@@ -34,7 +37,12 @@ export const viewport: Viewport = {
 
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (
-    <html lang="ko">
+    <html
+      lang="ko"
+      data-build={
+        site.indexable ? "public" : launchPreview ? "preview" : "draft"
+      }
+    >
       <body>
         <a href="#main" className="skip-link">
           본문 바로가기

@@ -9,5 +9,7 @@ const STATIC_PATHS = ["/", "/about/", "/data/", "/contact/", "/privacy/", "/term
 
 export default function sitemap(): MetadataRoute.Sitemap {
   if (!site.indexable) return [];
-  return [...STATIC_PATHS, ...publishedTools().map((t) => t.path), ...publishedGuides().map((g) => `/guides/${g.slug}/`)].map((path) => ({ url: absoluteUrl(path) }));
+  const guides = publishedGuides();
+  const guidePaths = guides.length ? ["/guides/", ...guides.map((g) => `/guides/${g.slug}/`)] : [];
+  return [...STATIC_PATHS, ...publishedTools().map((t) => t.path), ...guidePaths].map((path) => ({ url: absoluteUrl(path) }));
 }

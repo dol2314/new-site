@@ -169,10 +169,9 @@ export function EvSubsidyCalculator({
                 {r.name}
               </option>
             ))}
-            <option value={OTHER} disabled={!otherRegionReady}>
-              그 밖의 지역 (지방비 직접 입력)
-              {otherRegionReady ? "" : " — 준비 중"}
-            </option>
+            {otherRegionReady && (
+              <option value={OTHER}>그 밖의 지역 (지방비 직접 입력)</option>
+            )}
           </select>
         </div>
         {isOther && otherRegionReady && (

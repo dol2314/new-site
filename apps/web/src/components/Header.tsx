@@ -1,9 +1,11 @@
 import Link from "next/link";
 import { site } from "@/site.config";
+import { publishedGuides } from "@/lib/guides";
 import { publishedTools } from "@/lib/tools";
 
 export function Header() {
   const tools = publishedTools();
+  const hasGuides = publishedGuides().length > 0;
   return (
     <header className="site-header">
       <div className="container header-inner">
@@ -18,6 +20,11 @@ export function Header() {
                   <Link href={t.path}>{t.short}</Link>
                 </li>
               ))}
+              {hasGuides && (
+                <li>
+                  <Link href="/guides/">사례 분석</Link>
+                </li>
+              )}
             </ul>
           </nav>
         )}

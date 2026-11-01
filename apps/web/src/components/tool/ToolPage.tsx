@@ -6,6 +6,7 @@ import type { Tool } from "@/lib/tools";
 import { formatKoreanDate } from "@/lib/kst";
 import Link from "next/link";
 import { Faq, type FaqItem } from "./Faq";
+import { publishedGuides } from "@/lib/guides";
 
 export interface Example {
   title: string;
@@ -26,7 +27,12 @@ interface Props {
   checkedAt: string;
   /** 운영자 검수일 (없으면 검수 전) */
   reviewedAt?: string;
+  /** 면책 문구. 없으면 세금·과태료 도구 기본 문구 */
+  disclaimer?: string;
 }
+
+const DEFAULT_DISCLAIMER =
+  "이 계산은 모의 계산입니다. 실제 금액은 관할 지방자치단체의 고지·결정으로 정해지며, 지자체 조례나 개인 사정(감면, 연중 등록·이전 등)에 따라 다를 수 있습니다.";
 
 /**
  * 도구 페이지 공통 틀. 기획안 3-3절 8개 항목을 data-section으로 표시해 scripts/check-page-quality.mjs가 검사한다.
@@ -85,6 +91,13 @@ export function ToolPage(p: Props) {
               <Link href={t.path}>{t.title}</Link>
             </li>
           ))}
+          {publishedGuides()
+            .filter((g) => g.tools.includes(p.tool.id))
+            .map((g) => (
+              <li key={g.slug}>
+                사례 분석: <Link href={`/guides/${g.slug}/`}>{g.title}</Link>
+              </li>
+            ))}
           {p.next.links.map((l) => (
             <li key={l.href} data-link-verified={l.verified ? "true" : "false"}>
               <a href={l.href} rel="noopener">
@@ -97,10 +110,7 @@ export function ToolPage(p: Props) {
       </section>
 
       <section data-section="disclaimer" className="muted small">
-        <p>
-          이 계산은 모의 계산입니다. 실제 금액은 관할 지방자치단체의 고지·결정으로 정해지며, 지자체 조례나 개인 사정(감면, 연중 등록·이전 등)에
-          따라 다를 수 있습니다.
-        </p>
+        <p>{p.disclaimer ?? DEFAULT_DISCLAIMER}</p>
         <p>
           데이터 확인일: {formatKoreanDate(p.checkedAt)} · 검수일: {p.reviewedAt ? formatKoreanDate(p.reviewedAt) : <span data-unreviewed>운영자 검수 전</span>}
         </p>

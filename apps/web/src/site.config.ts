@@ -8,7 +8,7 @@ export const site = {
   name: env("NEXT_PUBLIC_SITE_NAME") || "차값계산소(가칭)",
   url: (env("NEXT_PUBLIC_SITE_URL") || "http://localhost:3000").replace(/\/+$/, ""),
   description:
-    "자동차세·연납, 자동차 검사 기간·과태료, 전기차 보조금, 취등록세, 할부, 충전요금을 공식 기준으로 계산합니다. 입력한 값은 내 기기 밖으로 나가지 않습니다.",
+    "자동차세·연납, 전기차 보조금, 취등록세, 실구매가·할부, 충전요금을 공식 기준과 기준일을 붙여 계산합니다. 입력한 값은 내 기기 밖으로 나가지 않습니다.",
   locale: "ko_KR",
   /** false면 모든 페이지 noindex + robots.txt 전체 차단. 도구가 공개되기 전까지 false로 둔다. */
   indexable: env("NEXT_PUBLIC_SITE_INDEXABLE") === "true",
@@ -23,6 +23,15 @@ export const site = {
   },
   ogImage: "/og/default.png",
 } as const;
+
+/**
+ * 로컬 점검 전용(LAUNCH_PREVIEW=1): hold가 없는 도구·글을 모두 공개된 것처럼 빌드해 scripts/check-launch.mjs로
+ * 공개 뒤 구조(링크·3클릭·빈 페이지)를 미리 검사한다. 배포에 쓰지 않으며, 공개 모드와 함께 켜면 빌드가 멈춘다.
+ */
+export const launchPreview = env("LAUNCH_PREVIEW") === "1";
+if (launchPreview && site.indexable) {
+  throw new Error("LAUNCH_PREVIEW=1 은 NEXT_PUBLIC_SITE_INDEXABLE=true 와 함께 쓸 수 없습니다 (로컬 점검 전용).");
+}
 
 export const operatorConfigured = Boolean(site.operator.name && site.operator.email);
 
