@@ -3,8 +3,12 @@ import type { ReactNode } from "react";
 import { Analytics } from "@/components/Analytics";
 import { Footer } from "@/components/Footer";
 import { Header } from "@/components/Header";
+import { checkLawTextAssumptions } from "@/lib/law-text-assumptions";
 import { launchPreview, site } from "@/site.config";
 import "./globals.css";
+
+// 연말 법 개정 등으로 데이터가 바뀌어 글·도구 문장의 전제가 깨지면 빌드를 멈춘다
+checkLawTextAssumptions();
 
 const verificationOther: Record<string, string> = {};
 if (site.verification.naver)
