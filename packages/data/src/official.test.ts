@@ -262,3 +262,24 @@ describe("사례 글 5편 숫자: 전기차 vs 휘발유차 5개 연도 (2027-01
     expect([evReal, iceReal, ev.totals.carTax, ice.totals.carTax, ev.totals.all, ice.totals.all]).toEqual([38_863_630, 31_909_090, 648_380, 1_363_260, 43_929_736, 43_879_884]);
   });
 });
+
+describe("사례 글 6~8편 숫자", () => {
+  const t = carTaxData(2027).tax;
+  const { params: rp } = registrationTaxData();
+  const c = evChargingData();
+  it("6편: 전기차 1년 130,000원, 998cc 새 차 103,780원, 1,353cc는 차령 12년에 123,100원", () => {
+    const y = (cc: number | undefined, age: number, f: "gasoline" | "electric" = "gasoline") =>
+      calcCarTax({ fuelType: f, displacementCc: cc, ageStartDate: `${2027 - age + 1}-03-01`, taxYear: 2027 }, t).annualTotal;
+    expect([y(undefined, 1, "electric"), y(998, 1), y(1353, 11), y(1353, 12)]).toEqual([130_000, 103_780, 135_420, 123_100]);
+  });
+  it("7편: 경차 2,062만원까지 0원(산출 749,810원), 2,063만원부터 과세, 1,800만원 일반 승용은 1,145,450원", () => {
+    const tx = (price: number, compact = true) =>
+      calcRegistrationTax({ price, vatIncluded: true, compact, powertrain: "ice", seats7to10: false, childrenUnder18: 0, acquiredOn: "2027-03-15" }, rp);
+    expect([tx(20_620_000).computedTax, tx(20_620_000).payable, tx(20_630_000).payable > 0, tx(18_000_000, false).payable]).toEqual([749_810, 0, true, 1_145_450]);
+  });
+  it("8편: 개편 전 100kW 미만 324.4 / 이상 347.2원, 1,000km·6km/kWh 완속만 한 달 −4,900원", () => {
+    const run = (tiers: typeof c.publicTiers) =>
+      calcChargingCost({ monthlyKm: 1000, kmPerKwh: 6, mix: [{ label: "x", share: 1, wonPerKwh: tierForKw(7, tiers).wonPerKwh }] }).monthlyCost;
+    expect([tierForKw(50, c.publicTiersBefore).wonPerKwh, tierForKw(100, c.publicTiersBefore).wonPerKwh, run(c.publicTiers) - run(c.publicTiersBefore)]).toEqual([324.4, 347.2, -4_900]);
+  });
+});

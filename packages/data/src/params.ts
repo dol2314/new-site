@@ -280,6 +280,8 @@ export function evSubsidyData(year: number): EvSubsidyData {
 
 export interface RegistrationTaxData {
   params: RegistrationTaxParams;
+  /** 경형자동차 기준 (지방세특례제한법 시행령 제31조제1항) — 화면 설명용 */
+  compactDefinition: { maxCcExclusive: number; maxLengthM: number; maxWidthM: number; maxHeightM: number; electricDimensionsOnly: boolean };
   missing: string[];
   sources: SourceRef[];
 }
@@ -291,6 +293,7 @@ const REG_KEYS = [
   "values.evRelief",
   "values.hydrogenRelief",
   "values.compactRelief",
+  "values.compactDefinition",
   "values.multiChild",
   "values.minimumTax",
   "rules.taxBase",
@@ -316,12 +319,15 @@ export function registrationTaxData(): RegistrationTaxData {
     minimumTax: pick(doc, "values.minimumTax", missing),
   };
   for (const k of REG_KEYS.filter((k) => k.startsWith("rules."))) pick(doc, k, missing);
-  return { params, missing, sources: refs(doc, REG_KEYS) };
+  const compactDefinition = pick<RegistrationTaxData["compactDefinition"]>(doc, "values.compactDefinition", missing);
+  return { params, compactDefinition, missing, sources: refs(doc, REG_KEYS) };
 }
 
 export interface EvChargingData {
   /** 공공 충전요금 단계 (확인된 값만) */
   publicTiers: ChargeTier[];
+  /** 개편 전(2022-09-01 ~ 2026-07-31) 공공 충전요금 — 전후 비교용 */
+  publicTiersBefore: ChargeTier[];
   effectiveDate: string | null;
   sources: SourceRef[];
   missing: string[];
@@ -331,13 +337,15 @@ export function evChargingData(): EvChargingData {
   const doc = chargingDoc as unknown as DataDoc;
   const missing: string[] = [];
   const publicTiers = pick<ChargeTier[]>(doc, "values.publicTiers", missing);
+  const publicTiersBefore = pick<ChargeTier[]>(doc, "values.publicTiersBefore", missing);
   pick(doc, "rules.publicScope", missing);
   pick(doc, "rules.publicChange", missing);
   pick(doc, "rules.weekendDiscount", missing);
   return {
     publicTiers,
+    publicTiersBefore,
     effectiveDate: doc.values.publicTiers?.effective_date ?? null,
-    sources: refs(doc, ["values.publicTiers", "rules.publicScope", "rules.publicChange", "rules.weekendDiscount"]),
+    sources: refs(doc, ["values.publicTiers", "values.publicTiersBefore", "rules.publicScope", "rules.publicChange", "rules.weekendDiscount"]),
     missing,
   };
 }

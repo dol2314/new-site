@@ -38,6 +38,27 @@
       "checked_at": "2026-11-01",
       "verified": true,
       "note": "30kW 미만 295.0 / 30~50kW 미만 307.2 / 50~100kW 미만 325.6 / 100~200kW 미만 348.4 / 200kW 이상 393.1. 기존: 100kW 미만 324.4, 100kW 이상 347.2. 무공해차 통합누리집은 자동 수집 차단이라 정책브리핑으로 확인"
+    },
+    "publicTiersBefore": {
+      "value": [
+        {
+          "minKw": 0,
+          "maxKw": 100,
+          "wonPerKwh": 324.4
+        },
+        {
+          "minKw": 100,
+          "maxKw": null,
+          "wonPerKwh": 347.2
+        }
+      ],
+      "unit": "원/kWh",
+      "source_name": "환경부 보도참고자료 「전기차 급속충전요금 현실화 조정」(2022-07-29, 9월 1일부터 적용) — 대한민국 정책브리핑, 기후에너지환경부 개편안 카드뉴스(2026-07-09)의 '기존' 요금",
+      "source_url": "https://www.korea.kr/briefing/pressReleaseView.do?newsId=156518967",
+      "effective_date": "2022-09-01",
+      "checked_at": "2026-11-02",
+      "verified": true,
+      "note": "2026-07-31까지 적용. 2022 자료는 50kW 324.4 / 100kW 이상 347.2, 2026 카드뉴스는 같은 값을 '100kW 미만 / 100kW 이상'으로 표기. 개편 전후 비교에만 쓴다"
     }
   },
   "rules": {
