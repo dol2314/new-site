@@ -2,7 +2,7 @@
  * 확인된 법령값으로 엔진을 검증한다. 기대값은 법령 산식으로 손으로 계산한 값
  * (지방세법 제127조·제128조·제151조, 시행령 제122조·제125조, 국고금 관리법 제47조, 자동차관리법 시행령 별표 2).
  */
-import { calcCarTax, calcNewRegistrationTax, calcOwnershipCost, calcChargingCost, tierForKw, calcTransferProrate, calcEvSubsidy, calcRegistrationTax, expectedConversionNational, calcInspectionPenalty, calcPrepay, inspectionWindow, penaltyForDays } from "@site/calc-core";
+import { calcCarTax, calcLoan, depositInterestWhilePaying, calcNewRegistrationTax, calcOwnershipCost, calcChargingCost, tierForKw, calcTransferProrate, calcEvSubsidy, calcRegistrationTax, expectedConversionNational, calcInspectionPenalty, calcPrepay, inspectionWindow, penaltyForDays } from "@site/calc-core";
 import { describe, expect, it } from "vitest";
 import { carTaxData, carTaxProrateData, evChargingData, ownershipData, evSubsidyData, inspectionData, registrationTaxData } from "./params";
 
@@ -281,5 +281,24 @@ describe("사례 글 6~8편 숫자", () => {
     const run = (tiers: typeof c.publicTiers) =>
       calcChargingCost({ monthlyKm: 1000, kmPerKwh: 6, mix: [{ label: "x", share: 1, wonPerKwh: tierForKw(7, tiers).wonPerKwh }] }).monthlyCost;
     expect([tierForKw(50, c.publicTiersBefore).wonPerKwh, tierForKw(100, c.publicTiersBefore).wonPerKwh, run(c.publicTiers) - run(c.publicTiersBefore)]).toEqual([324.4, 347.2, -4_900]);
+  });
+});
+
+describe("사례 글 9~11편 숫자", () => {
+  const { params: rp } = registrationTaxData();
+  const ev = evSubsidyData(2026);
+  it("9편: 세 자녀 7인승 4,000만원 381,820원, 5인승 1,145,450원, 두 자녀 7인승 1,272,730원, 3,142만원까지 0원", () => {
+    const tx = (o: { price?: number; seats7to10?: boolean; childrenUnder18?: number }) =>
+      calcRegistrationTax({ price: 40_000_000, vatIncluded: true, compact: false, powertrain: "ice", seats7to10: true, childrenUnder18: 3, acquiredOn: "2027-04-01", ...o }, rp).payable;
+    expect([tx({}), tx({ seats7to10: false }), tx({ childrenUnder18: 2 }), tx({ price: 31_420_000 }), tx({ price: 31_430_000 })]).toEqual([381_820, 1_145_450, 1_272_730, 0, 300_020]);
+  });
+  it("10편: 국비 500만원 차, 청년 첫 차 + 자녀 2명 = 700만원, 차상위 + 전환지원 = 700만원", () => {
+    const model = { id: "x", maker: "x", name: "x", category: "승용", discontinued: false, national: 500, conversionNational: 100, local: {}, conversionLocal: {} };
+    const run = (o: object) => calcEvSubsidy({ model, region: null, conversion: false, ...o }, ev.rules).total;
+    expect([run({ youthFirstCar: true, children: 2 }), run({ lowIncome: true, conversion: true })]).toEqual([7_000_000, 7_000_000]);
+  });
+  it("11편: 3,000만원 연 6% 36개월 원리금균등 월 912,658원, 총이자 2,855,692원, 예금 3% 이자 1,270,291원", () => {
+    const l = calcLoan({ principal: 30_000_000, annualRate: 0.06, months: 36, method: "equal-payment" });
+    expect([l.firstPayment, l.totalInterest, depositInterestWhilePaying(l, 30_000_000, 0.03)]).toEqual([912_658, 2_855_692, 1_270_291]);
   });
 });
