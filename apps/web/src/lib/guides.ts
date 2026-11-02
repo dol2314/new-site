@@ -176,6 +176,39 @@ const RAW_GUIDES: GuideMeta[] = [
     published: false,
     reviewed: false,
   },
+  {
+    slug: "car-tax-installment-vs-prepay",
+    title: "자동차세 분할납부 vs 연납, 네 번 나눠 낼까 한 번에 내고 깎을까",
+    description:
+      "자동차세 분할납부는 3·6·9·12월에 나눠 내지만 공제가 없고, 연납은 한 번에 내는 대신 공제를 받습니다. 2,500cc 차로 달별 납부액과 아끼는 돈을 비교했습니다.",
+    asOf: "2026-11-02",
+    updatedAt: "2026-11-02",
+    tools: ["car-tax"],
+    published: false,
+    reviewed: false,
+  },
+  {
+    slug: "used-car-acquisition-tax-base",
+    title: "중고차 취득세, 실거래가와 시가표준액 중 무엇으로 내나",
+    description:
+      "중고차 취득세는 실제 거래가로 계산하지만, 신고한 값이 시가표준액보다 낮으면 시가표준액이 기준입니다. 거래가별 취득세와 아주 싼 차의 면세점, 경차의 경우를 계산했습니다.",
+    asOf: "2026-11-02",
+    updatedAt: "2026-11-02",
+    tools: ["registration-tax"],
+    published: false,
+    reviewed: false,
+  },
+  {
+    slug: "down-payment-ratio-interest",
+    title: "할부 선수금, 10% 더 내면 이자가 얼마나 주나 — 예금에 둘 때와 비교",
+    description:
+      "3,500만원 차 48개월 할부에서 선수금 비율별 월 납입금과 총이자를 계산하고, 같은 돈을 예금에 두는 경우와 비교했습니다. 금리·기간에 따라 선수금 효과가 어떻게 달라지는지도 정리했습니다.",
+    asOf: "2026-11-02",
+    updatedAt: "2026-11-02",
+    tools: ["car-loan"],
+    published: false,
+    reviewed: false,
+  },
 ];
 
 for (const x of RAW_GUIDES) {

@@ -1,7 +1,10 @@
 import type { ComponentType } from "react";
 import type { GuideMeta } from "@/lib/guides";
 import BalloonInstallmentLastPayment from "./balloon-installment-last-payment";
+import CarTaxInstallmentVsPrepay from "./car-tax-installment-vs-prepay";
 import CarTaxPrepayTiming from "./car-tax-prepay-timing";
+import DownPaymentRatioInterest from "./down-payment-ratio-interest";
+import UsedCarAcquisitionTaxBase from "./used-car-acquisition-tax-base";
 import NewCarFirstYearCarTax from "./new-car-first-year-car-tax";
 import UsedCarTaxByAge from "./used-car-tax-by-age";
 import CashVsCarInstallment from "./cash-vs-car-installment";
@@ -31,4 +34,7 @@ export const GUIDE_BODIES: Record<string, ComponentType<{ meta: GuideMeta }>> = 
   "used-car-tax-by-age": UsedCarTaxByAge,
   "new-car-first-year-car-tax": NewCarFirstYearCarTax,
   "balloon-installment-last-payment": BalloonInstallmentLastPayment,
+  "car-tax-installment-vs-prepay": CarTaxInstallmentVsPrepay,
+  "used-car-acquisition-tax-base": UsedCarAcquisitionTaxBase,
+  "down-payment-ratio-interest": DownPaymentRatioInterest,
 };

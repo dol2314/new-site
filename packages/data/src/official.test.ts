@@ -2,7 +2,7 @@
  * 확인된 법령값으로 엔진을 검증한다. 기대값은 법령 산식으로 손으로 계산한 값
  * (지방세법 제127조·제128조·제151조, 시행령 제122조·제125조, 국고금 관리법 제47조, 자동차관리법 시행령 별표 2).
  */
-import { ageStartDate, calcCarTax, calcLoan, depositInterestWhilePaying, calcNewRegistrationTax, calcOwnershipCost, calcChargingCost, tierForKw, calcTransferProrate, calcEvSubsidy, calcRegistrationTax, expectedConversionNational, calcInspectionPenalty, calcPrepay, inspectionWindow, penaltyForDays } from "@site/calc-core";
+import { ageStartDate, splitInstallments, calcCarTax, calcLoan, depositInterestWhilePaying, calcNewRegistrationTax, calcOwnershipCost, calcChargingCost, tierForKw, calcTransferProrate, calcEvSubsidy, calcRegistrationTax, expectedConversionNational, calcInspectionPenalty, calcPrepay, inspectionWindow, penaltyForDays } from "@site/calc-core";
 import { describe, expect, it } from "vitest";
 import { carTaxData, carTaxProrateData, evChargingData, ownershipData, evSubsidyData, inspectionData, registrationTaxData } from "./params";
 
@@ -319,5 +319,27 @@ describe("사례 글 12~14편 숫자", () => {
     const b = calcLoan({ principal: 40_000_000, annualRate: 0.06, months: 36, method: "balloon", balloonRate: 0.4 });
     const e = calcLoan({ principal: 40_000_000, annualRate: 0.06, months: 36, method: "equal-payment" });
     expect([b.firstPayment, b.lastPayment, b.totalInterest - e.totalInterest]).toEqual([810_126, 16_810_147, 1_356_966]);
+  });
+});
+
+describe("사례 글 15~17편 숫자", () => {
+  const t = carTaxData(2027).tax;
+  const { params: rp } = registrationTaxData();
+  it("15편: 2,497cc 2022-04 등록 2027년 분할납부 합계 = 1년 세금, 1월 연납 공제 > 0", () => {
+    const x = calcCarTax({ fuelType: "gasoline", displacementCc: 2497, ageStartDate: "2022-04-20", taxYear: 2027 }, t);
+    const sp = splitInstallments(x, t.educationTaxRate, t.truncateUnit);
+    expect([x.halves[0].carAge, x.halves[0].reductionRate, sp.total]).toEqual([6, 0.2, x.annualTotal]);
+    expect(sp.march + sp.june).toBe(x.halves[0].total);
+  });
+  it("16편: 시가표준액 1,300만원 차 — 1,500만원 거래 1,050,000원, 1,000만원 신고 910,000원, 30만원 거래·시가표준액 80만원 56,000원", () => {
+    const u = (price: number, sv: number | null) =>
+      calcRegistrationTax({ price, vatIncluded: false, standardValue: sv, compact: false, powertrain: "ice", seats7to10: false, childrenUnder18: 0, acquiredOn: "2027-02-15" }, rp).payable;
+    expect([u(15_000_000, 13_000_000), u(10_000_000, 13_000_000), u(300_000, 800_000), u(300_000, 400_000)]).toEqual([1_050_000, 910_000, 56_000, 0]);
+  });
+  it("17편: 3,500만원 연 7% 48개월 — 선수금 10% 늘리면 이자 감소 > 같은 돈 예금(3%) 이자", () => {
+    const l = (p: number) => calcLoan({ principal: p, annualRate: 0.07, months: 48, method: "equal-payment" });
+    const save = l(35_000_000).totalInterest - l(31_500_000).totalInterest;
+    const dep = depositInterestWhilePaying(l(3_500_000), 3_500_000, 0.03);
+    expect(save).toBeGreaterThan(dep);
   });
 });
