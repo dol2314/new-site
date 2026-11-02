@@ -101,3 +101,4 @@ describe("depositInterestWhilePaying", () => {
     expect(depositInterestWhilePaying(loan, 1_000_000, 0)).toBe(0);
   });
 });
+

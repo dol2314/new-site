@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { ageStartDate, calcCarTax, calcPrepay, carAgeByHalf, reductionRate } from "./carTax";
+import { ageStartDate, calcCarTax, calcPrepay, carAgeByHalf, reductionRate, splitInstallments } from "./carTax";
 import { FAKE_CAR_TAX, FAKE_PREPAY } from "./fixtures.test-util";
 
 // 기대값은 FAKE 매개변수로 손으로 계산한 값(산식 검증용, 법령값 아님)
@@ -76,4 +76,12 @@ describe("calcPrepay", () => {
     expect(r.carTaxDiscount).toBe(920); // 18,250 × 0.5 × 0.1 = 912.5 → 35,587.5 → 35,580
   });
   it("허용 안 된 월", () => expect(() => calcPrepay(tax, 3, 2027, FAKE_PREPAY)).toThrow(RangeError));
+});
+
+describe("splitInstallments (★가짜 매개변수★)", () => {
+  it("1,510cc: 기분 15,100 → 3월 7,550 + 교육세 755→750 = 8,300, 6월 나머지 8,310, 합계는 그대로", () => {
+    const t = calcCarTax({ fuelType: "gasoline", displacementCc: 1510, ageStartDate: "2027-01-01", taxYear: 2027 }, FAKE_CAR_TAX);
+    const s = splitInstallments(t, FAKE_CAR_TAX.educationTaxRate, FAKE_CAR_TAX.truncateUnit);
+    expect([s.march, s.june, s.september, s.december, s.total]).toEqual([8_300, 8_310, 8_300, 8_310, t.annualTotal]);
+  });
 });

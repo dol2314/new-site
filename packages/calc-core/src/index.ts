@@ -6,6 +6,7 @@ export {
   calcPrepay,
   carAgeByHalf,
   reductionRate,
+  splitInstallments,
   type Breakdown,
   type CarTaxInput,
   type CarTaxParams,
@@ -17,6 +18,7 @@ export {
   type PrepayParams,
   type PrepayPeriod,
   type PrepayResult,
+  type SplitInstallments,
 } from "./carTax";
 export {
   calcNewRegistrationTax,

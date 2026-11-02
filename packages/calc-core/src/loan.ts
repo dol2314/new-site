@@ -112,3 +112,4 @@ export function depositInterestWhilePaying(
   }
   return Math.round(earned);
 }
+
