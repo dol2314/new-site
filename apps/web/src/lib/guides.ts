@@ -77,6 +77,39 @@ const RAW_GUIDES: GuideMeta[] = [
     published: false,
     reviewed: false,
   },
+  {
+    slug: "ev-car-tax-flat-rate",
+    title: "전기차 자동차세는 왜 1년 13만원인가 — 배기량 차와 차령별 비교",
+    description:
+      "전기차 자동차세가 배기량과 관계없이 1년 13만원인 법적 이유와, 경차·1,600cc·2,000cc 휘발유차와의 차이, 오래 탈수록 역전되는 경우를 계산했습니다.",
+    asOf: "2026-11-02",
+    updatedAt: "2026-11-02",
+    tools: ["car-tax"],
+    published: false,
+    reviewed: false,
+  },
+  {
+    slug: "compact-car-acquisition-tax",
+    title: "경차 취득세, 얼마짜리부터 나오나 — 75만원 감면 한도 계산",
+    description:
+      "경차는 취득세율 4%에 75만원까지 면제라, 일정 가격까지는 취득세가 0원입니다. 차값별 취득세와 1,000cc 넘는 소형차와의 차이, 감면이 끝나는 해를 계산했습니다.",
+    asOf: "2026-11-02",
+    updatedAt: "2026-11-02",
+    tools: ["registration-tax", "car-loan"],
+    published: false,
+    reviewed: false,
+  },
+  {
+    slug: "public-charging-fee-change",
+    title: "공공 충전요금 개편 전후, 완속은 내리고 초급속은 올랐다 — 충전 습관별 한 달 변화",
+    description:
+      "2026년 8월 공공 충전요금이 2단계에서 5단계로 바뀌었습니다. 출력별 요금 변화와 아파트 완속 위주·장거리 초급속 위주 운전자의 한 달 충전비 변화를 계산했습니다.",
+    asOf: "2026-11-02",
+    updatedAt: "2026-11-02",
+    tools: ["ev-charging"],
+    published: false,
+    reviewed: false,
+  },
 ];
 
 for (const x of RAW_GUIDES) {
