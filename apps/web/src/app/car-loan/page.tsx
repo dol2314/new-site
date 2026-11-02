@@ -230,6 +230,7 @@ export default function CarLoanPage() {
             latestYear: own.latestYear,
             newRegistration: own.newRegistration,
             tiers: charging.publicTiers,
+            pendingFuels: own.pendingFuels,
           }}
         />
       }

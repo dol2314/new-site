@@ -20,6 +20,8 @@ export interface CompareData {
   latestYear: number;
   newRegistration: { minCollectWon: number; halfBasisMinAge: number };
   tiers: ChargeTier[];
+  /** 자동차세 구분이 확인되지 않은 연료(FuelType 기준) — 5년 비교에서 뺀다 */
+  pendingFuels: FuelType[];
 }
 
 interface CarA {
@@ -160,6 +162,8 @@ export function CostCompare({
   const [bSubsidy, setBSubsidy] = useState("");
   const [b, setB] = useState<CarInputs>(EMPTY);
 
+  const blocked = (p: Powertrain) => data.pendingFuels.includes(fuelOf(p));
+  const powers = POWER.filter((p) => !blocked(p.id));
   const paramsFor = (y: number) =>
     data.carTaxByYear[Math.min(y, data.latestYear)]!;
 
@@ -201,6 +205,8 @@ export function CostCompare({
 
   const result = (() => {
     if (!carA) return { error: "1단계에서 차값과 취득일을 먼저 넣어 주세요." };
+    if (blocked(carA.power))
+      return { error: "하이브리드·수소차는 자동차세 구분을 공식 자료로 확인하고 있어 5년 비교에서 아직 뺐습니다." };
     if (km === "") return { error: "1년 주행거리를 넣어 주세요." };
     if (bPrice === "") return { error: "비교할 차의 차값을 넣어 주세요." };
     const ra = run(carA.power, a, carA.realPrice, carA.acquiredOn);
@@ -282,7 +288,7 @@ export function CostCompare({
             value={bPower}
             onChange={(e) => setBPower(e.target.value as Powertrain)}
           >
-            {POWER.map((p) => (
+            {powers.map((p) => (
               <option key={p.id} value={p.id}>
                 {p.label}
               </option>

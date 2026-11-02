@@ -28,7 +28,8 @@ function band(total: number): ResultBand {
   return "very-high";
 }
 
-export function CarTaxCalculator({ years }: { years: YearData[] }) {
+export function CarTaxCalculator({ years, pendingFuels = [] }: { years: YearData[]; pendingFuels?: FuelType[] }) {
+  const fuels = FUELS.filter((f) => !pendingFuels.includes(f.id));
   const [fuel, setFuel] = useState<FuelType>("gasoline");
   const [cc, setCc] = useState("1999");
   const [regDateSel, setRegDate] = useState<string | null>(null);
@@ -78,12 +79,17 @@ export function CarTaxCalculator({ years }: { years: YearData[] }) {
       <div className="field">
         <label htmlFor="fuel">연료</label>
         <select id="fuel" value={fuel} onChange={(e) => setFuel(e.target.value as FuelType)}>
-          {FUELS.map((f) => (
+          {fuels.map((f) => (
             <option key={f.id} value={f.id}>
               {f.label}
             </option>
           ))}
         </select>
+        {pendingFuels.length > 0 && (
+          <p className="hint" data-pending>
+            하이브리드·수소차는 자동차세를 배기량으로 매기는지 정액인지 공식 자료로 확인하고 있어 아직 고를 수 없습니다.
+          </p>
+        )}
       </div>
       {!flat && (
         <div className="field">

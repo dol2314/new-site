@@ -23,7 +23,7 @@ export const metadata = pageMetadata({
 const Y = latest.year;
 const ex1 = calcCarTax({ fuelType: "gasoline", displacementCc: 1999, ageStartDate: `${Y - 1}-03-02`, taxYear: Y }, latest.tax);
 const ex1Jan = calcPrepay(ex1, 1, Y, latest.prepay);
-const ex2 = calcCarTax({ fuelType: "hybrid", displacementCc: 1598, ageStartDate: `${Y - 7}-05-20`, taxYear: Y }, latest.tax);
+const ex2 = calcCarTax({ fuelType: "gasoline", displacementCc: 1598, ageStartDate: `${Y - 7}-05-20`, taxYear: Y }, latest.tax);
 const ex2Mar = calcPrepay(ex2, 3, Y, latest.prepay);
 const ex3 = calcCarTax({ fuelType: "electric", ageStartDate: `${Y - 2}-09-01`, taxYear: Y }, latest.tax);
 const ex3Jun = calcPrepay(ex3, 6, Y, latest.prepay);
@@ -40,7 +40,7 @@ const examples: Example[] = [
     ),
   },
   {
-    title: `1598cc 하이브리드, ${Y - 7}년 5월 등록 — 차령 경감`,
+    title: `1598cc 휘발유차, ${Y - 7}년 5월 등록 — 차령 경감`,
     body: (
       <p>
         차령 {ex2.halves[0].carAge}년이라 기분마다 {Math.round(ex2.halves[0].reductionRate * 100)}%가 깎입니다. 1년 {formatWon(ex2.annualTotal)}이고,
@@ -73,7 +73,7 @@ export default function CarTaxPage() {
         `차령 3년부터 해마다 ${Math.round(latest.tax.ageReduction.perYearRate * 100)}%씩, 최대 ${Math.round(latest.tax.ageReduction.perYearRate * (latest.tax.ageReduction.maxAge - latest.tax.ageReduction.minAge) * 100)}%까지 줄어듭니다. 전기차는 1년 ${formatWon(latest.tax.flatAnnualWon)}(교육세 별도) 정액입니다.`,
         `1월 16~31일에 1년치를 미리 내면 남은 기간 이자율 ${Math.round(latest.prepay.rate * 100)}%만큼 공제받아, 평년 기준 연 자동차세의 약 ${((334 / 365) * latest.prepay.rate * 100).toFixed(1)}%를 아낍니다.`,
       ]}
-      calculator={<CarTaxCalculator years={years} />}
+      calculator={<CarTaxCalculator years={years} pendingFuels={latest.pendingFuels} />}
       examples={examples}
       method={
         <>
