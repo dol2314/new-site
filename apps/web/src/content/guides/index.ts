@@ -1,6 +1,9 @@
 import type { ComponentType } from "react";
 import type { GuideMeta } from "@/lib/guides";
 import CarTaxPrepayTiming from "./car-tax-prepay-timing";
+import CashVsCarInstallment from "./cash-vs-car-installment";
+import EvSubsidyExtraSupport from "./ev-subsidy-extra-support";
+import MultiChildCarAcquisitionTax from "./multi-child-car-acquisition-tax";
 import CompactCarAcquisitionTax from "./compact-car-acquisition-tax";
 import EvCarTaxFlatRate from "./ev-car-tax-flat-rate";
 import PublicChargingFeeChange from "./public-charging-fee-change";
@@ -19,4 +22,7 @@ export const GUIDE_BODIES: Record<string, ComponentType<{ meta: GuideMeta }>> = 
   "ev-car-tax-flat-rate": EvCarTaxFlatRate,
   "compact-car-acquisition-tax": CompactCarAcquisitionTax,
   "public-charging-fee-change": PublicChargingFeeChange,
+  "multi-child-car-acquisition-tax": MultiChildCarAcquisitionTax,
+  "ev-subsidy-extra-support": EvSubsidyExtraSupport,
+  "cash-vs-car-installment": CashVsCarInstallment,
 };

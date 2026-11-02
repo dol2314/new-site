@@ -110,6 +110,39 @@ const RAW_GUIDES: GuideMeta[] = [
     published: false,
     reviewed: false,
   },
+  {
+    slug: "multi-child-car-acquisition-tax",
+    title: "다자녀 취득세 감면, 7인승을 사면 얼마 덜 내나 — 자녀 수·좌석 수별 계산",
+    description:
+      "18세 미만 자녀가 셋 이상이면 7~10인승 취득세가 면제되지만, 세금이 200만원을 넘으면 15%는 냅니다. 자녀 수와 좌석 수, 차값별로 취득세를 계산했습니다.",
+    asOf: "2026-11-02",
+    updatedAt: "2026-11-02",
+    tools: ["registration-tax", "car-loan"],
+    published: false,
+    reviewed: false,
+  },
+  {
+    slug: "ev-subsidy-extra-support",
+    title: "전기차 보조금 추가지원, 청년 첫 차·차상위·다자녀면 얼마 더 받나",
+    description:
+      "전기차 보조금 지침의 추가지원(청년 생애 첫 차·차상위 국비 20%, 다자녀 정액, 전환지원)을 국비 금액별로 계산하고, 함께 받을 수 있는 조합을 정리했습니다.",
+    asOf: "2026-11-02",
+    updatedAt: "2026-11-02",
+    tools: ["ev-subsidy", "car-loan"],
+    published: false,
+    reviewed: false,
+  },
+  {
+    slug: "cash-vs-car-installment",
+    title: "3천만원 차, 현금 vs 할부 36개월 — 예금 이자까지 넣은 실제 비용",
+    description:
+      "3,000만원 차를 할부로 살 때 총이자와, 같은 돈을 예금에 두었을 때 받는 이자를 함께 계산했습니다. 금리·기간·선수금별 차이와 일시불 할인의 취득세 효과도 정리했습니다.",
+    asOf: "2026-11-02",
+    updatedAt: "2026-11-02",
+    tools: ["car-loan", "registration-tax"],
+    published: false,
+    reviewed: false,
+  },
 ];
 
 for (const x of RAW_GUIDES) {
