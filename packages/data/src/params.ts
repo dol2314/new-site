@@ -2,7 +2,7 @@
  * 확인된(verified) 데이터만 계산 엔진 매개변수로 바꿔 준다.
  * 확인 전 항목이 하나라도 필요하면 missing에 이름이 들어가고, 그 기능을 쓰는 화면은 공개하지 않는다.
  */
-import type { CarTaxParams, CapRelief, EvModel, EvSubsidyRules, RegistrationTaxParams, InspectionCycle, InspectionParams, PenaltyTier, PrepayParams, PrepayPeriod, ProrateParams, ChargeTier } from "@site/calc-core";
+import type { CarTaxParams, FuelType, CapRelief, EvModel, EvSubsidyRules, RegistrationTaxParams, InspectionCycle, InspectionParams, PenaltyTier, PrepayParams, PrepayPeriod, ProrateParams, ChargeTier } from "@site/calc-core";
 import car2026 from "../data/car-tax/2026.json";
 import car2027 from "../data/car-tax/2027.json";
 import ev2026 from "../data/ev-subsidy/2026.json";
@@ -73,6 +73,8 @@ export interface CarTaxData {
   prepay: PrepayParams;
   dueDates: { first: { months: string; due: string }; second: { months: string; due: string } };
   smallTaxThresholdWon: number;
+  /** 자동차세 구분(정액/배기량)이 확인되지 않은 연료 — 화면에서 고르지 못하게 한다 (rules.fuelClassification) */
+  pendingFuels: FuelType[];
   sources: SourceRef[];
   missing: string[];
 }
@@ -104,6 +106,7 @@ export function carTaxData(year: number): CarTaxData {
     prepay,
     dueDates: pick(doc, "values.dueDates", missing),
     smallTaxThresholdWon: pick<{ thresholdWon: number }>(doc, "values.smallTaxRule", missing)?.thresholdWon,
+    pendingFuels: doc.rules?.fuelClassification?.verified ? [] : ["hybrid", "hydrogen"],
     sources: refs(doc, CAR_KEYS),
     missing,
   };
@@ -158,6 +161,8 @@ export function carTaxProrateData(year: number): CarTaxProrateData {
 }
 
 export interface OwnershipData {
+  /** 자동차세 구분이 확인되지 않은 연료 */
+  pendingFuels: FuelType[];
   /** 확인된 자동차세 매개변수가 있는 연도 */
   carTaxByYear: Record<number, CarTaxParams>;
   /** 데이터가 있는 마지막 연도. 그 뒤 연도는 이 연도 세율이 그대로라고 가정한다(화면에 밝힘) */
@@ -180,6 +185,7 @@ export function ownershipData(): OwnershipData {
   };
   pick(doc, "rules.newRegistrationProrate", missing);
   return {
+    pendingFuels: latest.pendingFuels,
     carTaxByYear: Object.fromEntries(ready.map((d) => [d.year, d.tax])),
     latestYear: latest.year,
     newRegistration,
