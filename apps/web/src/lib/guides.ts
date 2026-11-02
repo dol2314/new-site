@@ -23,7 +23,8 @@ export interface GuideMeta {
 const RAW_GUIDES: GuideMeta[] = [
   {
     slug: "ev-acquisition-tax-year-end",
-    title: "전기차 취득세, 12월에 인도받으면 140만원 덜 낸다 — 2026년 말 감면 종료 계산",
+    title:
+      "전기차 취득세, 12월에 인도받으면 140만원 덜 낸다 — 2026년 말 감면 종료 계산",
     description:
       "현행법상 전기차 취득세 감면(140만원 한도)은 2026년 12월 31일 취득분까지입니다. 차값별·경차·수소차로 12월과 1월 인도 때 취득세 차이를 계산했습니다.",
     asOf: "2026-11-01",
@@ -34,7 +35,8 @@ const RAW_GUIDES: GuideMeta[] = [
   },
   {
     slug: "car-tax-prepay-timing",
-    title: "자동차세 연납, 2,000cc급은 1월에 22,600원 아낀다 — 3·6·9월 신청과 비교",
+    title:
+      "자동차세 연납, 2,000cc급은 1월에 22,600원 아낀다 — 3·6·9월 신청과 비교",
     description:
       "2027년 자동차세 연납 공제를 1·3·6·9월 신청 시기별로 계산했습니다. 배기량별·오래된 차·전기차로 나눠 아끼는 금액과 분할납부·이사·차 판매 때 주의할 점을 정리했습니다.",
     asOf: "2026-11-01",
@@ -45,7 +47,8 @@ const RAW_GUIDES: GuideMeta[] = [
   },
   {
     slug: "car-tax-transfer-proration",
-    title: "차 팔 때 자동차세, 이전등록일로 나눈다 — 판 사람·산 사람 일할계산 예시",
+    title:
+      "차 팔 때 자동차세, 이전등록일로 나눈다 — 판 사람·산 사람 일할계산 예시",
     description:
       "과세기간 중 차를 팔면 자동차세를 소유 일수만큼 나눠 각자 냅니다. 2027년 기준으로 상반기·하반기 이전, 등록 지연, 새 차, 2천원 미만 사례를 계산하고 계약일 기준 신청과 연납 환급을 정리했습니다.",
     asOf: "2026-11-01",
@@ -68,7 +71,8 @@ const RAW_GUIDES: GuideMeta[] = [
   },
   {
     slug: "ev-vs-gasoline-5-years",
-    title: "전기차 vs 휘발유차, 5년 타면 얼마 차이? — 주행거리·충전 방식별 손익 계산",
+    title:
+      "전기차 vs 휘발유차, 5년 타면 얼마 차이? — 주행거리·충전 방식별 손익 계산",
     description:
       "4,500만원 전기차와 3,000만원 휘발유차를 5개 연도 동안 탈 때 실구매가·자동차세·충전비·기름값을 더해 비교하고, 몇 km부터 전기차가 덜 드는지 계산했습니다.",
     asOf: "2026-11-01",
@@ -101,7 +105,8 @@ const RAW_GUIDES: GuideMeta[] = [
   },
   {
     slug: "public-charging-fee-change",
-    title: "공공 충전요금 개편 전후, 완속은 내리고 초급속은 올랐다 — 충전 습관별 한 달 변화",
+    title:
+      "공공 충전요금 개편 전후, 완속은 내리고 초급속은 올랐다 — 충전 습관별 한 달 변화",
     description:
       "2026년 8월 공공 충전요금이 2단계에서 5단계로 바뀌었습니다. 출력별 요금 변화와 아파트 완속 위주·장거리 초급속 위주 운전자의 한 달 충전비 변화를 계산했습니다.",
     asOf: "2026-11-02",
@@ -112,7 +117,8 @@ const RAW_GUIDES: GuideMeta[] = [
   },
   {
     slug: "multi-child-car-acquisition-tax",
-    title: "다자녀 취득세 감면, 7인승을 사면 얼마 덜 내나 — 자녀 수·좌석 수별 계산",
+    title:
+      "다자녀 취득세 감면, 7인승을 사면 얼마 덜 내나 — 자녀 수·좌석 수별 계산",
     description:
       "18세 미만 자녀가 셋 이상이면 7~10인승 취득세가 면제되지만, 세금이 200만원을 넘으면 15%는 냅니다. 자녀 수와 좌석 수, 차값별로 취득세를 계산했습니다.",
     asOf: "2026-11-02",
@@ -145,7 +151,8 @@ const RAW_GUIDES: GuideMeta[] = [
   },
   {
     slug: "used-car-tax-by-age",
-    title: "중고차 자동차세, 연식에 따라 얼마나 싸지나 — 차령 계산과 등록 월의 반년 차이",
+    title:
+      "중고차 자동차세, 연식에 따라 얼마나 싸지나 — 차령 계산과 등록 월의 반년 차이",
     description:
       "배기량 승용차는 차령 3년부터 해마다 5%씩 자동차세가 줄어듭니다. 최초 등록 연도별 세금, 같은 해 3월·9월 등록 차이, 해 넘겨 등록한 재고차의 경감 시점을 계산했습니다.",
     asOf: "2026-11-02",
@@ -156,7 +163,8 @@ const RAW_GUIDES: GuideMeta[] = [
   },
   {
     slug: "new-car-first-year-car-tax",
-    title: "새 차 등록한 해 자동차세, 1월과 12월 등록은 얼마 다른가 — 날짜별 계산",
+    title:
+      "새 차 등록한 해 자동차세, 1월과 12월 등록은 얼마 다른가 — 날짜별 계산",
     description:
       "새 차를 등록한 해에는 등록일부터 반기 말까지 날짜만큼만 자동차세를 냅니다. 등록일별 그해 세금과 6월 말·7월 초 차이, 연말 등록, 전기차의 경우를 계산했습니다.",
     asOf: "2026-11-02",
@@ -209,14 +217,65 @@ const RAW_GUIDES: GuideMeta[] = [
     published: false,
     reviewed: false,
   },
+  {
+    slug: "ev-conversion-subsidy",
+    title:
+      "전기차 전환지원금, 타던 차를 팔고 사면 얼마 더 받나 — 차종별 금액과 요건",
+    description:
+      "내연기관차를 팔거나 폐차하고 전기차를 사면 받는 전환지원금을 2026년 공공데이터의 차종별 국비·지방비로 계산하고, 국비가 적은 차의 비례 감액과 인정되지 않는 경우를 정리했습니다.",
+    asOf: "2026-11-02",
+    updatedAt: "2026-11-02",
+    tools: ["ev-subsidy", "car-loan"],
+    published: false,
+    reviewed: false,
+  },
+  {
+    slug: "compact-ev-real-price",
+    title: "경형 전기차 실구매가, 보조금·취득세·할부까지 한 번에 계산",
+    description:
+      "경형 전기차의 국비 범위와 지방비에 따라 차량 대금, 취득세, 실구매가, 월 할부금이 어떻게 달라지는지 계산했습니다. 12월 인도와 1월 인도의 취득세 차이도 함께 정리했습니다.",
+    asOf: "2026-11-02",
+    updatedAt: "2026-11-02",
+    tools: ["car-loan", "ev-subsidy", "registration-tax"],
+    published: false,
+    reviewed: false,
+  },
+  {
+    slug: "public-charging-session-cost",
+    title: "공공 충전기 한 번 충전에 얼마? 배터리 크기·출력별 계산",
+    description:
+      "배터리 35·60·80kWh 전기차를 10%에서 80%까지 공공 충전기로 채울 때 드는 돈을 출력별로 계산하고, 100km당 충전비와 충전량별 차이를 정리했습니다.",
+    asOf: "2026-11-02",
+    updatedAt: "2026-11-02",
+    tools: ["ev-charging"],
+    published: false,
+    reviewed: false,
+  },
+  {
+    slug: "car-tax-prepay-calendar",
+    title: "2027년 자동차세 연납 달력 — 1월을 놓치면 언제 다시 신청하나",
+    description:
+      "2027년 자동차세 연납 신고납부 기간 네 번의 날짜와 요일, 기간별 공제율과 아끼는 돈, 놓쳤을 때 다음 기회와 납부서·이사·매매 때 주의할 점을 정리했습니다.",
+    asOf: "2026-11-02",
+    updatedAt: "2026-11-02",
+    tools: ["car-tax"],
+    published: false,
+    reviewed: false,
+  },
 ];
 
 for (const x of RAW_GUIDES) {
-  if (x.published && x.hold) throw new Error(`공개할 수 없는 항목이 published=true: ${x.slug} — ${x.hold}`);
+  if (x.published && x.hold)
+    throw new Error(
+      `공개할 수 없는 항목이 published=true: ${x.slug} — ${x.hold}`,
+    );
 }
 
 /** LAUNCH_PREVIEW(로컬 점검)에서는 hold 없는 글을 공개로 본다 */
-export const GUIDES: GuideMeta[] = launchPreview ? RAW_GUIDES.map((g) => (g.hold ? g : { ...g, published: true })) : RAW_GUIDES;
+export const GUIDES: GuideMeta[] = launchPreview
+  ? RAW_GUIDES.map((g) => (g.hold ? g : { ...g, published: true }))
+  : RAW_GUIDES;
 
 export const publishedGuides = () => GUIDES.filter((g) => g.published);
-export const guideBySlug = (slug: string) => GUIDES.find((g) => g.slug === slug);
+export const guideBySlug = (slug: string) =>
+  GUIDES.find((g) => g.slug === slug);

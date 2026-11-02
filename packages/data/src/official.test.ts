@@ -343,3 +343,28 @@ describe("사례 글 15~17편 숫자", () => {
     expect(save).toBeGreaterThan(dep);
   });
 });
+
+describe("사례 글 18~21편 숫자", () => {
+  const ev = evSubsidyData(2026);
+  const c = evChargingData();
+  const { params: rp } = registrationTaxData();
+  it("18편: EV3 롱레인지 2WD 17인치 국비 555·전환 100, EV3 GT 248·전환 50, 제주 전환 지방비 30만원", () => {
+    const f = (n: string) => ev.models.find((m) => m.name === n && !m.discontinued)!;
+    expect([f("EV3 롱레인지 2WD 17인치").national, f("EV3 롱레인지 2WD 17인치").conversionNational, f("EV3 GT").national, f("EV3 GT").conversionNational, f("EV3 롱레인지 2WD 17인치").conversionLocal.jeju]).toEqual([555, 100, 248, 50, 30]);
+  });
+  it("19편: 경·소형 국비 457~490만원, 2,900만원 경형 전기차 2027-01-12 취득세 304,540원, 2026-12-18 0원", () => {
+    const small = ev.models.filter((m) => !m.discontinued && m.category === "경·소형").map((m) => m.national);
+    const tx = (d: string) => calcRegistrationTax({ price: 29_000_000, vatIncluded: true, compact: true, powertrain: "electric", seats7to10: false, childrenUnder18: 0, acquiredOn: d }, rp).payable;
+    expect([Math.min(...small), Math.max(...small), tx("2027-01-12"), tx("2026-12-18")]).toEqual([457, 490, 304_540, 0]);
+  });
+  it("20편: 60kWh × 70% = 42kWh, 완속 12,390원, 200kW 이상 16,510원", () => {
+    const s = (w: number) => calcChargingCost({ monthlyKm: 42, kmPerKwh: 1, mix: [{ label: "x", share: 1, wonPerKwh: w }] }).monthlyCost;
+    expect([s(tierForKw(7, c.publicTiers).wonPerKwh), s(tierForKw(350, c.publicTiers).wonPerKwh)]).toEqual([12_390, 16_510]);
+  });
+  it("21편: 연납 기간 1·3·6·9월, 1,598cc 2024-05 등록 1월 연납 절약 > 9월 연납 절약", () => {
+    const d = carTaxData(2027);
+    const x = calcCarTax({ fuelType: "gasoline", displacementCc: 1598, ageStartDate: "2024-05-10", taxYear: 2027 }, d.tax);
+    expect(d.prepay.periods.map((p) => p.month)).toEqual([1, 3, 6, 9]);
+    expect(calcPrepay(x, 1, 2027, d.prepay).saving).toBeGreaterThan(calcPrepay(x, 9, 2027, d.prepay).saving);
+  });
+});
