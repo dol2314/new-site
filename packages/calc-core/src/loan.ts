@@ -39,11 +39,18 @@ export interface LoanResult {
 export function calcLoan(input: LoanInput): LoanResult {
   const { principal: P, annualRate, months: n, method } = input;
   if (!Number.isFinite(P) || P < 0) throw new RangeError("할부 원금은 0 이상");
-  if (!Number.isInteger(n) || n < 1 || n > 120) throw new RangeError("기간은 1~120개월");
-  if (!Number.isFinite(annualRate) || annualRate < 0 || annualRate > 0.3) throw new RangeError("연 이율은 0~30%");
+  if (!Number.isInteger(n) || n < 1 || n > 120)
+    throw new RangeError("기간은 1~120개월");
+  if (!Number.isFinite(annualRate) || annualRate < 0 || annualRate > 0.3)
+    throw new RangeError("연 이율은 0~30%");
   const r = annualRate / 12;
-  const balloon = method === "balloon" ? Math.round(P * (input.balloonRate ?? 0)) : 0;
-  if (method === "balloon" && (!(input.balloonRate! >= 0) || input.balloonRate! >= 1)) throw new RangeError("유예 비율은 0 이상 1 미만");
+  const balloon =
+    method === "balloon" ? Math.round(P * (input.balloonRate ?? 0)) : 0;
+  if (
+    method === "balloon" &&
+    (!(input.balloonRate! >= 0) || input.balloonRate! >= 1)
+  )
+    throw new RangeError("유예 비율은 0 이상 1 미만");
 
   // 원리금균등·유예: 매월 같은 금액 (유예는 마지막에 유예금을 남기도록)
   let level = 0;
@@ -62,11 +69,18 @@ export function calcLoan(input: LoanInput): LoanResult {
   for (let k = 1; k <= n; k++) {
     const interest = Math.round(balance * r);
     let principal: number;
-    if (k === n) principal = balance; // 마지막 회차: 남은 원금(유예금 포함) 정리
+    if (k === n)
+      principal = balance; // 마지막 회차: 남은 원금(유예금 포함) 정리
     else if (method === "equal-principal") principal = fixedPrincipal;
     else principal = level - interest;
     balance -= principal;
-    schedule.push({ month: k, payment: principal + interest, principal, interest, balance });
+    schedule.push({
+      month: k,
+      payment: principal + interest,
+      principal,
+      interest,
+      balance,
+    });
   }
   const totalInterest = schedule.reduce((s, x) => s + x.interest, 0);
   return {
@@ -77,4 +91,24 @@ export function calcLoan(input: LoanInput): LoanResult {
     totalInterest,
     totalPaid: P + totalInterest,
   };
+}
+
+/**
+ * 현금을 예금에 두고 할부금을 그 돈에서 낼 때 받는 예금 이자(세전, 단리, 매달 남은 잔액 기준).
+ * 잔액은 처음에 할부 원금만큼 두고, 매달 납입금만큼 줄어든다. 원 단위 반올림.
+ * 할부 총이자 − 이 금액 = 할부의 순비용(양수면 현금이 유리).
+ */
+export function depositInterestWhilePaying(
+  loan: LoanResult,
+  principal: number,
+  annualDepositRate: number,
+): number {
+  if (annualDepositRate < 0) throw new RangeError("예금 이율은 0 이상");
+  let balance = principal;
+  let earned = 0;
+  for (const row of loan.schedule) {
+    earned += Math.max(balance, 0) * (annualDepositRate / 12);
+    balance -= row.payment;
+  }
+  return Math.round(earned);
 }
