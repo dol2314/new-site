@@ -54,7 +54,7 @@ const examples: Example[] = [
     title: `기아 ${ev3.name}, 제주, 추가지원 없음`,
     body: (
       <p>
-        국비 {formatWon(r1.national)}와 제주 지방비 {formatWon(r1.local ?? 0)}를
+        국비 {formatWon(r1.national)}과 제주 지방비 {formatWon(r1.local ?? 0)}을
         더해 <strong>{formatWon(r1.total)}</strong>입니다.
       </p>
     ),
@@ -66,7 +66,7 @@ const examples: Example[] = [
         청년 추가지원 {formatWon(r2.rateAdditions)}(국비의{" "}
         {R.youthFirstCarRate * 100}%)과 전환지원금 국비{" "}
         {formatWon(r2.conversionNational)}·지방비{" "}
-        {formatWon(r2.conversionLocal ?? 0)}가 더해져 {formatWon(r2.total)}
+        {formatWon(r2.conversionLocal ?? 0)}이 더해져 {formatWon(r2.total)}
         입니다.
       </p>
     ),
@@ -76,8 +76,8 @@ const examples: Example[] = [
     body: (
       <p>
         국비 {formatWon(r3.national)}, 지방비 {formatWon(r3.local ?? 0)}에
-        차상위 추가 {formatWon(r3.rateAdditions)}와 다자녀 정액{" "}
-        {formatWon(r3.multiChild)}를 더해 {formatWon(r3.total)}입니다.
+        차상위 추가 {formatWon(r3.rateAdditions)}과 다자녀 정액{" "}
+        {formatWon(r3.multiChild)}을 더해 {formatWon(r3.total)}입니다.
       </p>
     ),
   },

@@ -170,7 +170,7 @@ const examples: Example[] = [
       <p>
         매달 {formatWon(lb.firstPayment)}으로 원리금균등보다{" "}
         {formatWon(lp.firstPayment - lb.firstPayment)} 적지만, 마지막 달에{" "}
-        {formatWon(lb.lastPayment)}를 내야 하고 총이자는{" "}
+        {formatWon(lb.lastPayment)}을 내야 하고 총이자는{" "}
         {formatWon(lb.totalInterest)}으로{" "}
         {formatWon(lb.totalInterest - lp.totalInterest)} 많습니다.
       </p>

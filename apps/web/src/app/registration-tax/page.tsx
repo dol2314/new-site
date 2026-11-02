@@ -49,7 +49,7 @@ const examples: Example[] = [
     title: "자녀 3명, 4,000만원 7인승",
     body: (
       <p>
-        7~10인승은 면제 대상이지만, 산출 취득세 {formatWon(e3.computedTax)}가 {formatWon(p.minimumTax.exemptOverWon)}을 넘어{" "}
+        7~10인승은 면제 대상이지만, 산출 취득세 {formatWon(e3.computedTax)}이 {formatWon(p.minimumTax.exemptOverWon)}을 넘어{" "}
         {Math.round(p.minimumTax.reliefRate * 100)}%만 감면됩니다. 그래서 {formatWon(e3.payable)}을 냅니다.
       </p>
     ),
