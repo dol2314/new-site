@@ -22,7 +22,9 @@
     "data:ev": "node scripts/data/import-ev-subsidy.mjs",
     "check:similarity": "node scripts/check-similarity.mjs",
     "check:launch": "node scripts/check-launch.mjs",
-    "check:all": "npm run typecheck && npm run lint && npm test && npm run build && npm run check:seo && npm run check:quality && npm run check:similarity && npm run check:launch && npm run validate:data"
+    "check:all": "npm run typecheck && npm run lint && npm test && npm run build && npm run check:seo && npm run check:quality && npm run check:similarity && npm run check:launch && npm run validate:data",
+    "law:impact": "node scripts/law-impact.mjs --write",
+    "law:simulate": "node scripts/simulate-law-change.mjs"
   },
   "devDependencies": {
     "@types/node": "22.20.5",
