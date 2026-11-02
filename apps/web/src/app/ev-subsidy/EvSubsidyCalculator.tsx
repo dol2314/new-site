@@ -8,6 +8,7 @@ import {
 } from "@site/calc-core";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { track, type ResultBand } from "@/lib/analytics";
+import { useTodayKst } from "@/lib/use-today";
 
 interface Region {
   code: string;
@@ -57,6 +58,9 @@ export function EvSubsidyCalculator({
   const [youth, setYouth] = useState(false);
   const [children, setChildren] = useState(0);
   const [bms, setBms] = useState(false);
+  const today = useTodayKst();
+  // BMS 폐차 재구매 지원은 기한이 있다(지침). 오늘(KST)이 기한을 넘으면 선택지를 숨기고 계산에서도 뺀다.
+  const bmsOpen = today === null || today <= rules.bmsScrap.until;
   const [conversion, setConversion] = useState(false);
   const [userLocal, setUserLocal] = useState("");
   const [userConvLocal, setUserConvLocal] = useState("");
@@ -80,7 +84,8 @@ export function EvSubsidyCalculator({
           lowIncome,
           youthFirstCar: youth,
           children,
-          bmsScrap: bms,
+          bmsScrap: bms && bmsOpen,
+          appliedOn: today ?? undefined,
         },
         rules,
       );
@@ -237,14 +242,17 @@ export function EvSubsidyCalculator({
             />{" "}
             19~34세 청년의 생애 첫 차
           </label>
-          <label className="inline">
-            <input
-              type="checkbox"
-              checked={bms}
-              onChange={(e) => setBms(e.target.checked)}
-            />{" "}
-            BMS 업데이트가 안 되는 노후 전기차를 폐차하고 다시 구매
-          </label>
+          {bmsOpen && (
+            <label className="inline">
+              <input
+                type="checkbox"
+                checked={bms}
+                onChange={(e) => setBms(e.target.checked)}
+              />{" "}
+              BMS 업데이트가 안 되는 노후 전기차를 폐차하고 다시 구매 (
+              {rules.bmsScrap.until.slice(0, 4)}년 말까지)
+            </label>
+          )}
           <label htmlFor="kids">18세 이하 자녀</label>
           <select
             id="kids"
