@@ -52,6 +52,7 @@ export {
 } from "./evSubsidy";
 export {
   calcRegistrationTax,
+  capFor,
   type CapRelief,
   type Powertrain,
   type RegistrationTaxInput,

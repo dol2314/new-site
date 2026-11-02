@@ -16,8 +16,23 @@ import { parseDate, type IsoDate } from "./dates";
 import { truncateTo } from "./money";
 
 export interface CapRelief {
+  /** 지금(마지막) 기간의 한도 */
   capWon: number;
+  /** 지금(마지막) 기간의 끝 — 이 날까지 취득분 */
   until: IsoDate;
+  /**
+   * 법 개정으로 한도가 기간마다 다를 때 앞선 기간들(예: 2026-12-31까지 140만원, 그 뒤 2027-12-31까지 70만원).
+   * 취득일이 앞선 기간의 until 이하이면 그 기간 한도를 쓴다. until 오름차순.
+   */
+  earlier?: { capWon: number; until: IsoDate }[];
+}
+
+/** 취득일에 적용할 한도. 기한이 지났으면 null */
+export function capFor(relief: CapRelief, acquiredOn: IsoDate): number | null {
+  const t = parseDate(acquiredOn);
+  for (const e of relief.earlier ?? [])
+    if (t <= parseDate(e.until)) return e.capWon;
+  return t <= parseDate(relief.until) ? relief.capWon : null;
 }
 
 export interface RegistrationTaxParams {
@@ -30,7 +45,12 @@ export interface RegistrationTaxParams {
   multiChild: {
     until: IsoDate;
     threePlus: { vanExempt: boolean; otherPassengerCapWon: number };
-    two: { vanRate: number; otherPassengerRate: number; otherPassengerThresholdWon: number; otherPassengerFixedWon: number };
+    two: {
+      vanRate: number;
+      otherPassengerRate: number;
+      otherPassengerThresholdWon: number;
+      otherPassengerFixedWon: number;
+    };
   };
   minimumTax: { exemptOverWon: number; reliefRate: number };
 }
@@ -77,22 +97,40 @@ export interface RegistrationTaxResult {
   breakdown: Breakdown[];
 }
 
-const within = (date: IsoDate, until: IsoDate) => parseDate(date) <= parseDate(until);
+const within = (date: IsoDate, until: IsoDate) =>
+  parseDate(date) <= parseDate(until);
 
 /** 140만원(cap) 이하면 면제, 넘으면 cap 공제 */
 const capRelief = (tax: number, cap: number) => (tax <= cap ? tax : cap);
 
-export function calcRegistrationTax(input: RegistrationTaxInput, p: RegistrationTaxParams): RegistrationTaxResult {
-  if (!Number.isFinite(input.price) || input.price < 0) throw new RangeError("차량 가격은 0 이상");
+export function calcRegistrationTax(
+  input: RegistrationTaxInput,
+  p: RegistrationTaxParams,
+): RegistrationTaxResult {
+  if (!Number.isFinite(input.price) || input.price < 0)
+    throw new RangeError("차량 가격은 0 이상");
   parseDate(input.acquiredOn);
   const breakdown: Breakdown[] = [];
 
-  const price = input.vatIncluded ? Math.trunc((input.price * 10) / 11) : Math.trunc(input.price);
-  if (input.vatIncluded) breakdown.push({ label: "부가세 뺀 가격", value: price, rule: `${input.price.toLocaleString("ko-KR")}원 × 10/11` });
+  const price = input.vatIncluded
+    ? Math.trunc((input.price * 10) / 11)
+    : Math.trunc(input.price);
+  if (input.vatIncluded)
+    breakdown.push({
+      label: "부가세 뺀 가격",
+      value: price,
+      rule: `${input.price.toLocaleString("ko-KR")}원 × 10/11`,
+    });
   const sv = input.standardValue ?? null;
   const useStandard = sv !== null && sv > price;
   const base = useStandard ? sv : price;
-  breakdown.push({ label: "과세표준", value: base, rule: useStandard ? "신고가액이 시가표준액보다 적어 시가표준액" : "사실상취득가격(부가세 제외)" });
+  breakdown.push({
+    label: "과세표준",
+    value: base,
+    rule: useStandard
+      ? "신고가액이 시가표준액보다 적어 시가표준액"
+      : "사실상취득가격(부가세 제외)",
+  });
 
   const rate = input.compact ? p.rates.compact : p.rates.passenger;
   const taxFree = base <= p.taxFreeThresholdWon;
@@ -100,16 +138,33 @@ export function calcRegistrationTax(input: RegistrationTaxInput, p: Registration
   breakdown.push({
     label: "산출 취득세",
     value: computedTax,
-    rule: taxFree ? `${p.taxFreeThresholdWon.toLocaleString("ko-KR")}원 이하 면세점` : `과세표준 × ${Math.round(rate * 1000) / 10}%`,
+    rule: taxFree
+      ? `${p.taxFreeThresholdWon.toLocaleString("ko-KR")}원 이하 면세점`
+      : `과세표준 × ${Math.round(rate * 1000) / 10}%`,
   });
 
   const candidates: Relief[] = [];
   const expired: { label: string; until: IsoDate }[] = [];
-  const add = (r: Omit<Relief, "minimumTaxApplied">, minimumTaxExcepted: boolean) => {
+  const add = (
+    r: Omit<Relief, "minimumTaxApplied">,
+    minimumTaxExcepted: boolean,
+  ) => {
     // 면제(전액 감면)인데 산출세액이 기준 초과면 85%만 (제66조 등 예외)
     const full = r.amount >= computedTax;
-    if (full && !minimumTaxExcepted && computedTax > p.minimumTax.exemptOverWon) {
-      candidates.push({ ...r, amount: truncateTo(computedTax * p.minimumTax.reliefRate, p.truncateUnit), rule: `${r.rule} → 산출세액 ${p.minimumTax.exemptOverWon.toLocaleString("ko-KR")}원 초과라 ${p.minimumTax.reliefRate * 100}%만 감면`, minimumTaxApplied: true });
+    if (
+      full &&
+      !minimumTaxExcepted &&
+      computedTax > p.minimumTax.exemptOverWon
+    ) {
+      candidates.push({
+        ...r,
+        amount: truncateTo(
+          computedTax * p.minimumTax.reliefRate,
+          p.truncateUnit,
+        ),
+        rule: `${r.rule} → 산출세액 ${p.minimumTax.exemptOverWon.toLocaleString("ko-KR")}원 초과라 ${p.minimumTax.reliefRate * 100}%만 감면`,
+        minimumTaxApplied: true,
+      });
     } else {
       candidates.push({ ...r, minimumTaxApplied: false });
     }
@@ -117,36 +172,141 @@ export function calcRegistrationTax(input: RegistrationTaxInput, p: Registration
 
   if (computedTax > 0) {
     if (input.powertrain === "electric") {
-      if (within(input.acquiredOn, p.evRelief.until)) add({ id: "ev", label: "전기자동차 감면", amount: capRelief(computedTax, p.evRelief.capWon), rule: `${p.evRelief.capWon.toLocaleString("ko-KR")}원 한도` }, true);
+      const cap = capFor(p.evRelief, input.acquiredOn);
+      if (cap !== null)
+        add(
+          {
+            id: "ev",
+            label: "전기자동차 감면",
+            amount: capRelief(computedTax, cap),
+            rule: `${cap.toLocaleString("ko-KR")}원 한도`,
+          },
+          true,
+        );
       else expired.push({ label: "전기자동차 감면", until: p.evRelief.until });
     }
     if (input.powertrain === "hydrogen") {
-      if (within(input.acquiredOn, p.hydrogenRelief.until)) add({ id: "hydrogen", label: "수소전기자동차 감면", amount: capRelief(computedTax, p.hydrogenRelief.capWon), rule: `${p.hydrogenRelief.capWon.toLocaleString("ko-KR")}원 한도` }, true);
-      else expired.push({ label: "수소전기자동차 감면", until: p.hydrogenRelief.until });
+      const cap = capFor(p.hydrogenRelief, input.acquiredOn);
+      if (cap !== null)
+        add(
+          {
+            id: "hydrogen",
+            label: "수소전기자동차 감면",
+            amount: capRelief(computedTax, cap),
+            rule: `${cap.toLocaleString("ko-KR")}원 한도`,
+          },
+          true,
+        );
+      else
+        expired.push({
+          label: "수소전기자동차 감면",
+          until: p.hydrogenRelief.until,
+        });
     }
     if (input.compact) {
-      if (within(input.acquiredOn, p.compactRelief.until)) add({ id: "compact", label: "경형자동차 감면", amount: capRelief(computedTax, p.compactRelief.capWon), rule: `${p.compactRelief.capWon.toLocaleString("ko-KR")}원 한도` }, false);
-      else expired.push({ label: "경형자동차 감면", until: p.compactRelief.until });
+      const cap = capFor(p.compactRelief, input.acquiredOn);
+      if (cap !== null)
+        add(
+          {
+            id: "compact",
+            label: "경형자동차 감면",
+            amount: capRelief(computedTax, cap),
+            rule: `${cap.toLocaleString("ko-KR")}원 한도`,
+          },
+          false,
+        );
+      else
+        expired.push({
+          label: "경형자동차 감면",
+          until: p.compactRelief.until,
+        });
     }
     if (input.childrenUnder18 >= 2) {
       const mc = p.multiChild;
-      if (!within(input.acquiredOn, mc.until)) expired.push({ label: "다자녀 감면", until: mc.until });
+      if (!within(input.acquiredOn, mc.until))
+        expired.push({ label: "다자녀 감면", until: mc.until });
       else if (input.childrenUnder18 >= 3) {
-        if (input.seats7to10) add({ id: "multi-child-3", label: "다자녀(3명 이상) 감면", amount: computedTax, rule: "7~10인승 승용 면제" }, false);
-        else add({ id: "multi-child-3", label: "다자녀(3명 이상) 감면", amount: capRelief(computedTax, mc.threePlus.otherPassengerCapWon), rule: `${mc.threePlus.otherPassengerCapWon.toLocaleString("ko-KR")}원 한도` }, false);
+        if (input.seats7to10)
+          add(
+            {
+              id: "multi-child-3",
+              label: "다자녀(3명 이상) 감면",
+              amount: computedTax,
+              rule: "7~10인승 승용 면제",
+            },
+            false,
+          );
+        else
+          add(
+            {
+              id: "multi-child-3",
+              label: "다자녀(3명 이상) 감면",
+              amount: capRelief(computedTax, mc.threePlus.otherPassengerCapWon),
+              rule: `${mc.threePlus.otherPassengerCapWon.toLocaleString("ko-KR")}원 한도`,
+            },
+            false,
+          );
       } else if (input.seats7to10) {
-        add({ id: "multi-child-2", label: "다자녀(2명) 감면", amount: truncateTo(computedTax * mc.two.vanRate, p.truncateUnit), rule: "7~10인승 승용 50% 경감" }, false);
+        add(
+          {
+            id: "multi-child-2",
+            label: "다자녀(2명) 감면",
+            amount: truncateTo(computedTax * mc.two.vanRate, p.truncateUnit),
+            rule: "7~10인승 승용 50% 경감",
+          },
+          false,
+        );
       } else {
-        const amount = computedTax <= mc.two.otherPassengerThresholdWon ? truncateTo(computedTax * mc.two.otherPassengerRate, p.truncateUnit) : mc.two.otherPassengerFixedWon;
-        add({ id: "multi-child-2", label: "다자녀(2명) 감면", amount, rule: computedTax <= mc.two.otherPassengerThresholdWon ? "50% 경감" : `${mc.two.otherPassengerFixedWon.toLocaleString("ko-KR")}원 공제` }, false);
+        const amount =
+          computedTax <= mc.two.otherPassengerThresholdWon
+            ? truncateTo(
+                computedTax * mc.two.otherPassengerRate,
+                p.truncateUnit,
+              )
+            : mc.two.otherPassengerFixedWon;
+        add(
+          {
+            id: "multi-child-2",
+            label: "다자녀(2명) 감면",
+            amount,
+            rule:
+              computedTax <= mc.two.otherPassengerThresholdWon
+                ? "50% 경감"
+                : `${mc.two.otherPassengerFixedWon.toLocaleString("ko-KR")}원 공제`,
+          },
+          false,
+        );
       }
     }
   }
 
   candidates.sort((a, b) => b.amount - a.amount);
   const relief = candidates[0] ?? null;
-  const payable = truncateTo(computedTax - (relief?.amount ?? 0), p.truncateUnit);
-  if (relief) breakdown.push({ label: relief.label, value: -relief.amount, rule: relief.rule });
-  breakdown.push({ label: "낼 취득세", value: payable, rule: "지방교육세·농어촌특별세 없음" });
-  return { base, baseFrom: useStandard ? "standard-value" : "price", taxFree, rate, computedTax, relief, otherReliefs: candidates.slice(1), expired, payable, breakdown };
+  const payable = truncateTo(
+    computedTax - (relief?.amount ?? 0),
+    p.truncateUnit,
+  );
+  if (relief)
+    breakdown.push({
+      label: relief.label,
+      value: -relief.amount,
+      rule: relief.rule,
+    });
+  breakdown.push({
+    label: "낼 취득세",
+    value: payable,
+    rule: "지방교육세·농어촌특별세 없음",
+  });
+  return {
+    base,
+    baseFrom: useStandard ? "standard-value" : "price",
+    taxFree,
+    rate,
+    computedTax,
+    relief,
+    otherReliefs: candidates.slice(1),
+    expired,
+    payable,
+    breakdown,
+  };
 }

@@ -57,3 +57,16 @@ describe("calcRegistrationTax", () => {
   });
   it("음수 가격 거부", () => expect(() => calcRegistrationTax({ ...base, price: -1 }, P)).toThrow(RangeError));
 });
+
+describe("기간별 한도 (개정으로 감면 연장 + 한도 축소)", () => {
+  // 2026-12-31까지 5,000, 그 뒤 2027-12-31까지 2,000 (가짜 값)
+  const Q: RegistrationTaxParams = { ...P, evRelief: { capWon: 2_000, until: "2027-12-31", earlier: [{ capWon: 5_000, until: "2026-12-31" }] } };
+  it("앞선 기간 취득은 앞선 한도", () =>
+    expect(calcRegistrationTax({ ...base, powertrain: "electric", acquiredOn: "2026-12-31" }, Q).payable).toBe(5_000));
+  it("새 기간 취득은 새 한도", () =>
+    expect(calcRegistrationTax({ ...base, powertrain: "electric", acquiredOn: "2027-01-01" }, Q).payable).toBe(8_000));
+  it("마지막 기간이 지나면 감면 없음", () => {
+    const r = calcRegistrationTax({ ...base, powertrain: "electric", acquiredOn: "2028-01-01" }, Q);
+    expect([r.payable, r.expired.map((e) => e.until)]).toEqual([10_000, ["2027-12-31"]]);
+  });
+});
