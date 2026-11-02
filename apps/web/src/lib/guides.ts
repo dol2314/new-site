@@ -143,6 +143,39 @@ const RAW_GUIDES: GuideMeta[] = [
     published: false,
     reviewed: false,
   },
+  {
+    slug: "used-car-tax-by-age",
+    title: "중고차 자동차세, 연식에 따라 얼마나 싸지나 — 차령 계산과 등록 월의 반년 차이",
+    description:
+      "배기량 승용차는 차령 3년부터 해마다 5%씩 자동차세가 줄어듭니다. 최초 등록 연도별 세금, 같은 해 3월·9월 등록 차이, 해 넘겨 등록한 재고차의 경감 시점을 계산했습니다.",
+    asOf: "2026-11-02",
+    updatedAt: "2026-11-02",
+    tools: ["car-tax"],
+    published: false,
+    reviewed: false,
+  },
+  {
+    slug: "new-car-first-year-car-tax",
+    title: "새 차 등록한 해 자동차세, 1월과 12월 등록은 얼마 다른가 — 날짜별 계산",
+    description:
+      "새 차를 등록한 해에는 등록일부터 반기 말까지 날짜만큼만 자동차세를 냅니다. 등록일별 그해 세금과 6월 말·7월 초 차이, 연말 등록, 전기차의 경우를 계산했습니다.",
+    asOf: "2026-11-02",
+    updatedAt: "2026-11-02",
+    tools: ["car-tax", "car-loan"],
+    published: false,
+    reviewed: false,
+  },
+  {
+    slug: "balloon-installment-last-payment",
+    title: "유예할부 마지막 회차, 미리 얼마를 모아야 하나 — 원리금균등과 비교",
+    description:
+      "4,000만원을 36개월 유예할부로 빌릴 때 월 납입금, 마지막 달 목돈, 미리 모아야 할 돈과 총이자를 원리금균등과 비교했습니다. 유예 비율·금리·기간별 차이도 정리했습니다.",
+    asOf: "2026-11-02",
+    updatedAt: "2026-11-02",
+    tools: ["car-loan"],
+    published: false,
+    reviewed: false,
+  },
 ];
 
 for (const x of RAW_GUIDES) {

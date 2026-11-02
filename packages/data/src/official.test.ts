@@ -2,7 +2,7 @@
  * 확인된 법령값으로 엔진을 검증한다. 기대값은 법령 산식으로 손으로 계산한 값
  * (지방세법 제127조·제128조·제151조, 시행령 제122조·제125조, 국고금 관리법 제47조, 자동차관리법 시행령 별표 2).
  */
-import { calcCarTax, calcLoan, depositInterestWhilePaying, calcNewRegistrationTax, calcOwnershipCost, calcChargingCost, tierForKw, calcTransferProrate, calcEvSubsidy, calcRegistrationTax, expectedConversionNational, calcInspectionPenalty, calcPrepay, inspectionWindow, penaltyForDays } from "@site/calc-core";
+import { ageStartDate, calcCarTax, calcLoan, depositInterestWhilePaying, calcNewRegistrationTax, calcOwnershipCost, calcChargingCost, tierForKw, calcTransferProrate, calcEvSubsidy, calcRegistrationTax, expectedConversionNational, calcInspectionPenalty, calcPrepay, inspectionWindow, penaltyForDays } from "@site/calc-core";
 import { describe, expect, it } from "vitest";
 import { carTaxData, carTaxProrateData, evChargingData, ownershipData, evSubsidyData, inspectionData, registrationTaxData } from "./params";
 
@@ -300,5 +300,24 @@ describe("사례 글 9~11편 숫자", () => {
   it("11편: 3,000만원 연 6% 36개월 원리금균등 월 912,658원, 총이자 2,855,692원, 예금 3% 이자 1,270,291원", () => {
     const l = calcLoan({ principal: 30_000_000, annualRate: 0.06, months: 36, method: "equal-payment" });
     expect([l.firstPayment, l.totalInterest, depositInterestWhilePaying(l, 30_000_000, 0.03)]).toEqual([912_658, 2_855_692, 1_270_291]);
+  });
+});
+
+describe("사례 글 12~14편 숫자", () => {
+  const t = carTaxData(2027).tax;
+  const o = ownershipData();
+  const tax = (start: string, year = 2027) => calcCarTax({ fuelType: "gasoline", displacementCc: 1999, ageStartDate: start, taxYear: year }, o.carTaxByYear[Math.min(year, o.latestYear)]!).annualTotal;
+  it("12편: 2022년 3월 등록 415,780원 vs 9월 등록 428,770원, 해 넘긴 재고차 2028년 506,740원", () =>
+    expect([tax("2022-03-10"), tax("2022-09-10"), tax(ageStartDate("2027-01-15", 2026), 2028), tax("2015-03-10")]).toEqual([415_780, 428_770, 506_740, 259_860]));
+  it("13편: 1,999cc 2027-03-02 등록 그해 432,150원, 7-01 등록 262,000원, 전기차 12-31 등록 0원(2천원 미만)", () => {
+    const nr = { ...o.newRegistration, educationTaxRate: t.educationTaxRate, truncateUnit: t.truncateUnit };
+    const first = (reg: string, f: "gasoline" | "electric" = "gasoline") =>
+      calcNewRegistrationTax(calcCarTax({ fuelType: f, displacementCc: f === "electric" ? undefined : 1999, ageStartDate: reg, taxYear: 2027 }, t), reg, nr);
+    expect([first("2027-03-02").yearTotal, first("2027-07-01").yearTotal, first("2027-12-31", "electric").yearTotal]).toEqual([432_150, 262_000, 0]);
+  });
+  it("14편: 4,000만원 연 6% 36개월 40% 유예 — 월 810,126원, 마지막 16,810,147원, 원리금균등보다 이자 1,356,966원 더", () => {
+    const b = calcLoan({ principal: 40_000_000, annualRate: 0.06, months: 36, method: "balloon", balloonRate: 0.4 });
+    const e = calcLoan({ principal: 40_000_000, annualRate: 0.06, months: 36, method: "equal-payment" });
+    expect([b.firstPayment, b.lastPayment, b.totalInterest - e.totalInterest]).toEqual([810_126, 16_810_147, 1_356_966]);
   });
 });
