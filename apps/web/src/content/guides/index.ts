@@ -18,13 +18,21 @@ import CompactCarAcquisitionTax from "./compact-car-acquisition-tax";
 import EvCarTaxFlatRate from "./ev-car-tax-flat-rate";
 import PublicChargingFeeChange from "./public-charging-fee-change";
 import CarTaxTransferProration from "./car-tax-transfer-proration";
+import EvAcquisitionTaxAfterEnd from "./ev-acquisition-tax-after-end";
 import EvAcquisitionTaxYearEnd from "./ev-acquisition-tax-year-end";
+import { evReliefEnded } from "@/lib/guide-phase";
 import EvVsGasoline5Years from "./ev-vs-gasoline-5-years";
 import HomeVsFastChargingCost from "./home-vs-fast-charging-cost";
 
 /** slug → 글 본문. lib/guides.ts 목록과 짝을 맞춘다 */
-export const GUIDE_BODIES: Record<string, ComponentType<{ meta: GuideMeta }>> = {
-  "ev-acquisition-tax-year-end": EvAcquisitionTaxYearEnd,
+export const GUIDE_BODIES: Record<
+  string,
+  ComponentType<{ meta: GuideMeta }>
+> = {
+  // 전기차 감면 기한이 지난 뒤 빌드면 같은 주소에서 "감면 종료 뒤" 판 (lib/guide-phase.ts)
+  "ev-acquisition-tax-year-end": evReliefEnded
+    ? EvAcquisitionTaxAfterEnd
+    : EvAcquisitionTaxYearEnd,
   "car-tax-prepay-timing": CarTaxPrepayTiming,
   "car-tax-transfer-proration": CarTaxTransferProration,
   "home-vs-fast-charging-cost": HomeVsFastChargingCost,

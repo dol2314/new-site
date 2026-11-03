@@ -6,7 +6,10 @@ const env = (key: string): string => (process.env[key] ?? "").trim();
 
 export const site = {
   name: env("NEXT_PUBLIC_SITE_NAME") || "차값계산소(가칭)",
-  url: (env("NEXT_PUBLIC_SITE_URL") || "http://localhost:3000").replace(/\/+$/, ""),
+  url: (env("NEXT_PUBLIC_SITE_URL") || "http://localhost:3000").replace(
+    /\/+$/,
+    "",
+  ),
   description:
     "자동차세·연납, 전기차 보조금, 취등록세, 실구매가·할부, 충전요금을 공식 기준과 기준일을 붙여 계산합니다. 입력한 값은 내 기기 밖으로 나가지 않습니다.",
   locale: "ko_KR",
@@ -30,10 +33,28 @@ export const site = {
  */
 export const launchPreview = env("LAUNCH_PREVIEW") === "1";
 if (launchPreview && site.indexable) {
-  throw new Error("LAUNCH_PREVIEW=1 은 NEXT_PUBLIC_SITE_INDEXABLE=true 와 함께 쓸 수 없습니다 (로컬 점검 전용).");
+  throw new Error(
+    "LAUNCH_PREVIEW=1 은 NEXT_PUBLIC_SITE_INDEXABLE=true 와 함께 쓸 수 없습니다 (로컬 점검 전용).",
+  );
 }
 
-export const operatorConfigured = Boolean(site.operator.name && site.operator.email);
+/**
+ * 빌드한 날(KST, YYYY-MM-DD). 시점에 따라 글 판을 바꿀 때 쓴다(예: 감면 종료 뒤 판).
+ * 미리 보기·점검: SITE_BUILD_DATE=2027-01-02 npm run build
+ */
+export const buildDate = (() => {
+  const v = env("SITE_BUILD_DATE");
+  if (v) {
+    if (!/^\d{4}-\d{2}-\d{2}$/.test(v))
+      throw new Error(`SITE_BUILD_DATE 형식은 YYYY-MM-DD: ${v}`);
+    return v;
+  }
+  return new Date(Date.now() + 9 * 3_600_000).toISOString().slice(0, 10);
+})();
+
+export const operatorConfigured = Boolean(
+  site.operator.name && site.operator.email,
+);
 
 /** 절대 URL. path는 "/"로 시작하고 trailingSlash 규칙에 맞게 "/"로 끝난다. */
 export function absoluteUrl(path: string): string {

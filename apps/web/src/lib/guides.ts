@@ -2,6 +2,7 @@
  * 사례 분석 글 목록. published=true인 글만 사이트맵·RSS에 들어가고 색인을 허용한다.
  * 글을 공개하려면: 품질·유사도 검사 통과 → 운영자 검수(reviewed, reviewedAt) → published.
  */
+import { evReliefCheckedAt, evReliefEnded } from "@/lib/guide-phase";
 import { launchPreview } from "@/site.config";
 import type { ToolId } from "./tools";
 
@@ -18,6 +19,8 @@ export interface GuideMeta {
   reviewedAt?: string;
   /** 공개하면 안 되는 이유(확인 전 데이터 등). 있으면 LAUNCH_PREVIEW에서도 공개로 바꾸지 않는다 */
   hold?: string;
+  /** 전기차 취득세 감면 기한이 지난 뒤 빌드에서 바꿔 쓸 제목·설명 (lib/guide-phase.ts). asOf는 법령 확인일로 바뀐다 */
+  afterEvReliefEnd?: { title: string; description: string; updatedAt: string };
 }
 
 const RAW_GUIDES: GuideMeta[] = [
@@ -32,6 +35,13 @@ const RAW_GUIDES: GuideMeta[] = [
     tools: ["registration-tax", "car-loan", "ev-subsidy"],
     published: false,
     reviewed: false,
+    afterEvReliefEnd: {
+      title:
+        "전기차 취득세 감면 끝, 4,500만원 전기차는 이제 286만원 — 차값별·경차·수소차·다자녀 계산",
+      description:
+        "전기차 취득세 감면(140만원 한도)이 2026년 12월 31일 취득분으로 끝났습니다. 2027년에 취득한 전기차의 차값별 취득세와 작년 대비 증가액, 아직 남은 경차·수소차·다자녀 감면을 계산했습니다.",
+      updatedAt: "2027-01-01",
+    },
   },
   {
     slug: "car-tax-prepay-timing",
@@ -272,9 +282,16 @@ for (const x of RAW_GUIDES) {
 }
 
 /** LAUNCH_PREVIEW(로컬 점검)에서는 hold 없는 글을 공개로 본다 */
+/** 시점에 따라 바뀌는 판: 전기차 감면 기한이 지난 뒤 빌드면 afterEvReliefEnd의 제목·설명, asOf는 법령 확인일 */
+const PHASED: GuideMeta[] = RAW_GUIDES.map((g) =>
+  evReliefEnded && g.afterEvReliefEnd
+    ? { ...g, ...g.afterEvReliefEnd, asOf: evReliefCheckedAt ?? g.asOf }
+    : g,
+);
+
 export const GUIDES: GuideMeta[] = launchPreview
-  ? RAW_GUIDES.map((g) => (g.hold ? g : { ...g, published: true }))
-  : RAW_GUIDES;
+  ? PHASED.map((g) => (g.hold ? g : { ...g, published: true }))
+  : PHASED;
 
 export const publishedGuides = () => GUIDES.filter((g) => g.published);
 export const guideBySlug = (slug: string) =>

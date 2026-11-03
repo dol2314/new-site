@@ -288,6 +288,8 @@ export interface RegistrationTaxData {
   params: RegistrationTaxParams;
   /** 경형자동차 기준 (지방세특례제한법 시행령 제31조제1항) — 화면 설명용 */
   compactDefinition: { maxCcExclusive: number; maxLengthM: number; maxWidthM: number; maxHeightM: number; electricDimensionsOnly: boolean };
+  /** 이미 끝난 하이브리드 감면 (지방세특례제한법 제66조제3항) — 화면 안내용 */
+  hybridRelief: CapRelief;
   missing: string[];
   sources: SourceRef[];
 }
@@ -300,6 +302,7 @@ const REG_KEYS = [
   "values.hydrogenRelief",
   "values.compactRelief",
   "values.compactDefinition",
+  "values.hybridRelief",
   "values.multiChild",
   "values.minimumTax",
   "rules.taxBase",
@@ -326,7 +329,8 @@ export function registrationTaxData(): RegistrationTaxData {
   };
   for (const k of REG_KEYS.filter((k) => k.startsWith("rules."))) pick(doc, k, missing);
   const compactDefinition = pick<RegistrationTaxData["compactDefinition"]>(doc, "values.compactDefinition", missing);
-  return { params, compactDefinition, missing, sources: refs(doc, REG_KEYS) };
+  const hybridRelief = pick<CapRelief>(doc, "values.hybridRelief", missing);
+  return { params, compactDefinition, hybridRelief, missing, sources: refs(doc, REG_KEYS) };
 }
 
 export interface EvChargingData {
