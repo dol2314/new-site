@@ -71,6 +71,7 @@ export const LAW_TEXT_ASSUMPTIONS: TextAssumption[] = [
     files: [
       "lib/guides.ts (ev-acquisition-tax-year-end 제목·설명)",
       "content/guides/ev-acquisition-tax-year-end.tsx",
+      "content/guides/ev-acquisition-tax-after-end.tsx (감면 종료 뒤 판 전체)",
       "content/guides/ev-vs-gasoline-5-years.tsx (1월 인도 감면 없음 문장, 12월 인도 항목)",
       "content/guides/compact-ev-real-price.tsx (1월 인도는 경차 감면, 12월은 전기차 감면)",
       "app/registration-tax/page.tsx (12월·1월 비교 사례 제목·문장)",
@@ -82,6 +83,15 @@ export const LAW_TEXT_ASSUMPTIONS: TextAssumption[] = [
     what: "1편 제목 '12월에 인도받으면 140만원 덜 낸다' (4,500만원 전기차 12월 vs 1월 취득세 차이)",
     holds: ev45("2027-01-05") - ev45("2026-12-20") === 1_400_000,
     files: ["lib/guides.ts (ev-acquisition-tax-year-end 제목)"],
+  },
+  {
+    id: "ev-after-title-286",
+    what: "1편 '감면 종료 뒤' 판 제목 '4,500만원 전기차는 이제 286만원' (2027년 취득, 감면 없음)",
+    holds: Math.floor(ev45("2027-01-15") / 10_000) === 286,
+    files: [
+      "lib/guides.ts (ev-acquisition-tax-year-end의 afterEvReliefEnd 제목)",
+      "content/guides/ev-acquisition-tax-after-end.tsx",
+    ],
   },
   {
     id: "reg-rates",
